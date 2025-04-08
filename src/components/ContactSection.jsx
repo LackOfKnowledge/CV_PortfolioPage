@@ -12,17 +12,25 @@ import Alert from "@mui/material/Alert";
 import SendIcon from "@mui/icons-material/Send";
 import CircularProgress from "@mui/material/CircularProgress";
 
-// Styl dla animowanego nagłówka sekcji
-const animatedWaveSxSection = (theme) => ({
+// Definicje stylów animacji nagłówka
+const animatedWaveSxBase = (theme) => ({
   background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
   backgroundSize: "350% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   backgroundClip: "text",
   textFillColor: "transparent",
-  animation: "waveGradient 12s linear infinite",
-  display: "inline-block", // Nadal potrzebne
-  fontWeight: "medium", // Ustawiamy font-weight tutaj
+  display: "inline-block",
+  animationName: "waveGradient",
+  animationTimingFunction: "linear",
+  animationIterationCount: "infinite",
+  animationDuration: "var(--gradient-anim-duration)",
+  transition: "animation-duration 0.4s ease-out",
+  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
+});
+const animatedWaveSxSection = (theme) => ({
+  ...animatedWaveSxBase(theme),
+  fontWeight: "medium",
 });
 
 export default function ContactSection() {
@@ -36,7 +44,7 @@ export default function ContactSection() {
   });
 
   const handleSubmit = async (event) => {
-    /* ... (logika bez zmian) ... */ event.preventDefault();
+    /* ... (logika fetch bez zmian) ... */ event.preventDefault();
     setSubmitting(true);
     setSubmitStatus({ success: false, error: false, message: "" });
     try {
@@ -72,22 +80,18 @@ export default function ContactSection() {
   return (
     <Box
       id="kontakt"
-      sx={{ py: { xs: 6, md: 10 }, backgroundColor: "background.paper" }}
+      sx={{ py: { xs: 6, md: 10 }, backgroundColor: "background.default" }}
     >
       <Container maxWidth="sm">
-        <Typography
-          variant="h4"
-          component="h2"
-          align="center"
-          gutterBottom
-          sx={(theme) => ({
-            // Używamy funkcji sx
-            ...animatedWaveSxSection(theme), // Rozszerzamy style animacji
-            mx: "auto", // <<== DODAJEMY TO, aby wycentrować sam element inline-block
-          })}
-        >
-          Kontakt
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={animatedWaveSxSection}
+          >
+            Kontakt
+          </Typography>
+        </Box>
         <Divider
           variant="middle"
           sx={{

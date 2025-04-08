@@ -18,16 +18,16 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { motion } from "framer-motion";
 
-// --- WAŻNE: Zastąp dane projektami! ---
+// --- TODO: Zastąp dane projektami! ---
 const portfolioData = [
   {
-    title: "Projekt 1",
-    description: "...",
+    title: "Prodify",
+    description: "Praca inżynierska - aplikacja działająca na serweru lokalnym",
     image: "/images/portfolio/project1.jpg",
-    tags: ["React"],
+    tags: ["React", "Next.js", "CSS", "HTML5", "Postman"],
     demoUrl: "...",
-    repoUrl: "...",
-  } /* ... */,
+    repoUrl: "https://github.com/LackOfKnowledge/prodify-app-frontend",
+  },
 ];
 const portfolioContainerVariant = {
   hidden: { opacity: 0 },
@@ -38,17 +38,25 @@ const portfolioItemVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-// Styl dla animowanego nagłówka sekcji
-const animatedWaveSxSection = (theme) => ({
+// Definicje stylów animacji nagłówka
+const animatedWaveSxBase = (theme) => ({
   background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
   backgroundSize: "350% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   backgroundClip: "text",
   textFillColor: "transparent",
-  animation: "waveGradient 12s linear infinite",
-  display: "inline-block", // Nadal potrzebne
-  fontWeight: "medium", // Ustawiamy font-weight tutaj
+  display: "inline-block",
+  animationName: "waveGradient",
+  animationTimingFunction: "linear",
+  animationIterationCount: "infinite",
+  animationDuration: "var(--gradient-anim-duration)",
+  transition: "animation-duration 0.4s ease-out",
+  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
+});
+const animatedWaveSxSection = (theme) => ({
+  ...animatedWaveSxBase(theme),
+  fontWeight: "medium",
 });
 
 export default function PortfolioSection() {
@@ -62,19 +70,15 @@ export default function PortfolioSection() {
       }}
     >
       <Container maxWidth="lg">
-        <Typography
-          variant="h4"
-          component="h2"
-          align="center"
-          gutterBottom
-          sx={(theme) => ({
-            // Używamy funkcji sx
-            ...animatedWaveSxSection(theme), // Rozszerzamy style animacji
-            mx: "auto", // <<== DODAJEMY TO, aby wycentrować sam element inline-block
-          })}
-        >
-          Portfolio
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={animatedWaveSxSection}
+          >
+            Portfolio
+          </Typography>
+        </Box>
         <Divider
           variant="middle"
           sx={{
@@ -122,7 +126,7 @@ export default function PortfolioSection() {
                       component="img"
                       height="180"
                       image={project.image || "/images/placeholder.png"}
-                      alt={`Screenshot projektu ${project.title}`}
+                      alt={`Screenshot ${project.title}`}
                       sx={{
                         borderBottom: (theme) =>
                           `1px solid ${theme.palette.divider}`,

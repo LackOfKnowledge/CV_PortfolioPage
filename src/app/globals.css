@@ -1,6 +1,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --gradient-anim-duration: 10s; /* Podstawowa prędkość (np. 8 sekund na cykl) */
+  --gradient-anim-duration-hover: 5s;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +42,7 @@ a {
     color-scheme: dark;
   }
 }
+
 @keyframes waveGradient {
   0% {
     background-position: 0% 50%;

@@ -8,23 +8,19 @@ import Stack from "@mui/material/Stack";
 import DownloadIcon from "@mui/icons-material/Download";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
-// Styl dla animowanego nagłówka głównego (Imię i Nazwisko)
-// Można dostosować gradient/prędkość specjalnie dla tej sekcji
 const animatedWaveSxHero = (theme) => ({
   background: `linear-gradient(75deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #9C27B0, ${theme.palette.primary.main})`,
-  backgroundSize: "300% auto", // Może być inny rozmiar/prędkość
+  backgroundSize: "300% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   backgroundClip: "text",
   textFillColor: "transparent",
-  animation: "waveGradient 10s linear infinite", // Inna prędkość dla odmiany?
+  animation: "waveGradient 10s linear infinite",
   display: "inline-block",
   fontWeight: "bold",
-  // mb: 2, // Usunięte, bo Typography ma gutterBottom
 });
 
 export default function HeroSection({ onNavigate }) {
-  // Dodajemy onNavigate, jeśli przycisk Kontakt ma działać
   const headerHeight = "64px";
 
   return (
@@ -42,11 +38,10 @@ export default function HeroSection({ onNavigate }) {
         <Typography
           variant="h2"
           component="h1"
-          gutterBottom // Dodaje margines dolny
-          // Zastosowanie stylu animowanej fali do imienia
+          gutterBottom
           sx={animatedWaveSxHero}
         >
-          [Twoje Imię i Nazwisko]
+          Krzysztof Skuratowicz {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Typography
           variant="h5"
@@ -54,22 +49,23 @@ export default function HeroSection({ onNavigate }) {
           color="text.secondary"
           sx={{ mb: 3 }}
         >
-          [Frontend Developer], specjalista od pięknych interfejsów ;)
+          Od niedawna programista (o ile można to tak nazwać ;) ), na codzień
+          ojciec i mąż. {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Typography
           variant="body1"
           color="text.primary"
           sx={{ mb: 5, maxWidth: "700px", mx: "auto" }}
         >
-          [Witaj! Nazywam się [...] i jestem pasjonatem...]
+          Witaj! Jestem Krzysiek i nie wiem póki co co o sobie napisać :){" "}
+          {/* TODO: Wpisz swoje dane */}
         </Typography>
-
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={2}
           justifyContent="center"
         >
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
             size="large"
@@ -78,15 +74,13 @@ export default function HeroSection({ onNavigate }) {
             sx={{ minWidth: "180px" }}
           >
             Pobierz CV
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             color="primary"
             size="large"
             startIcon={<MailOutlineIcon />}
-            // Wywołujemy nawigację do sekcji kontakt po kliknięciu
             onClick={() => (onNavigate ? onNavigate("kontakt") : null)}
-            // href="#kontakt" // Usuwamy href, jeśli używamy onClick do nawigacji w SPA
             sx={{ minWidth: "180px" }}
           >
             Kontakt

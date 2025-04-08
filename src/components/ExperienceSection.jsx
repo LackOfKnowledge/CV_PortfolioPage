@@ -13,35 +13,44 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import WorkIcon from "@mui/icons-material/Work";
 import SchoolIcon from "@mui/icons-material/School";
 
-// --- WAŻNE: Podmień dane! ---
+// --- TODO: Podmień dane na swoje! ---
 const experienceData = [
   {
     type: "work",
-    title: "Frontend Dev",
-    company: "Firma X",
-    dates: "...",
-    description: "...",
+    title: "Geodeta",
+    company: "Zenit",
+    dates: "10.2020 - teraz",
+    description: "Geodeta i wszelkie czynności związane z tym zawodem",
   },
   {
     type: "education",
-    title: "Inżynier",
-    company: "Uczelnia Y",
-    dates: "...",
-    description: "...",
+    title: "Inżynier (jeszcze nie :) )",
+    company: "Uczelnia: Uniwersytet Pomorski w Słupsku",
+    dates: "10.2021 - 05.2025",
+    description:
+      "Aplikacja Prodify (część frontendowa) - aplikacja przeznaczona dla średnich i dużych firm produkcyjnych mająca za zadanie automatyzację, optymalizację i nadzór nad produkcją",
   },
 ];
 
-// Styl dla animowanego nagłówka
-const animatedWaveSxSection = (theme) => ({
+// Definicje stylów animacji nagłówka sekcji
+const animatedWaveSxBase = (theme) => ({
   background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
   backgroundSize: "350% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   backgroundClip: "text",
   textFillColor: "transparent",
-  animation: "waveGradient 12s linear infinite",
-  display: "inline-block", // Nadal potrzebne
-  fontWeight: "medium", // Ustawiamy font-weight tutaj
+  display: "inline-block",
+  animationName: "waveGradient",
+  animationTimingFunction: "linear",
+  animationIterationCount: "infinite",
+  animationDuration: "var(--gradient-anim-duration)",
+  transition: "animation-duration 0.4s ease-out",
+  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
+});
+const animatedWaveSxSection = (theme) => ({
+  ...animatedWaveSxBase(theme),
+  fontWeight: "medium",
 });
 
 export default function ExperienceSection() {
@@ -51,19 +60,15 @@ export default function ExperienceSection() {
       sx={{ py: { xs: 6, md: 10 }, backgroundColor: "background.default" }}
     >
       <Container maxWidth="md">
-        <Typography
-          variant="h4"
-          component="h2"
-          align="center"
-          gutterBottom
-          sx={(theme) => ({
-            // Używamy funkcji sx
-            ...animatedWaveSxSection(theme), // Rozszerzamy style animacji
-            mx: "auto", // <<== DODAJEMY TO, aby wycentrować sam element inline-block
-          })}
-        >
-          Doświadczenie i Edukacja
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={animatedWaveSxSection}
+          >
+            Doświadczenie i Edukacja
+          </Typography>
+        </Box>
         <Divider
           variant="middle"
           sx={{

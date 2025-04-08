@@ -22,16 +22,24 @@ const navItems = [
   { label: "Kontakt", targetId: "kontakt" },
 ];
 
-// Styl dla animowanego nagłówka
-const animatedWaveSxHeader = (theme) => ({
-  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main || theme.palette.primary.light}, ${theme.palette.primary.main})`,
-  backgroundSize: "250% auto",
+// Definicje stylów animacji z użyciem zmiennych CSS
+const animatedWaveSxBase = (theme) => ({
+  background: `linear-gradient(90deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, #9C27B0, #E91E63, ${theme.palette.primary.main})`,
+  backgroundSize: "400% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   backgroundClip: "text",
   textFillColor: "transparent",
-  animation: "waveGradient 6s linear infinite", // Szybsza animacja w headerze
   display: "inline-block",
+  animationName: "waveGradient",
+  animationTimingFunction: "linear",
+  animationIterationCount: "infinite",
+  animationDuration: "var(--gradient-anim-duration)", // Użycie zmiennej CSS
+  transition: "animation-duration 0.4s ease-out", // Próba płynnego przejścia
+  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" }, // Przyspieszenie
+});
+const animatedWaveSxHeader = (theme) => ({
+  ...animatedWaveSxBase(theme),
   fontWeight: "bold",
 });
 
@@ -98,7 +106,7 @@ export default function Header({ activeView, onNavClick }) {
             )}
           </IconButton>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            {/* TODO: Mobile Menu */}
+            {/* Mobile Menu */}
           </Box>
         </Toolbar>
       </Container>

@@ -10,10 +10,17 @@ import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import { motion } from "framer-motion";
 
-// --- WAŻNE: Zastąp swoimi umiejętnościami! ---
+// --- TODO: Zastąp swoimi umiejętnościami! ---
 const skillsData = {
-  Frontend: [{ name: "React" }, { name: "Next.js" }],
-  Narzędzia: [{ name: "Git" }],
+  Frontend: [
+    { name: "React" },
+    { name: "Next.js" },
+    { name: "JavaScript" },
+    { name: "C# (basics)" },
+    { name: "Vue.js (basics)" },
+  ],
+  Narzędzia: [{ name: "Git" }, { name: "Node.js" }],
+  Inne: [{ name: "Angielski B2" }],
 };
 const categoryTitleSparkleVariant = {
   hidden: { opacity: 0, y: 10 },
@@ -45,17 +52,25 @@ const chipPulseAnimation = () => ({
   },
 });
 
-// Styl dla animowanego nagłówka sekcji
-const animatedWaveSxSection = (theme) => ({
+// Definicje stylów animacji nagłówka
+const animatedWaveSxBase = (theme) => ({
   background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
   backgroundSize: "350% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   backgroundClip: "text",
   textFillColor: "transparent",
-  animation: "waveGradient 12s linear infinite",
-  display: "inline-block", // Nadal potrzebne
-  fontWeight: "medium", // Ustawiamy font-weight tutaj
+  display: "inline-block",
+  animationName: "waveGradient",
+  animationTimingFunction: "linear",
+  animationIterationCount: "infinite",
+  animationDuration: "var(--gradient-anim-duration)",
+  transition: "animation-duration 0.4s ease-out",
+  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
+});
+const animatedWaveSxSection = (theme) => ({
+  ...animatedWaveSxBase(theme),
+  fontWeight: "medium",
 });
 
 export default function SkillsSection() {
@@ -64,24 +79,20 @@ export default function SkillsSection() {
       id="umiejetnosci"
       sx={{
         py: { xs: 6, md: 10 },
-        backgroundColor: "background.paper",
+        backgroundColor: "background.default",
         overflow: "hidden",
       }}
     >
       <Container maxWidth="lg">
-        <Typography
-          variant="h4"
-          component="h2"
-          align="center"
-          gutterBottom
-          sx={(theme) => ({
-            // Używamy funkcji sx
-            ...animatedWaveSxSection(theme), // Rozszerzamy style animacji
-            mx: "auto", // <<== DODAJEMY TO, aby wycentrować sam element inline-block
-          })}
-        >
-          Umiejętności i Technologie
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={animatedWaveSxSection}
+          >
+            Umiejętności i Technologie
+          </Typography>
+        </Box>
         <Divider
           variant="middle"
           sx={{
