@@ -22,9 +22,10 @@ import { motion } from "framer-motion";
 const portfolioData = [
   {
     title: "Prodify",
-    description: "Praca inżynierska - aplikacja działająca na serweru lokalnym",
-    image: "/images/portfolio/project1.jpg",
-    tags: ["React", "Next.js", "CSS", "HTML5", "Postman"],
+    description:
+      "Praca inżynierska - aplikacja działająca na serwerze lokalnym",
+    image: "/images/projekt1.png",
+    tags: ["React", "Next.js", "CSS", "HTML5", "Postman", "Node.js"],
     demoUrl: "...",
     repoUrl: "https://github.com/LackOfKnowledge/prodify-app-frontend",
   },
@@ -125,7 +126,7 @@ export default function PortfolioSection() {
                     <CardMedia
                       component="img"
                       height="180"
-                      image={project.image || "/images/placeholder.png"}
+                      image={project.image || "/images/projekt1.png"}
                       alt={`Screenshot ${project.title}`}
                       sx={{
                         borderBottom: (theme) =>

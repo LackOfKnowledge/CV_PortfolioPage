@@ -41,7 +41,7 @@ export default function HeroSection({ onNavigate }) {
           gutterBottom
           sx={animatedWaveSxHero}
         >
-          Krzysztof Skuratowicz {/* TODO: Wpisz swoje dane */}
+          PLACEHOLDER {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Typography
           variant="h5"
@@ -65,16 +65,17 @@ export default function HeroSection({ onNavigate }) {
           spacing={2}
           justifyContent="center"
         >
-          {/* <Button
+          <Button
             variant="contained"
             color="primary"
             size="large"
             startIcon={<DownloadIcon />}
-            href="/api/generate-cv"
+            href="/cv"
+            target="_blank"
             sx={{ minWidth: "180px" }}
           >
             Pobierz CV
-          </Button> */}
+          </Button>
           <Button
             variant="outlined"
             color="primary"

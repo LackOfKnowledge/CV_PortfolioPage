@@ -22,24 +22,16 @@ const navItems = [
   { label: "Kontakt", targetId: "kontakt" },
 ];
 
-// Definicje stylów animacji z użyciem zmiennych CSS
-const animatedWaveSxBase = (theme) => ({
-  background: `linear-gradient(90deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, #9C27B0, #E91E63, ${theme.palette.primary.main})`,
-  backgroundSize: "400% auto",
+// Styl dla animowanego nagłówka (bez zmian)
+const animatedWaveSxHeader = (theme) => ({
+  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main || theme.palette.primary.light}, ${theme.palette.primary.main})`,
+  backgroundSize: "250% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   backgroundClip: "text",
   textFillColor: "transparent",
+  animation: "waveGradient 6s linear infinite",
   display: "inline-block",
-  animationName: "waveGradient",
-  animationTimingFunction: "linear",
-  animationIterationCount: "infinite",
-  animationDuration: "var(--gradient-anim-duration)", // Użycie zmiennej CSS
-  transition: "animation-duration 0.4s ease-out", // Próba płynnego przejścia
-  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" }, // Przyspieszenie
-});
-const animatedWaveSxHeader = (theme) => ({
-  ...animatedWaveSxBase(theme),
   fontWeight: "bold",
 });
 
@@ -53,29 +45,41 @@ export default function Header({ activeView, onNavClick }) {
       elevation={1}
     >
       <Container maxWidth="lg">
+        {/* Toolbar ma domyślnie ustaloną minimalną wysokość */}
         <Toolbar disableGutters>
           <Typography
-            variant="h6"
+            variant="h4"
             component="div"
             onClick={() => onNavClick("hero")}
             sx={{
               ...animatedWaveSxHeader(theme),
               flexGrow: 1,
               cursor: "pointer",
+              ml: { xs: 1, md: 0 } /* Mały margines na mobilnych */,
             }}
           >
-            Twoje Portfolio
+            <i>KS</i>
           </Typography>
+
+          {/* Kontener dla przycisków nawigacji */}
           <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              // alignItems: 'center', // Zmieniamy na stretch
+              alignSelf: "stretch", // Rozciągnij ten Box na całą wysokość Toolbar
+            }}
           >
             {navItems.map((item) => (
               <Button
                 key={item.label}
                 onClick={() => onNavClick(item.targetId)}
                 sx={{
+                  height: "100%",
+                  py: 0,
+                  px: 1.5,
+                  borderRadius: 0,
                   color: "inherit",
-                  mx: 0.5,
+                  mx: 0,
                   fontWeight: activeView === item.targetId ? "bold" : "normal",
                   color:
                     activeView === item.targetId
@@ -86,7 +90,10 @@ export default function Header({ activeView, onNavClick }) {
                       theme.palette.mode === "dark"
                         ? theme.palette.primary.light
                         : theme.palette.primary.dark,
-                    backgroundColor: "action.hover",
+                    backgroundColor:
+                      activeView === item.targetId
+                        ? theme.palette.action.selected
+                        : theme.palette.action.hover,
                   },
                 }}
               >
@@ -94,7 +101,9 @@ export default function Header({ activeView, onNavClick }) {
               </Button>
             ))}
           </Box>
-          <IconButton
+
+          {/* Przełącznik motywu */}
+          {/* <IconButton
             sx={{ ml: 1 }}
             onClick={colorMode.toggleColorMode}
             color="inherit"
@@ -104,9 +113,11 @@ export default function Header({ activeView, onNavClick }) {
             ) : (
               <Brightness4Icon />
             )}
-          </IconButton>
+          </IconButton> */}
+
+          {/* Menu mobilne */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            {/* Mobile Menu */}
+            {/* TODO: Mobile Menu */}
           </Box>
         </Toolbar>
       </Container>
