@@ -10,10 +10,15 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Brightness4Icon from "@mui/icons-material/Brightness4"; // Import nadal tu jest, na wypadek odkomentowania
+import Brightness7Icon from "@mui/icons-material/Brightness7"; // Import nadal tu jest
 import { useColorMode } from "./ThemeRegistry";
+import Link from "next/link";
+import { usePathname } from "next/navigation"; // Import hooka do odczytu ścieżki
+// Import funkcji stylu nagłówka z motywu
+import { animatedWaveSxHeader } from "@/theme/theme"; // Upewnij się, że ścieżka jest poprawna
 
+// Elementy nawigacji dla widoków SPA
 const navItems = [
   { label: "O mnie", targetId: "omnie" },
   { label: "Doświadczenie", targetId: "doswiadczenie" },
@@ -22,22 +27,12 @@ const navItems = [
   { label: "Kontakt", targetId: "kontakt" },
 ];
 
-// Styl dla animowanego nagłówka (bez zmian)
-const animatedWaveSxHeader = (theme) => ({
-  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main || theme.palette.primary.light}, ${theme.palette.primary.main})`,
-  backgroundSize: "250% auto",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-  textFillColor: "transparent",
-  animation: "waveGradient 6s linear infinite",
-  display: "inline-block",
-  fontWeight: "bold",
-});
-
 export default function Header({ activeView, onNavClick }) {
   const theme = useTheme();
   const colorMode = useColorMode();
+  const pathname = usePathname(); // Pobranie aktualnej ścieżki URL
+
+  const isChatActive = pathname === "/chat"; // Flaga dla strony /chat
 
   return (
     <AppBar
@@ -45,30 +40,27 @@ export default function Header({ activeView, onNavClick }) {
       elevation={1}
     >
       <Container maxWidth="lg">
-        {/* Toolbar ma domyślnie ustaloną minimalną wysokość */}
         <Toolbar disableGutters>
+          {/* Tytuł/Logo - link do strony startowej (widok 'hero') */}
           <Typography
-            variant="h4"
+            variant="h6"
             component="div"
             onClick={() => onNavClick("hero")}
             sx={{
               ...animatedWaveSxHeader(theme),
               flexGrow: 1,
               cursor: "pointer",
-              ml: { xs: 1, md: 0 } /* Mały margines na mobilnych */,
+              ml: { xs: 1, md: 0 },
             }}
           >
             <i>KS</i>
           </Typography>
 
-          {/* Kontener dla przycisków nawigacji */}
+          {/* Nawigacja dla desktopu */}
           <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              // alignItems: 'center', // Zmieniamy na stretch
-              alignSelf: "stretch", // Rozciągnij ten Box na całą wysokość Toolbar
-            }}
+            sx={{ display: { xs: "none", md: "flex" }, alignSelf: "stretch" }}
           >
+            {/* Przyciski dla widoków SPA */}
             {navItems.map((item) => (
               <Button
                 key={item.label}
@@ -80,9 +72,13 @@ export default function Header({ activeView, onNavClick }) {
                   borderRadius: 0,
                   color: "inherit",
                   mx: 0,
-                  fontWeight: activeView === item.targetId ? "bold" : "normal",
+                  // Podświetlenie tylko jeśli NIE jesteśmy na /chat i widok SPA pasuje
+                  fontWeight:
+                    !isChatActive && activeView === item.targetId
+                      ? "bold"
+                      : "normal",
                   color:
-                    activeView === item.targetId
+                    !isChatActive && activeView === item.targetId
                       ? theme.palette.primary.main
                       : "inherit",
                   "&:hover": {
@@ -100,24 +96,48 @@ export default function Header({ activeView, onNavClick }) {
                 {item.label}
               </Button>
             ))}
+            {/* Link do /chat */}
+            <Link
+              href="/chat"
+              passHref
+              legacyBehavior
+            >
+              <Button
+                component="a" // Ważne dla Link + Button
+                sx={{
+                  height: "100%",
+                  py: 0,
+                  px: 1.5,
+                  borderRadius: 0,
+                  color: "inherit",
+                  mx: 0,
+                  // Podświetlenie tylko jeśli JESTEŚMY na /chat
+                  fontWeight: isChatActive ? "bold" : "normal",
+                  color: isChatActive ? theme.palette.primary.main : "inherit",
+                  "&:hover": {
+                    color:
+                      theme.palette.mode === "dark"
+                        ? theme.palette.primary.light
+                        : theme.palette.primary.dark,
+                    backgroundColor: theme.palette.action.hover,
+                  },
+                }}
+              >
+                Czat AI
+              </Button>
+            </Link>
           </Box>
 
-          {/* Przełącznik motywu */}
-          {/* <IconButton
-            sx={{ ml: 1 }}
-            onClick={colorMode.toggleColorMode}
-            color="inherit"
-          >
-            {theme.palette.mode === "dark" ? (
-              <Brightness7Icon />
-            ) : (
-              <Brightness4Icon />
-            )}
-          </IconButton> */}
+          {/* Zakomentowany przycisk zmiany motywu */}
+          {/*
+          <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          */}
 
           {/* Menu mobilne */}
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            {/* TODO: Mobile Menu */}
+          <Box sx={{ display: { xs: "flex", md: "none" }, ml: 1 }}>
+            {/* TODO: Implementacja Drawer Menu z linkami SPA i Link do /chat */}
           </Box>
         </Toolbar>
       </Container>
