@@ -1,7 +1,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --gradient-anim-duration: 10s; /* Podstawowa prędkość (np. 8 sekund na cykl) */
+  --gradient-anim-duration: 10s;
   --gradient-anim-duration-hover: 5s;
 }
 
@@ -26,14 +26,44 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
-  background-color: white;
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
 }
 
+@media print {
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .site-footer {
+    display: none !important;
+  }
+
+  .cv-section-item {
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+
+  a,
+  a:visited {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+}
+
 @page {
   size: A4;
-  margin: 2cm;
+  margin: 1cm;
 }
 
 .cv-section-item {

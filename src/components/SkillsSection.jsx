@@ -13,13 +13,26 @@ import { motion } from "framer-motion";
 // --- TODO: Zastąp swoimi umiejętnościami! ---
 const skillsData = {
   Frontend: [
+    { name: "HTML5 (JSX)" },
+    { name: "CSS3" },
     { name: "React" },
     { name: "Next.js" },
-    { name: "JavaScript" },
-    { name: "C# (basics)" },
-    { name: "Vue.js (basics)" },
+    { name: "Material UI (MUI)" },
+    { name: "Framer Motion" },
+    { name: "Vue (Podstawy)" },
+    { name: "Axios" },
+    { name: "js-cookie" },
   ],
-  Narzędzia: [{ name: "Git" }, { name: "Node.js" }],
+  Narzędzia: [
+    { name: "Git / GitHub" },
+    { name: "npm / yarn" },
+    { name: "VS Code" },
+    { name: "Przeglądarkowe DevTools" },
+    { name: "Postman" },
+    { name: "Figma (Podstawy)" },
+    { name: "eslint" },
+    { name: "Node.js" },
+  ],
   Inne: [{ name: "Angielski B2" }],
 };
 const categoryTitleSparkleVariant = {

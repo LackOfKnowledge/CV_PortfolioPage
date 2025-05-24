@@ -97,7 +97,7 @@ export default function Header({ activeView, onNavClick }) {
               </Button>
             ))}
             {/* Link do /chat */}
-            <Link
+            {/* <Link
               href="/chat"
               passHref
               legacyBehavior
@@ -125,7 +125,7 @@ export default function Header({ activeView, onNavClick }) {
               >
                 Czat AI
               </Button>
-            </Link>
+            </Link> */}
           </Box>
 
           {/* Zakomentowany przycisk zmiany motywu */}
@@ -136,9 +136,9 @@ export default function Header({ activeView, onNavClick }) {
           */}
 
           {/* Menu mobilne */}
-          <Box sx={{ display: { xs: "flex", md: "none" }, ml: 1 }}>
+          {/* <Box sx={{ display: { xs: "flex", md: "none" }, ml: 1 }}>
             {/* TODO: Implementacja Drawer Menu z linkami SPA i Link do /chat */}
-          </Box>
+          {/* </Box>  */}
         </Toolbar>
       </Container>
     </AppBar>

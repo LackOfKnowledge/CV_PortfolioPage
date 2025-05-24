@@ -65,14 +65,14 @@ export default function AboutSection() {
             fontSize: { xs: "1rem", md: "1.1rem" },
           }}
         >
-          Do tej pory pracowałem jako geodeta, ale postanowiłem coś zmienić w
-          swoim życiu i wybrałem się na studia informatyczne. Tak się wszystko
-          potoczyło, że polubiłem się z UX/UI oraz z frontem - tak, jestem
-          "Frątasiem" :) {/* TODO: Wpisz swoje dane */}
+          Hej! Jestem Krzysiek — z wykształcenia inżynier informatyk, z
+          doświadczenia geodeta, a z zamiaru frontend developer. Lubię konkret,
+          przejrzysty kod i dobrze przemyślane interfejsy. Dopiero wchodzę w
+          branżę IT, ale mam już za sobą parę projektów i spory zapał do nauki.
           <br />
           <br />
-          Poza kodowaniem lubię gotować, oglądać filmy i seriale oraz podróże -
-          oklepane XD {/* TODO: Wpisz swoje dane */}
+          Kiedyś zamiast kodzić, to grałem - teraz raczej jest na odwrót. Gdy
+          zacznę grzebać przy kodzie, ciężko jest mnie oderwać :)
         </Typography>
       </Container>
     </Box>

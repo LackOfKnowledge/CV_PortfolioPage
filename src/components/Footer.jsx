@@ -7,7 +7,6 @@ import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-// Usunęliśmy import LinkedInIcon
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -15,6 +14,7 @@ export default function Footer() {
   return (
     <Box
       component="footer"
+      className="site-footer"
       sx={{
         py: 3,
         px: 2,

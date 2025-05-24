@@ -1,48 +1,43 @@
 export const personalData = {
-  name: "--------", // Zmień na swoje
+  name: "Krzysztof Skuratowicz", // Zmień na swoje
   title: "Inżynier Informatyk (Programowanie aplikacji webowych)", // Zmień
-  email: "------@gmail.com",
-  phone: "+48 --- --- ---",
+  email: "krzysztofskuratowicz@gmail.com",
+  phone: "+48 793 154 884",
   location: "Słupsk, Polska",
   github: "https://github.com/LackOfKnowledge",
   linkedin: "https://linkedin.com/in/twojprofil",
-  // Dodaj zdjęcie jeśli chcesz je mieć w danych
-  // photo: "/images/profile.jpg"
 };
 
 export const summary =
-  "Wysoce zmotywowany Frontend Engineer z doświadczeniem w tworzeniu stron internetowych..."; // Twoje podsumowanie
+  "Jestem inżynierem informatyki i początkującym frontend developerem z solidnymi podstawami React i Next.js, który aktywnie buduje swoje portfolio i rozwija umiejętności w kierunku pracy w branży IT. Posiadam doświadczenie zawodowe jako geodeta, gdzie rozwinąłem precyzję, umiejętność pracy zespołowej i skutecznej komunikacji z klientami biznesowymi. Obecnie poszukuję pierwszych wyzwań zawodowych jako programista lub specjalista IT, otwarty zarówno na stanowiska juniorskie, jak i na rozwój w strukturach technicznych firm lub instytucji.";
 
 export const educationData = [
   {
     institution: "Uniwersytet Pomorski w Słupsku",
-    degree: "Inżynier Frontend",
-    dates: "2017 - 2021",
+    degree: "Inżynier programista",
+    dates: "2021 - 2025",
   },
   // ...
 ];
 
 export const skillsData = {
   "Języki & Technologie Podstawowe": [
-    { name: "HTML5" /*, level: 'Ekspercki'*/ }, // Poziom można dodać, jeśli chcesz
+    { name: "HTML5" },
     { name: "CSS3 / SCSS" },
     { name: "JavaScript (ES6+)" },
-    { name: "TypeScript (Podstawy)" }, // Jeśli znasz
   ],
   "Frameworki & Biblioteki": [
     { name: "React" },
     { name: "Next.js" },
     { name: "Material UI (MUI)" },
     { name: "Framer Motion" },
-    // { name: 'jQuery' }, // Jeśli używałeś
-    // { name: 'Angular / Vue (Podstawy)' }, // Jeśli znasz podstawy
+    { name: "Vue (Podstawy)" },
   ],
   "Narzędzia & Platformy": [
     { name: "Git / GitHub" },
     { name: "npm / yarn" },
     { name: "VS Code" },
     { name: "Przeglądarkowe DevTools" },
-    { name: "Vercel / Netlify" },
     { name: "Postman" },
     { name: "Figma (Podstawy)" },
   ],
@@ -53,10 +48,7 @@ export const skillsData = {
     { name: "Podstawy SEO" },
     { name: "Scrum / Agile" },
   ],
-  "Języki Obce": [
-    { name: "Angielski", level: "B2/C1 - komunikatywny" }, // Dodaj poziom
-    // { name: 'Inny Język', level: 'Poziom' },
-  ],
+  "Języki Obce": [{ name: "Angielski", level: "B2" }],
 };
 
 export const experienceData = [
@@ -65,8 +57,8 @@ export const experienceData = [
     company: "Zenit",
     dates: "Październik 2020 - Teraz",
     description: [
-      "Opracował interfejsy...",
-      "Rozwijał i utrzymywał..." /*...*/,
+      "Odpowiedzialność za sporządzanie dokumentacji projektowej, m.in. przy budowie nowego dworca PKP w Słupsku",
+      "Utrzymywanie kontaktu operacyjnego z podwykonawcami i projektantami w ramach projektów realizowanych dla Orange Polska" /*...*/,
     ],
   },
   // ...

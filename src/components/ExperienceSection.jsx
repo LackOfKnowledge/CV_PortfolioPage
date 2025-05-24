@@ -20,13 +20,14 @@ const experienceData = [
     title: "Geodeta",
     company: "Zenit",
     dates: "10.2020 - teraz",
-    description: "Geodeta i wszelkie czynności związane z tym zawodem",
+    description:
+      "Jako geodeta realizowałem kompleksowo projekty inwestycyjne, ze szczególnym uwzględnieniem klientów biznesowych. Współpracując przy projektach dla Orange Polska, odpowiadałem za kontakt operacyjny między firmą geodezyjną a podwykonawcą oraz konsultacje z projektantami. Nie boję się wymagających zadań – byłem współodpowiedzialny za przygotowanie dokumentacji projektowej pod budowę nowego dworca PKP w Słupsku.",
   },
   {
     type: "education",
     title: "Inżynier (jeszcze nie :) )",
     company: "Uczelnia: Uniwersytet Pomorski w Słupsku",
-    dates: "10.2021 - 05.2025",
+    dates: "10.2021 - 06.2025",
     description:
       "Aplikacja Prodify (część frontendowa) - aplikacja przeznaczona dla średnich i dużych firm produkcyjnych mająca za zadanie automatyzację, optymalizację i nadzór nad produkcją",
   },

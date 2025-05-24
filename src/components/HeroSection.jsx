@@ -41,7 +41,7 @@ export default function HeroSection({ onNavigate }) {
           gutterBottom
           sx={animatedWaveSxHero}
         >
-          PLACEHOLDER {/* TODO: Wpisz swoje dane */}
+          <img src="/images/avataaars.svg" />
         </Typography>
         <Typography
           variant="h5"
@@ -49,15 +49,16 @@ export default function HeroSection({ onNavigate }) {
           color="text.secondary"
           sx={{ mb: 3 }}
         >
-          Od niedawna programista (o ile można to tak nazwać ;) ), na codzień
-          ojciec i mąż. {/* TODO: Wpisz swoje dane */}
+          Witaj! Jestem Krzysiek i tutaj kiedyś coś napiszę o sobie :)
+          {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Typography
           variant="body1"
           color="text.primary"
           sx={{ mb: 5, maxWidth: "700px", mx: "auto" }}
         >
-          Witaj! Jestem Krzysiek i nie wiem póki co co o sobie napisać :){" "}
+          Od niedawna programista (o ile można to tak nazwać ;) ), na codzień
+          ojciec i mąż.
           {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Stack

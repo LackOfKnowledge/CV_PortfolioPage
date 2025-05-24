@@ -1,12 +1,10 @@
-// src/app/cv/page.jsx
-"use client"; // Potrzebne dla useEffect
+"use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 
-// Import danych
 import {
   personalData,
   summary,
@@ -15,35 +13,36 @@ import {
   experienceData,
   references,
   gdprClause,
-} from "@/data/cvData.js"; // Upewnij się, że ścieżka jest poprawna
+} from "@/data/cvData.js";
 
-// Import komponentu widoku CV
 import CvView from "@/components/CvView";
 
 export default function PrintCvPage() {
-  // Stan wskazujący, czy strona jest gotowa do druku
-  const [isReady, setIsReady] = React.useState(false);
+  const [isReadyForPrint, setIsReadyForPrint] = useState(false);
 
   useEffect(() => {
-    // Dajemy przeglądarce chwilę na wyrenderowanie layoutu przed drukiem
     const timer = setTimeout(() => {
-      if (typeof window !== "undefined") {
-        setIsReady(true); // Oznaczamy jako gotowe
+      setIsReadyForPrint(true);
+    }, 1200); // Możesz zwiększyć to opóźnienie, jeśli CV jest bardzo złożone
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isReadyForPrint && typeof window !== "undefined") {
+      // Dodatkowe małe opóźnienie, aby DOM na pewno się zaktualizował po zmianie isReadyForPrint
+      const printTimer = setTimeout(() => {
         try {
-          window.print(); // Wywołaj okno dialogowe drukowania
+          window.print();
         } catch (e) {
           console.error("Błąd podczas wywoływania window.print():", e);
-          // Można dodać powiadomienie dla użytkownika
         }
-      }
-    }, 800); // Opóźnienie w ms (np. 0.8 sekundy) - dostosuj w razie potrzeby
+      }, 50); // Krótkie opóźnienie przed samym drukowaniem
+      return () => clearTimeout(printTimer);
+    }
+  }, [isReadyForPrint]);
 
-    // Cleanup timera, jeśli komponent zostanie odmontowany przed czasem
-    return () => clearTimeout(timer);
-  }, []); // Pusta tablica zależności - uruchom tylko raz po zamontowaniu
-
-  // Opcjonalnie: Pokaż wskaźnik ładowania lub komunikat przed wywołaniem print()
-  if (!isReady) {
+  if (!isReadyForPrint) {
     return (
       <Box
         sx={{
@@ -56,34 +55,51 @@ export default function PrintCvPage() {
         }}
       >
         <CircularProgress />
-        <Typography>Przygotowywanie podglądu CV...</Typography>
+        <Typography>Przygotowywanie podglądu CV do druku...</Typography>
+        <div
+          style={{
+            position: "absolute",
+            left: "-9999px",
+            top: "-9999px",
+            opacity: 0,
+            zIndex: -1,
+          }}
+        >
+          <CvView
+            personalData={personalData}
+            summary={summary}
+            educationData={educationData}
+            skillsData={skillsData}
+            experienceData={experienceData}
+            references={references}
+            gdprClause={gdprClause}
+          />
+        </div>
       </Box>
     );
   }
 
   return (
     <>
-      {/* Globalne style tylko dla tej strony (opcjonalnie) */}
       <style
         jsx
         global
       >{`
-        /* Można dodać style specyficzne dla podglądu CV tutaj, jeśli layout główny przeszkadza */
-        /* body { background: #eee !important; } // Na przykład inne tło dla podglądu */
         @media print {
           body {
             margin: 0;
             padding: 0;
             background: white !important;
           }
-          /* Style z globals.css powinny być wystarczające, ale można tu dodać specyficzne reguły @page */
           @page {
             size: A4;
-            margin: 1.5cm;
-          } /* Marginesy dla druku */
+            margin: 1cm;
+          }
+          /* Dodatkowe style ukrywające elementy niepotrzebne na wydruku CV */
+          /* Jeśli masz globalny header/appbar, możesz go tu ukryć */
+          /* header, .site-header { display: none !important; } */
         }
       `}</style>
-      {/* Renderujemy komponent CV, przekazując zaimportowane dane */}
       <CvView
         personalData={personalData}
         summary={summary}
