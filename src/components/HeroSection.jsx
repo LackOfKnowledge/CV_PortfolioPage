@@ -49,7 +49,7 @@ export default function HeroSection({ onNavigate }) {
           color="text.secondary"
           sx={{ mb: 3 }}
         >
-          Witaj! Jestem Krzysiek i tutaj kiedyś coś napiszę o sobie :)
+          Witaj! Jestem Krzysiek i zapraszam do kontaktu!
           {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Typography
@@ -57,8 +57,9 @@ export default function HeroSection({ onNavigate }) {
           color="text.primary"
           sx={{ mb: 5, maxWidth: "700px", mx: "auto" }}
         >
-          Od niedawna programista (o ile można to tak nazwać ;) ), na codzień
-          ojciec i mąż.
+          Kliknij w pobierz CV i zobacz co potrafię, alternatywnie możesz
+          przeklikać się przez stronę i skontaktować się ze mną przez formularz,
+          bądź nawiązać współpracę bezpośrednio! :)
           {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Stack

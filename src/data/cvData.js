@@ -3,9 +3,10 @@ export const personalData = {
   title: "Inżynier Informatyk (Programowanie aplikacji webowych)", // Zmień
   email: "krzysztofskuratowicz@gmail.com",
   phone: "+48 793 154 884",
-  location: "Słupsk, Polska",
+  // location: "Słupsk, Polska",
   github: "https://github.com/LackOfKnowledge",
   linkedin: "https://linkedin.com/in/twojprofil",
+  photo: "/images/avataaars.svg",
 };
 
 export const summary =
@@ -17,12 +18,11 @@ export const educationData = [
     degree: "Inżynier programista",
     dates: "2021 - 2025",
   },
-  // ...
 ];
 
 export const skillsData = {
   "Języki & Technologie Podstawowe": [
-    { name: "HTML5" },
+    { name: "HTML5 / JSX" },
     { name: "CSS3 / SCSS" },
     { name: "JavaScript (ES6+)" },
   ],
@@ -31,24 +31,29 @@ export const skillsData = {
     { name: "Next.js" },
     { name: "Material UI (MUI)" },
     { name: "Framer Motion" },
-    { name: "Vue (Podstawy)" },
+    // { name: "Vue (Podstawy)" },
+    { name: "Axios" },
+    // { name: "js-cookie" },
   ],
   "Narzędzia & Platformy": [
-    { name: "Git / GitHub" },
-    { name: "npm / yarn" },
-    { name: "VS Code" },
-    { name: "Przeglądarkowe DevTools" },
-    { name: "Postman" },
-    { name: "Figma (Podstawy)" },
+    { name: "Git / GitHub" }, // Z 'Narzędzia'
+    { name: "npm" }, // Z 'Narzędzia' (zgodnie z Twoją ostatnią wersją)
+    { name: "VS Code" }, // Z 'Narzędzia'
+    { name: "WebStorm (JetBrains)" }, // Dodane z 'Narzędzia'
+    { name: "Node.js" }, // Dodane z 'Narzędzia'
+    { name: "DevTools" }, // Z 'Narzędzia'
+    { name: "Postman" }, // Z 'Narzędzia'
+    { name: "Figma (Podstawy)" }, // Z 'Narzędzia'
+    // { name: "eslint" }, // Dodane z 'Narzędzia'
   ],
   Inne: [
-    { name: "REST API" },
-    { name: "Responsive Web Design" },
-    { name: "Dostępność (WCAG/a11y)" },
-    { name: "Podstawy SEO" },
-    { name: "Scrum / Agile" },
+    { name: "REST API" }, // Z 'Inne' (pliku wyświetlającego)
+    { name: "Responsive Web Design" }, // Przeniesione z 'Frontend' (pliku wyświetlającego)
+    // { name: "Dostępność (WCAG/a11y)" }, // Przeniesione z 'Frontend' (pliku wyświetlającego)
+    { name: "Podstawy SEO" }, // Z 'Inne' (pliku wyświetlającego)
+    { name: "Scrum / Agile" }, // Z 'Inne' (pliku wyświetlającego)
   ],
-  "Języki Obce": [{ name: "Angielski", level: "B2" }],
+  "Języki Obce": [{ name: "Angielski", level: "B2" }], // Konwersja z 'Inne' (pliku wyświetlającego)
 };
 
 export const experienceData = [
@@ -61,7 +66,6 @@ export const experienceData = [
       "Utrzymywanie kontaktu operacyjnego z podwykonawcami i projektantami w ramach projektów realizowanych dla Orange Polska" /*...*/,
     ],
   },
-  // ...
 ];
 
 export const references = "Referencje dostępne na życzenie.";

@@ -13,27 +13,36 @@ import { motion } from "framer-motion";
 // --- TODO: Zastąp swoimi umiejętnościami! ---
 const skillsData = {
   Frontend: [
-    { name: "HTML5 (JSX)" },
-    { name: "CSS3" },
+    { name: "HTML5 / JSX" }, // Połączenie "HTML5" i uwzględnienie JSX
+    { name: "CSS3 / SCSS" }, // Dodanie SCSS
+    { name: "JavaScript (ES6+)" }, // Użycie bardziej szczegółowej nazwy
     { name: "React" },
     { name: "Next.js" },
     { name: "Material UI (MUI)" },
     { name: "Framer Motion" },
     { name: "Vue (Podstawy)" },
-    { name: "Axios" },
-    { name: "js-cookie" },
+    { name: "Axios" }, // Zachowane z drugiej listy, jeśli nadal aktualne
+    { name: "js-cookie" }, // Zachowane z drugiej listy, jeśli nadal aktualne
+    { name: "Responsive Web Design" }, // Przeniesione z "Inne" (plik CV)
+    { name: "Dostępność (WCAG/a11y)" }, // Przeniesione z "Inne" (plik CV)
   ],
   Narzędzia: [
     { name: "Git / GitHub" },
-    { name: "npm / yarn" },
+    { name: "npm" }, // Zachowanie yarn, jeśli używasz obu
     { name: "VS Code" },
-    { name: "Przeglądarkowe DevTools" },
+    { name: "WebStorm (JetBrains)" }, // Zachowane z drugiej listy, jeśli nadal aktualne
+    { name: "Node.js" }, // Zachowane z drugiej listy, jeśli nadal aktualne
+    { name: "DevTools" },
     { name: "Postman" },
     { name: "Figma (Podstawy)" },
-    { name: "eslint" },
-    { name: "Node.js" },
+    { name: "eslint" }, // Zachowane z drugiej listy, jeśli nadal aktualne
   ],
-  Inne: [{ name: "Angielski B2" }],
+  Inne: [
+    { name: "REST API" }, // Przeniesione z "Inne" (plik CV)
+    { name: "Podstawy SEO" }, // Przeniesione z "Inne" (plik CV)
+    { name: "Scrum / Agile" }, // Przeniesione z "Inne" (plik CV)
+    { name: "Angielski B2" }, // Utrzymanie formatu z "level" w nazwie
+  ],
 };
 const categoryTitleSparkleVariant = {
   hidden: { opacity: 0, y: 10 },

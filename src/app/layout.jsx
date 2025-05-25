@@ -7,7 +7,7 @@ import "./globals.css";
 
 // Metadata strony (bez zmian)
 export const metadata = {
-  title: "[Twoje Imię] - Portfolio", // Zmień na swoje dane
+  title: "Portfolio", // Zmień na swoje dane
   description: "Portfolio Frontend Developera", // Zmień opis
 };
 

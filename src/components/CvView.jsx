@@ -115,16 +115,17 @@ export default function CvView({
           }}
         >
           <Avatar
-            alt={`Inicjały ${personalData?.name}`}
+            alt={personalData?.name} // Zmieniono alt na samo imię i nazwisko
             sx={{
               width: 100,
               height: 100,
               mx: "auto",
               mb: 2.5,
-              fontSize: "2.8rem",
-              bgcolor: "#ECF0F1",
-              color: "#2C3E50",
+              fontSize: "2.8rem", // To może nie być potrzebne, jeśli jest zdjęcie
+              bgcolor: "#ECF0F1", // Tło będzie widoczne, jeśli zdjęcie się nie załaduje
+              color: "#2C3E50", // Kolor dla inicjałów (jeśli by były)
             }}
+            src={personalData?.photo ? personalData.photo : undefined}
           >
             {!personalData?.photo ? getInitials(personalData?.name) : null}
           </Avatar>
