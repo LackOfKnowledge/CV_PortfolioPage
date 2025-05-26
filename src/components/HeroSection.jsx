@@ -57,9 +57,10 @@ export default function HeroSection({ onNavigate }) {
           color="text.primary"
           sx={{ mb: 5, maxWidth: "700px", mx: "auto" }}
         >
-          Kliknij w pobierz CV i zobacz co potrafię, alternatywnie możesz
-          przeklikać się przez stronę i skontaktować się ze mną przez formularz,
-          bądź nawiązać współpracę bezpośrednio! :)
+          Przeklikaj przez zakładki i zapoznaj się z moim życiorysem, zobacz
+          gdzie pracowałem i co potrafię. Zachęcam do skontaktowania się ze mną
+          poprzez formularz. Jeśli chcesz wyślę Ci swoje CV, ale w bardziej
+          oryginalny sposób niż pdf mailem :).
           {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Stack
@@ -67,7 +68,7 @@ export default function HeroSection({ onNavigate }) {
           spacing={2}
           justifyContent="center"
         >
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
             size="large"
@@ -77,7 +78,7 @@ export default function HeroSection({ onNavigate }) {
             sx={{ minWidth: "180px" }}
           >
             Pobierz CV
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             color="primary"
