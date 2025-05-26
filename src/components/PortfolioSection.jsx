@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -19,10 +18,11 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
+import DialogContentModal from "@mui/material/DialogContent";
 import Backdrop from "@mui/material/Backdrop";
 import { motion } from "framer-motion";
 import { useTheme } from "@mui/material/styles";
+import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 
 const portfolioData = [
   {
@@ -31,20 +31,17 @@ const portfolioData = [
       "Praca inżynierska - aplikacja webowa o architekturze klient-serwer, działająca na serwerze lokalnym, stworzona z myślą o optymalizacji procesów.",
     image: "/images/projekt1.png",
     tags: [
-      "JavaScript ES6+",
-      "Material UI v5",
-      "React 18",
-      "Next.js 14 (App Router)",
-      "CSS3 Flexbox&Grid",
-      "HTML5 Semantyczny",
-      "Postman API Testing",
-      "Node.js (dla backendu)",
-      "JSON Web Tokens",
-      "RESTful API Design",
-      "UI/UX Prototyping",
-      "BardzoDługiTagBezSpacjiKtóryZdecydowaniePowinienSięZłamać",
-      "KolejnyDoscDługiTagAbySprawdzićZawijanie",
-      "KrótkiTag",
+      "JavaScript",
+      "Material UI",
+      "React",
+      "Next.js",
+      "CSS",
+      "HTML5",
+      "Postman",
+      "Node.js",
+      "JWT",
+      "REST API",
+      "UI/UX",
     ],
     demoUrl: "...",
     repoUrl: "https://github.com/LackOfKnowledge/prodify-app-frontend",
@@ -73,7 +70,7 @@ const portfolioData = [
   {
     title: "Właśnie to portfolio",
     description: "Moje portfolio, które aktualnie przeglądasz.",
-    image: "/images/cv_portfolio_image.png",
+    image: null,
     tags: [
       "Next.js",
       "React",
@@ -92,6 +89,25 @@ const portfolioData = [
       Kładłem nacisk na czysty kod, responsywność oraz estetykę.
       Możesz tu znaleźć informacje o moim doświadczeniu, umiejętnościach oraz zobaczyć inne projekty.
       Dodatkowo zaimplementowałem asystenta "Clippy" dla urozmaicenia interakcji.
+    `,
+  },
+  {
+    title: "test",
+    description: "test",
+    image: null,
+    tags: [
+      "Next.js",
+      "React",
+      "Material UI",
+      "Framer Motion",
+      "CSS",
+      "JavaScript",
+      "Responsive Design",
+    ],
+    demoUrl: "",
+    repoUrl: "https://github.com/LackOfKnowledge/xxxx",
+    detailedDescription: `
+      test
     `,
   },
 ];
@@ -140,6 +156,70 @@ export default function PortfolioSection() {
     setSelectedProject(null);
   };
 
+  const cardMargin = theme.spacing(2);
+
+  // Funkcja pomocnicza do renderowania obrazka lub ikony
+  const renderProjectImage = (projectImage) => {
+    if (typeof projectImage === "string") {
+      // Jeśli 'image' to string (ścieżka)
+      return (
+        <CardMedia
+          component="img"
+          height="180"
+          image={projectImage}
+          alt="Project image"
+          sx={{ objectFit: "cover", flexShrink: 0 }}
+        />
+      );
+    } else if (
+      projectImage &&
+      typeof projectImage === "object" &&
+      projectImage.type &&
+      projectImage.type.muiName === "SvgIcon"
+    ) {
+      // Jeśli 'image' to komponent ikony MUI (bardziej niezawodne sprawdzenie)
+      const IconComponent = projectImage;
+      return (
+        <Box
+          sx={{
+            height: "180px", // Dopasuj wysokość do CardMedia
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? theme.palette.grey[800]
+                : theme.palette.grey[200], // Placeholder tło
+            color: theme.palette.text.secondary,
+            flexShrink: 0,
+          }}
+        >
+          <IconComponent sx={{ fontSize: "4rem" }} />{" "}
+          {/* Dostosuj rozmiar ikony */}
+        </Box>
+      );
+    }
+    // Domyślny fallback, jeśli obrazek nie jest ani stringiem, ani poprawnym komponentem ikony
+    return (
+      <Box
+        sx={{
+          height: "180px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor:
+            theme.palette.mode === "dark"
+              ? theme.palette.grey[800]
+              : theme.palette.grey[200],
+          color: theme.palette.text.secondary,
+          flexShrink: 0,
+        }}
+      >
+        <ImageNotSupportedIcon sx={{ fontSize: "4rem" }} />
+      </Box>
+    );
+  };
+
   return (
     <Box
       id="portfolio"
@@ -174,158 +254,148 @@ export default function PortfolioSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          style={{ marginTop: theme.spacing(6) }}
         >
-          <Grid
-            container
-            spacing={4}
-            justifyContent="center"
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+              },
+              gap: cardMargin,
+              mt: theme.spacing(6),
+              alignItems: "stretch",
+            }}
           >
             {portfolioData.map((project, index) => (
-              <Grid
-                item
+              <Card
                 key={index}
-                xs={12}
-                sm={6}
-                md={4} // Wracamy do 3 kafelków na md dla stabilności, potem to zmienimy
+                component={motion.div}
+                variants={portfolioItemVariant}
+                onClick={() => handleOpenDialog(project)}
                 sx={{
-                  display: "flex", // Aby Card mógł użyć height: 100%
-                  flexDirection: "column", // Aby motion.div i Card zajęły całą wysokość
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
+                  overflow: "hidden",
+                  // Przywrócone
+                  transition:
+                    "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                  "&:hover": {
+                    // Przywrócone
+                    transform: "translateY(-5px)",
+                    boxShadow: theme.shadows[6],
+                    cursor: "pointer",
+                  },
                 }}
               >
-                {/* Usunięto motion.div jako bezpośredniego rodzica Card, aby uprościć strukturę dla onClick */}
-                {/* Zamiast tego, motion.div będzie wewnątrz Card lub Card będzie motion component */}
-                <Card
-                  component={motion.div} // Używamy Card jako motion component
-                  variants={portfolioItemVariant} // Przenosimy warianty animacji tutaj
-                  onClick={() => handleOpenDialog(project)}
+                {/* Użycie funkcji pomocniczej do renderowania obrazka/ikony */}
+                {renderProjectImage(project.image)}
+
+                <CardContent
                   sx={{
-                    width: "100%", // Card wypełnia szerokość Grid item
-                    height: "100%", // Card wypełnia wysokość Grid item
                     display: "flex",
                     flexDirection: "column",
-                    minWidth: 0, // Zapobiega problemom z kurczeniem się flex
-                    overflow: "hidden", // Kluczowe: ucina zawartość, która wychodzi poza kartę
-                    // Dodajemy ręcznie, bo sx nadpisuje domyślne z motion
-                    transition:
-                      "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      boxShadow: theme.shadows[6],
-                      cursor: "pointer",
-                    },
+                    flexGrow: 1,
+                    py: 2,
+                    px: 2,
+                    overflow: "hidden",
                   }}
                 >
-                  <CardMedia
-                    component="img"
-                    height="180"
-                    image={project.image || "/images/projekt1.png"}
-                    alt={`Screenshot ${project.title}`}
-                  />
-                  <CardContent
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    gutterBottom
                     sx={{
-                      flexGrow: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      py: 2,
-                      px: 2,
-                      minWidth: 0, // Zapobiega problemom z kurczeniem się flex
-                      // overflow: "hidden", // Usunięto stąd, bo Card ma już overflow: hidden
-                      // Jeśli nadal jest problem, można tu przywrócić
+                      wordBreak: "break-word",
+                      flexShrink: 0,
                     }}
                   >
-                    <Typography
-                      gutterBottom
-                      variant="h6"
-                      component="div"
-                      sx={{
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {project.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        mb: 2,
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {project.description}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexWrap: "wrap", // Kluczowe dla zawijania tagów
-                        gap: theme.spacing(0.5),
-                        mt: "auto",
-                        // Ten Box nie powinien potrzebować overflow, jeśli jego rodzice mają
-                        // Jeśli jednak jest problem, można dodać:
-                        // maxWidth: '100%',
-                        // overflowX: 'hidden', // Zapobiegnie rozszerzaniu się Boxa z tagami
-                      }}
-                    >
-                      {project.tags.map((tag) => (
-                        <Chip
-                          key={tag}
-                          label={tag}
-                          size="small"
-                          variant="outlined"
-                          sx={{
-                            // Chip nie powinien sam w sobie powodować problemów z szerokością,
-                            // jeśli jego kontener (Box) i nadrzędne (CardContent, Card)
-                            // mają odpowiednie `overflow` i `minWidth: 0`.
-                            // Łamanie słów w chipie jest ostatecznością.
-                            "& .MuiChip-label": {
-                              display: "inline-block",
-                              whiteSpace: "normal", // Pozwól na łamanie wewnątrz chipa jeśli słowa są długie
-                              wordBreak: "break-all", // Najbardziej agresywne łamanie
-                            },
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  </CardContent>
-                  {(project.demoUrl || project.repoUrl) && (
-                    <CardActions
-                      sx={{ justifyContent: "flex-start", px: 2, pb: 2, pt: 1 }}
-                      onClick={(e) => e.stopPropagation()} // Ważne, aby nie triggerować onClick karty
-                    >
-                      {project.demoUrl && project.demoUrl !== "..." && (
-                        <Button
-                          size="small"
-                          startIcon={<LaunchIcon />}
-                          href={project.demoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Demo
-                        </Button>
-                      )}
-                      {project.repoUrl && (
-                        <IconButton
-                          size="small"
-                          aria-label={`GitHub ${project.title}`}
-                          href={project.repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          color="inherit"
-                          sx={{ p: 0.5 }}
-                        >
-                          <GitHubIcon fontSize="small" />
-                        </IconButton>
-                      )}
-                    </CardActions>
-                  )}
-                </Card>
-              </Grid>
+                    {project.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    paragraph
+                    sx={{
+                      wordBreak: "break-word",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {project.description}
+                  </Typography>
+                  <Box
+                    sx={{
+                      mt: "auto",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      flexShrink: 0,
+                      pt: 1,
+                    }}
+                  >
+                    {project.tags.map((tag) => (
+                      <Chip
+                        key={tag}
+                        label={tag}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          m: "5px",
+                          maxWidth: "100%",
+                          "& .MuiChip-label": {
+                            display: "inline-block",
+                            whiteSpace: "normal",
+                            wordBreak: "break-all",
+                          },
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </CardContent>
+                {(project.demoUrl || project.repoUrl) && (
+                  <CardActions
+                    sx={{
+                      justifyContent: "flex-start",
+                      px: 2,
+                      pb: 2,
+                      pt: 1,
+                      flexShrink: 0,
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {project.demoUrl && project.demoUrl !== "..." && (
+                      <Button
+                        size="small"
+                        startIcon={<LaunchIcon />}
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Demo
+                      </Button>
+                    )}
+                    {project.repoUrl && (
+                      <IconButton
+                        size="small"
+                        aria-label={`GitHub ${project.title}`}
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="inherit"
+                        sx={{ p: 0.5 }}
+                      >
+                        <GitHubIcon fontSize="small" />
+                      </IconButton>
+                    )}
+                  </CardActions>
+                )}
+              </Card>
             ))}
-          </Grid>
+          </Box>
         </motion.div>
       </Container>
 
-      {/* Dialog */}
       {selectedProject && (
         <Dialog
           open={openDialog}
@@ -363,20 +433,13 @@ export default function PortfolioSection() {
               <CloseIcon />
             </IconButton>
           </DialogTitle>
-          <DialogContent dividers>
-            {selectedProject.image && (
-              <CardMedia
-                component="img"
-                height="300"
-                image={selectedProject.image}
-                alt={`Screenshot ${selectedProject.title}`}
-                sx={{ mb: 2, borderRadius: 1, objectFit: "contain" }}
-              />
-            )}
+          <DialogContentModal dividers>
+            {/* W modalu również użyjemy funkcji pomocniczej */}
+            {renderProjectImage(selectedProject.image)}
             <Typography
               gutterBottom
               id="project-dialog-description"
-              sx={{ whiteSpace: "pre-line" }}
+              sx={{ whiteSpace: "pre-line", mt: selectedProject.image ? 2 : 0 }} // Dodaj margines, jeśli obrazek jest obecny
             >
               {selectedProject.detailedDescription}
             </Typography>
@@ -397,7 +460,7 @@ export default function PortfolioSection() {
                 ))}
               </Box>
             )}
-          </DialogContent>
+          </DialogContentModal>
           {(selectedProject.demoUrl && selectedProject.demoUrl !== "...") ||
           selectedProject.repoUrl ? (
             <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>

@@ -8,17 +8,9 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import Brightness4Icon from "@mui/icons-material/Brightness4"; // Import nadal tu jest, na wypadek odkomentowania
-import Brightness7Icon from "@mui/icons-material/Brightness7"; // Import nadal tu jest
-import { useColorMode } from "./ThemeRegistry";
-import Link from "next/link";
-import { usePathname } from "next/navigation"; // Import hooka do odczytu ścieżki
-// Import funkcji stylu nagłówka z motywu
-import { animatedWaveSxHeader } from "@/theme/theme"; // Upewnij się, że ścieżka jest poprawna
+import { usePathname } from "next/navigation";
 
-// Elementy nawigacji dla widoków SPA
 const navItems = [
   { label: "O mnie", targetId: "omnie" },
   { label: "Doświadczenie", targetId: "doswiadczenie" },
@@ -29,10 +21,11 @@ const navItems = [
 
 export default function Header({ activeView, onNavClick }) {
   const theme = useTheme();
-  const colorMode = useColorMode();
-  const pathname = usePathname(); // Pobranie aktualnej ścieżki URL
+  const pathname = usePathname();
 
-  const isChatActive = pathname === "/chat"; // Flaga dla strony /chat
+  const isChatActive = pathname === "/chat";
+
+  const logoHeight = "60px";
 
   return (
     <AppBar
@@ -41,26 +34,35 @@ export default function Header({ activeView, onNavClick }) {
     >
       <Container maxWidth="lg">
         <Toolbar disableGutters>
-          {/* Tytuł/Logo - link do strony startowej (widok 'hero') */}
-          <Typography
-            variant="h6"
-            component="div"
+          {/* Logo - obrazek */}
+          <Box
             onClick={() => onNavClick("hero")}
             sx={{
-              ...animatedWaveSxHeader(theme),
-              flexGrow: 1,
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
               ml: { xs: 1, md: 0 },
+              mr: 2,
             }}
           >
-            <i>KS</i>
-          </Typography>
+            <img
+              src="/images/logo.png" // Ścieżka do Twojego logo w folderze public
+              alt="Logo"
+              style={{
+                height: logoHeight, // Ustawienie wysokości logo
+                width: "auto", // Szerokość dostosuje się proporcjonalnie
+                display: "block", // Usuwa dodatkową przestrzeń pod obrazkiem inline
+              }}
+            />
+          </Box>
+
+          {/* Pusty Box, aby odepchnąć nawigację na prawo, jeśli logo jest po lewej */}
+          <Box sx={{ flexGrow: 1 }} />
 
           {/* Nawigacja dla desktopu */}
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignSelf: "stretch" }}
           >
-            {/* Przyciski dla widoków SPA */}
             {navItems.map((item) => (
               <Button
                 key={item.label}
@@ -70,75 +72,27 @@ export default function Header({ activeView, onNavClick }) {
                   py: 0,
                   px: 1.5,
                   borderRadius: 0,
-                  color: "inherit",
-                  mx: 0,
-                  // Podświetlenie tylko jeśli NIE jesteśmy na /chat i widok SPA pasuje
+                  color: "inherit", // Kolor tekstu dziedziczony lub dostosowany
+                  mx: 0.5, // Mały margines między przyciskami
                   fontWeight:
                     !isChatActive && activeView === item.targetId
                       ? "bold"
                       : "normal",
-                  color:
+                  borderBottom:
                     !isChatActive && activeView === item.targetId
-                      ? theme.palette.primary.main
-                      : "inherit",
+                      ? `2px solid ${theme.palette.primary.main}`
+                      : "2px solid transparent",
                   "&:hover": {
-                    color:
-                      theme.palette.mode === "dark"
-                        ? theme.palette.primary.light
-                        : theme.palette.primary.dark,
-                    backgroundColor:
-                      activeView === item.targetId
-                        ? theme.palette.action.selected
-                        : theme.palette.action.hover,
+                    color: theme.palette.primary.main,
+                    borderBottom: `2px solid ${theme.palette.primary.light}`,
+                    backgroundColor: theme.palette.action.hover,
                   },
                 }}
               >
                 {item.label}
               </Button>
             ))}
-            {/* Link do /chat */}
-            {/* <Link
-              href="/chat"
-              passHref
-              legacyBehavior
-            >
-              <Button
-                component="a" // Ważne dla Link + Button
-                sx={{
-                  height: "100%",
-                  py: 0,
-                  px: 1.5,
-                  borderRadius: 0,
-                  color: "inherit",
-                  mx: 0,
-                  // Podświetlenie tylko jeśli JESTEŚMY na /chat
-                  fontWeight: isChatActive ? "bold" : "normal",
-                  color: isChatActive ? theme.palette.primary.main : "inherit",
-                  "&:hover": {
-                    color:
-                      theme.palette.mode === "dark"
-                        ? theme.palette.primary.light
-                        : theme.palette.primary.dark,
-                    backgroundColor: theme.palette.action.hover,
-                  },
-                }}
-              >
-                Czat AI
-              </Button>
-            </Link> */}
           </Box>
-
-          {/* Zakomentowany przycisk zmiany motywu */}
-          {/*
-          <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-          */}
-
-          {/* Menu mobilne */}
-          {/* <Box sx={{ display: { xs: "flex", md: "none" }, ml: 1 }}>
-            {/* TODO: Implementacja Drawer Menu z linkami SPA i Link do /chat */}
-          {/* </Box>  */}
         </Toolbar>
       </Container>
     </AppBar>

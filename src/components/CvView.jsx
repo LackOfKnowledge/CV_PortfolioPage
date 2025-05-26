@@ -39,19 +39,19 @@ export default function CvView({
   const rightColumnBgColor = "#FFFFFF";
 
   const headingSx = {
-    mb: 0.8, // Zmniejszony margines
+    mb: 0.8,
     color: "#2C3E50",
     borderBottom: "1px solid #BDC3C7",
-    pb: 0.2, // Zmniejszony padding
+    pb: 0.2,
     fontWeight: "bold",
     fontSize: "11pt",
     pageBreakAfter: "avoid",
   };
   const leftHeadingSx = {
-    mb: 1.2, // Zmniejszony margines
+    mb: 1.2,
     color: "#fff",
     borderBottom: "1px solid #7F8C8D",
-    pb: 0.6, // Zmniejszony padding
+    pb: 0.6,
     fontWeight: "bold",
     fontSize: "10pt",
     pageBreakAfter: "avoid",
@@ -71,8 +71,7 @@ export default function CvView({
       ? theme.palette.grey[300]
       : theme.palette.grey[700];
 
-  // Stała wysokość stopki - 2.5cm (mniej miejsca na stopkę, więcej na treść)
-  const footerHeight = "10mm"; // 2.5cm dla stopki RODO
+  const footerHeight = "10mm";
 
   return (
     <Box
@@ -82,38 +81,37 @@ export default function CvView({
         height: "297mm",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between", // <-- KLUCZOWE
-        boxShadow: { xs: 0, sm: 3 },
+        justifyContent: "space-between",
         fontFamily: "Arial, sans-serif",
         fontSize: baseFontSize,
         lineHeight: 1.35,
         backgroundColor: rightColumnBgColor,
         overflow: "hidden",
         pageBreakInside: "avoid",
+        border: "none",
+        boxShadow: "none",
+        margin: 0,
       }}
     >
-      {/* Kontener na dwie główne kolumny treści - OGRANICZONY WYSOKOŚCIĄ */}
       <Box
         className="cv-main-content-columns"
         sx={{
           display: "flex",
           flexDirection: "row",
           flexGrow: 1,
-          overflow: "hidden",
-          height: `calc(297mm - ${footerHeight})`, // <-- SZTYWNA wysokość bez maxHeight
+          overflow: "visible", // Zmienione z hidden, aby treść nie była ścinana
+          height: `calc(297mm - ${footerHeight})`,
         }}
       >
-        {/* --- Lewa Kolumna --- */}
         <Box
           className="cv-left-column"
           sx={{
             width: "25%",
             flexShrink: 0,
-            flex: "1 1 0", // <-- to dodajesz
             backgroundColor: leftColumnBgColor,
             color: "#ECF0F1",
-            p: "15pt", // Zmniejszony padding
-            overflowY: "hidden", // Zmiana: ukrywamy overflow zamiast scroll
+            p: "15pt",
+            overflowY: "visible", // Zmienione z hidden
             height: "100%",
           }}
         >
@@ -316,24 +314,21 @@ export default function CvView({
           )}
         </Box>
 
-        {/* --- Prawa Kolumna --- */}
         <Box
           className="cv-right-column"
           sx={{
             width: "75%",
             flexGrow: 1,
-            flex: "1 1 0",
             backgroundColor: rightColumnBgColor,
             color: "#333",
-            p: "15pt", // Zmniejszony padding
+            p: "15pt",
             display: "flex",
             flexDirection: "column",
             minHeight: 0,
-            overflowY: "hidden", // Zmiana: ukrywamy overflow zamiast scroll
+            overflowY: "visible", // Zmienione z hidden
             height: "100%",
           }}
         >
-          {/* Treść prawej kolumny */}
           <Box className="cv-right-column-main-content">
             <Typography
               variant="h3"
@@ -362,7 +357,7 @@ export default function CvView({
             </Typography>
             {summary && (
               <Box
-                sx={{ mb: 2, pageBreakInside: "avoid" }} // Zmniejszony margines
+                sx={{ mb: 2, pageBreakInside: "avoid" }}
                 className="cv-section-item"
               >
                 <Typography
@@ -382,8 +377,6 @@ export default function CvView({
             )}
             {experienceData?.length > 0 && (
               <Box sx={{ mb: 2 }}>
-                {" "}
-                // Zmniejszony margines
                 <Typography
                   variant="h6"
                   component="h2"
@@ -394,7 +387,7 @@ export default function CvView({
                 {experienceData.map((job, index) => (
                   <Box
                     key={index}
-                    sx={{ mb: 1.5, pageBreakInside: "avoid" }} // Zmniejszony margines
+                    sx={{ mb: 1.5, pageBreakInside: "avoid" }}
                     className="cv-section-item"
                   >
                     <Typography sx={{ fontWeight: "bold", fontSize: "10.5pt" }}>
@@ -447,7 +440,7 @@ export default function CvView({
             )}
             {references && (
               <Box
-                sx={{ mb: 2, pageBreakInside: "avoid" }} // Zmniejszony margines
+                sx={{ mb: 2, pageBreakInside: "avoid" }}
                 className="cv-section-item"
               >
                 <Typography
@@ -469,24 +462,21 @@ export default function CvView({
         </Box>
       </Box>
 
-      {/* Stopka z RODO - Pozycjonowana absolutnie na dole strony A4 */}
       <Box
         className="cv-footer-clause"
         sx={{
           flexShrink: 0,
           pageBreakInside: "avoid",
-          left: 0,
-          right: 0,
           width: "210mm",
-          height: footerHeight, // Stała wysokość 30mm (3cm)
-          minHeight: footerHeight, // Zapewnia minimalną wysokość
-          maxHeight: footerHeight, // Ogranicza maksymalną wysokość
-          p: "8pt 15pt", // Zmniejszony padding - mniej miejsca w stopce
+          height: footerHeight,
+          minHeight: footerHeight,
+          maxHeight: footerHeight,
+          p: "8pt 15pt",
           backgroundColor: footerBackgroundColor,
           borderTop: `1px solid ${theme.palette.divider}`,
           boxSizing: "border-box",
           display: "flex",
-          alignItems: "center", // Wyśrodkowanie treści w pionie
+          alignItems: "center",
         }}
       >
         <Typography
