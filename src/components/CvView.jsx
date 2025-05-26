@@ -1,3 +1,4 @@
+// src/components/CvView.jsx
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,8 +13,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-// import SchoolIcon from "@mui/icons-material/School";
-// import WorkIcon from "@mui/icons-material/Work";
+import { useTheme } from "@mui/material/styles";
 
 function getInitials(name) {
   if (!name || typeof name !== "string") return "?";
@@ -33,44 +33,25 @@ export default function CvView({
   references,
   gdprClause,
 }) {
-  const leftColumnSx = {
-    backgroundColor: "#2C3E50",
-    color: "#ECF0F1",
-    p: "18pt",
-    height: "100%", // Staramy się, aby komórka tabeli miała pełną wysokość
-    display: "flex",
-    flexDirection: "column",
-  };
-  const rightColumnContentWrapperSx = {
-    // Nowy styl dla wewnętrznego wrappera prawej kolumny
-    display: "flex",
-    flexDirection: "column",
-    height: "100%", // Ten wrapper ma wypełnić całą komórkę tabeli
-    p: "18pt", // Padding przeniesiony tutaj z rightColumnTableCellSx
-  };
-  const rightColumnTableCellSx = {
-    // Styl dla samej komórki tabeli (prawej kolumny)
-    backgroundColor: "#FFFFFF",
-    color: "#333",
-    // Padding został przeniesiony do rightColumnContentWrapperSx
-    // p: "18pt",
-    height: "100%", // Staramy się, aby komórka tabeli miała pełną wysokość
-    verticalAlign: "top", // Zachowujemy
-  };
+  const theme = useTheme();
+
+  const leftColumnBgColor = "#2C3E50";
+  const rightColumnBgColor = "#FFFFFF";
+
   const headingSx = {
-    mb: 1,
+    mb: 0.8, // Zmniejszony margines
     color: "#2C3E50",
     borderBottom: "1px solid #BDC3C7",
-    pb: 0.3,
+    pb: 0.2, // Zmniejszony padding
     fontWeight: "bold",
     fontSize: "11pt",
     pageBreakAfter: "avoid",
   };
   const leftHeadingSx = {
-    mb: 1.5,
+    mb: 1.2, // Zmniejszony margines
     color: "#fff",
     borderBottom: "1px solid #7F8C8D",
-    pb: 0.8,
+    pb: 0.6, // Zmniejszony padding
     fontWeight: "bold",
     fontSize: "10pt",
     pageBreakAfter: "avoid",
@@ -81,49 +62,70 @@ export default function CvView({
   const smallerFontSize = "7pt";
   const tinyFontSize = "5.5pt";
 
+  const footerBackgroundColor =
+    theme.palette.mode === "dark"
+      ? theme.palette.grey[800]
+      : theme.palette.grey[200];
+  const footerTextColor =
+    theme.palette.mode === "dark"
+      ? theme.palette.grey[300]
+      : theme.palette.grey[700];
+
+  // Stała wysokość stopki - 2.5cm (mniej miejsca na stopkę, więcej na treść)
+  const footerHeight = "10mm"; // 2.5cm dla stopki RODO
+
   return (
     <Box
+      className="cv-page-container"
       sx={{
         width: "210mm",
         height: "297mm",
-        margin: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between", // <-- KLUCZOWE
         boxShadow: { xs: 0, sm: 3 },
-        backgroundColor: "#fff",
         fontFamily: "Arial, sans-serif",
         fontSize: baseFontSize,
         lineHeight: 1.35,
-        display: "flex",
-        flexDirection: "column",
+        backgroundColor: rightColumnBgColor,
+        overflow: "hidden",
+        pageBreakInside: "avoid",
       }}
     >
+      {/* Kontener na dwie główne kolumny treści - OGRANICZONY WYSOKOŚCIĄ */}
       <Box
+        className="cv-main-content-columns"
         sx={{
-          display: "table",
-          width: "100%",
-          height: "100%",
-          tableLayout: "fixed",
-          borderCollapse: "collapse",
+          display: "flex",
+          flexDirection: "row",
+          flexGrow: 1,
+          overflow: "hidden",
+          height: `calc(297mm - ${footerHeight})`, // <-- SZTYWNA wysokość bez maxHeight
         }}
       >
         {/* --- Lewa Kolumna --- */}
         <Box
+          className="cv-left-column"
           sx={{
-            ...leftColumnSx,
-            display: "table-cell",
-            width: "35%",
-            verticalAlign: "top",
+            width: "25%",
+            flexShrink: 0,
+            flex: "1 1 0", // <-- to dodajesz
+            backgroundColor: leftColumnBgColor,
+            color: "#ECF0F1",
+            p: "15pt", // Zmniejszony padding
+            overflowY: "hidden", // Zmiana: ukrywamy overflow zamiast scroll
+            height: "100%",
           }}
         >
           <Avatar
-            alt={personalData?.name} // Zmieniono alt na samo imię i nazwisko
             sx={{
               width: 100,
               height: 100,
               mx: "auto",
               mb: 2.5,
-              fontSize: "2.8rem", // To może nie być potrzebne, jeśli jest zdjęcie
-              bgcolor: "#ECF0F1", // Tło będzie widoczne, jeśli zdjęcie się nie załaduje
-              color: "#2C3E50", // Kolor dla inicjałów (jeśli by były)
+              fontSize: "2.8rem",
+              bgcolor: "#ECF0F1",
+              color: "#2C3E50",
             }}
             src={personalData?.photo ? personalData.photo : undefined}
           >
@@ -245,6 +247,7 @@ export default function CvView({
               </ListItem>
             )}
           </List>
+
           {educationData?.length > 0 && (
             <Box
               sx={{ mt: 3, pageBreakInside: "avoid" }}
@@ -299,187 +302,204 @@ export default function CvView({
                   >
                     {category}
                   </Typography>
-                  <Box>
-                    {skills.map((skill) => (
-                      <Typography
-                        key={skill.name}
-                        sx={{
-                          fontSize: smallFontSize,
-                          mb: 0.1,
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        • {skill.name} {skill.level ? `(${skill.level})` : ""}
-                      </Typography>
-                    ))}
-                  </Box>
+                  {skills.map((skill) => (
+                    <Typography
+                      key={skill.name}
+                      sx={{ fontSize: smallFontSize, mb: 0.1, lineHeight: 1.3 }}
+                    >
+                      • {skill.name} {skill.level ? `(${skill.level})` : ""}
+                    </Typography>
+                  ))}
                 </Box>
               ))}
             </Box>
           )}
         </Box>
 
-        {/* --- Prawa Kolumna (jako table-cell) --- */}
+        {/* --- Prawa Kolumna --- */}
         <Box
+          className="cv-right-column"
           sx={{
-            ...rightColumnTableCellSx,
-            display: "table-cell",
-            width: "65%",
+            width: "75%",
+            flexGrow: 1,
+            flex: "1 1 0",
+            backgroundColor: rightColumnBgColor,
+            color: "#333",
+            p: "15pt", // Zmniejszony padding
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+            overflowY: "hidden", // Zmiana: ukrywamy overflow zamiast scroll
+            height: "100%",
           }}
         >
-          {/* Wewnętrzny wrapper dla treści prawej kolumny, który będzie flex containerem */}
-          <Box sx={rightColumnContentWrapperSx}>
-            {/* Kontener na główną treść prawej kolumny, która będzie rosła */}
-            <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
-              {" "}
-              {/* overflowY auto na wypadek gdyby treść była za długa dla jednej strony */}
-              <Typography
-                variant="h3"
-                component="h1"
-                sx={{
-                  fontWeight: "bold",
-                  color: "#2C3E50",
-                  mb: 0.3,
-                  fontSize: "20pt",
-                }}
-              >
-                {personalData?.name}
-              </Typography>
-              <Typography
-                variant="h5"
-                component="p"
-                sx={{
-                  color: "#34495E",
-                  mb: 2.5,
-                  borderBottom: "2px solid #34495E",
-                  pb: 0.8,
-                  fontSize: "13pt",
-                }}
-              >
-                {personalData?.title}
-              </Typography>
-              {summary && (
-                <Box
-                  sx={{ mb: 2.5, pageBreakInside: "avoid" }}
-                  className="cv-section-item"
-                >
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={headingSx}
-                  >
-                    Podsumowanie
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ fontSize: baseFontSize, textAlign: "justify" }}
-                  >
-                    {summary}
-                  </Typography>
-                </Box>
-              )}
-              {experienceData?.length > 0 && (
-                <Box sx={{ mb: 2.5 }}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={headingSx}
-                  >
-                    Doświadczenie zawodowe
-                  </Typography>
-                  {experienceData.map((job, index) => (
-                    <Box
-                      key={index}
-                      sx={{ mb: 2, pageBreakInside: "avoid" }}
-                      className="cv-section-item"
-                    >
-                      <Typography
-                        sx={{ fontWeight: "bold", fontSize: "10.5pt" }}
-                      >
-                        {job.title}
-                      </Typography>
-                      <Typography
-                        sx={{ fontSize: baseFontSize, color: "#34495E" }}
-                      >
-                        {job.company}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: smallerFontSize,
-                          color: "#7F8C8D",
-                          mb: 0.3,
-                        }}
-                      >
-                        {job.dates}
-                      </Typography>
-                      {job.description && Array.isArray(job.description) ? (
-                        job.description.map((point, pIndex) => (
-                          <Box
-                            key={pIndex}
-                            sx={{ display: "flex", mb: 0.2 }}
-                          >
-                            <Typography sx={{ mr: 0.8, lineHeight: 1.3 }}>
-                              •
-                            </Typography>
-                            <Typography
-                              sx={{
-                                fontSize: baseFontSize,
-                                flexGrow: 1,
-                                textAlign: "justify",
-                              }}
-                            >
-                              {point}
-                            </Typography>
-                          </Box>
-                        ))
-                      ) : job.description ? (
-                        <Typography
-                          sx={{ fontSize: baseFontSize, textAlign: "justify" }}
-                        >
-                          {job.description}
-                        </Typography>
-                      ) : null}
-                    </Box>
-                  ))}
-                </Box>
-              )}
-              {references && (
-                <Box
-                  sx={{ mb: 2.5, pageBreakInside: "avoid" }}
-                  className="cv-section-item"
-                >
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={headingSx}
-                  >
-                    Referencje
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ fontSize: baseFontSize }}
-                  >
-                    {references}
-                  </Typography>
-                </Box>
-              )}
-            </Box>
-
-            {/* Klauzula RODO na samym dole wewnętrznego wrappera prawej kolumny */}
+          {/* Treść prawej kolumny */}
+          <Box className="cv-right-column-main-content">
             <Typography
+              variant="h3"
+              component="h1"
               sx={{
-                fontSize: tinyFontSize,
-                color: "#777",
-                textAlign: "justify",
-                mt: "auto",
-                pt: 2,
-                pageBreakInside: "avoid",
+                fontWeight: "bold",
+                color: "#2C3E50",
+                mb: 0.3,
+                fontSize: "20pt",
               }}
             >
-              {gdprClause}
+              {personalData?.name}
             </Typography>
+            <Typography
+              variant="h5"
+              component="p"
+              sx={{
+                color: "#34495E",
+                mb: 2.5,
+                borderBottom: "2px solid #34495E",
+                pb: 0.8,
+                fontSize: "13pt",
+              }}
+            >
+              {personalData?.title}
+            </Typography>
+            {summary && (
+              <Box
+                sx={{ mb: 2, pageBreakInside: "avoid" }} // Zmniejszony margines
+                className="cv-section-item"
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={headingSx}
+                >
+                  Podsumowanie
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontSize: baseFontSize, textAlign: "justify" }}
+                >
+                  {summary}
+                </Typography>
+              </Box>
+            )}
+            {experienceData?.length > 0 && (
+              <Box sx={{ mb: 2 }}>
+                {" "}
+                // Zmniejszony margines
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={headingSx}
+                >
+                  Doświadczenie zawodowe
+                </Typography>
+                {experienceData.map((job, index) => (
+                  <Box
+                    key={index}
+                    sx={{ mb: 1.5, pageBreakInside: "avoid" }} // Zmniejszony margines
+                    className="cv-section-item"
+                  >
+                    <Typography sx={{ fontWeight: "bold", fontSize: "10.5pt" }}>
+                      {job.title}
+                    </Typography>
+                    <Typography
+                      sx={{ fontSize: baseFontSize, color: "#34495E" }}
+                    >
+                      {job.company}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: smallerFontSize,
+                        color: "#7F8C8D",
+                        mb: 0.3,
+                      }}
+                    >
+                      {job.dates}
+                    </Typography>
+                    {job.description && Array.isArray(job.description) ? (
+                      job.description.map((point, pIndex) => (
+                        <Box
+                          key={pIndex}
+                          sx={{ display: "flex", mb: 0.2 }}
+                        >
+                          <Typography sx={{ mr: 0.8, lineHeight: 1.3 }}>
+                            •
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: baseFontSize,
+                              flexGrow: 1,
+                              textAlign: "justify",
+                            }}
+                          >
+                            {point}
+                          </Typography>
+                        </Box>
+                      ))
+                    ) : job.description ? (
+                      <Typography
+                        sx={{ fontSize: baseFontSize, textAlign: "justify" }}
+                      >
+                        {job.description}
+                      </Typography>
+                    ) : null}
+                  </Box>
+                ))}
+              </Box>
+            )}
+            {references && (
+              <Box
+                sx={{ mb: 2, pageBreakInside: "avoid" }} // Zmniejszony margines
+                className="cv-section-item"
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={headingSx}
+                >
+                  Referencje
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontSize: baseFontSize }}
+                >
+                  {references}
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
+      </Box>
+
+      {/* Stopka z RODO - Pozycjonowana absolutnie na dole strony A4 */}
+      <Box
+        className="cv-footer-clause"
+        sx={{
+          flexShrink: 0,
+          pageBreakInside: "avoid",
+          left: 0,
+          right: 0,
+          width: "210mm",
+          height: footerHeight, // Stała wysokość 30mm (3cm)
+          minHeight: footerHeight, // Zapewnia minimalną wysokość
+          maxHeight: footerHeight, // Ogranicza maksymalną wysokość
+          p: "8pt 15pt", // Zmniejszony padding - mniej miejsca w stopce
+          backgroundColor: footerBackgroundColor,
+          borderTop: `1px solid ${theme.palette.divider}`,
+          boxSizing: "border-box",
+          display: "flex",
+          alignItems: "center", // Wyśrodkowanie treści w pionie
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: tinyFontSize,
+            color: footerTextColor,
+            textAlign: "justify",
+            pageBreakInside: "avoid",
+            lineHeight: 1.2,
+          }}
+        >
+          {gdprClause}
+        </Typography>
       </Box>
     </Box>
   );

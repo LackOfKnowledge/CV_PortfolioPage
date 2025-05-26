@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Box from "@mui/material/Box";
 import AuthProviders from "@/components/AuthProviders"; // Importuj AuthProviders
 import "./globals.css";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 export const metadata = {
   title: "Krzysztof Skuratowicz - Portfolio", // Zmień na swoje dane
@@ -20,7 +21,7 @@ export default function RootLayout({ children }) {
           <ThemeRegistry>
             <Box>
               <Box component="main">{children}</Box>
-              <Footer />
+              <ConditionalFooter />
             </Box>
           </ThemeRegistry>
         </AuthProviders>

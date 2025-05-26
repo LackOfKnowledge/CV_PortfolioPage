@@ -31,36 +31,35 @@ body {
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
   body {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
+    margin: 0;
+    padding: 0;
   }
 
-  .site-footer {
-    display: none !important;
+  .cv-page-container {
+    width: 210mm;
+    height: 297mm;
+    box-shadow: none;
+    margin: 0 auto;
+    page-break-after: always;
   }
 
-  .cv-section-item {
-    page-break-inside: avoid;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    page-break-after: avoid;
-  }
-
-  a,
-  a:visited {
-    text-decoration: none !important;
-    color: inherit !important;
+  .cv-footer-clause {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 25mm;
+    background-color: #f0f0f0;
+    padding: 8pt 15pt;
+    box-sizing: border-box;
   }
 }
-
 @page {
   size: A4;
   margin: 1cm;
