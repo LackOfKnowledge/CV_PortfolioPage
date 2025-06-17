@@ -10,12 +10,13 @@ export const personalData = {
 };
 
 export const summary =
-  "Jestem inżynierem informatyki i początkującym frontend developerem z solidnymi podstawami React i Next.js, który aktywnie buduje swoje portfolio i rozwija umiejętności w kierunku pracy w branży IT. Posiadam doświadczenie zawodowe jako geodeta, gdzie rozwinąłem precyzję, umiejętność pracy zespołowej i skutecznej komunikacji z klientami biznesowymi. Obecnie poszukuję pierwszych wyzwań zawodowych jako programista lub specjalista IT, otwarty zarówno na stanowiska juniorskie, jak i na rozwój w strukturach technicznych firm lub instytucji.";
+  "Jestem inżynierem informatyki i początkującym frontend developerem z solidnymi podstawami React i Next.js, który aktywnie buduje swoje portfolio i rozwija umiejętności w kierunku pracy w branży IT. Posiadam doświadczenie zawodowe jako geodeta, gdzie rozwinąłem precyzję, umiejętność pracy zespołowej i skutecznej komunikacji z klientami biznesowymi. Obecnie poszukuję pierwszych wyzwań zawodowych jako programista, specjalista IT lub UX/UI Designer, otwarty zarówno na stanowiska juniorskie, jak i na rozwój w strukturach technicznych firm lub instytucji.";
 
 export const educationData = [
   {
     institution: "Uniwersytet Pomorski w Słupsku",
-    degree: "Inżynier programista",
+    degree:
+      "Inżynier informatyki - specjalizacja  programowanie aplikacji webowych",
     dates: "2021 - 2025",
   },
 ];
@@ -24,7 +25,10 @@ export const skillsData = {
   "Języki & Technologie Podstawowe": [
     { name: "HTML5 / JSX" },
     { name: "CSS3 / SCSS" },
-    { name: "JavaScript (ES6+)" },
+    { name: "JavaScript" },
+    { name: "TypeScript (Podstawy)" },
+    { name: "C#" },
+    { name: "SQL (Podstawy)" },
   ],
   "Frameworki & Biblioteki": [
     { name: "React" },
@@ -37,7 +41,8 @@ export const skillsData = {
   ],
   "Narzędzia & Platformy": [
     { name: "Git / GitHub" },
-    { name: "npm" }, //(zgodnie z Twoją ostatnią wersją)
+    { name: "npm" },
+    { name: "pnpm" }, //(zgodnie z Twoją ostatnią wersją)
     { name: "VS Code" },
     { name: "WebStorm (JetBrains)" }, // Dodane z 'Narzędzia'
     { name: "Node.js" }, // Dodane z 'Narzędzia'
