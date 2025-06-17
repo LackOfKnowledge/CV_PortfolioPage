@@ -99,7 +99,7 @@ export default function CvView({
           display: "flex",
           flexDirection: "row",
           flexGrow: 1,
-          overflow: "visible", // Zmienione z hidden, aby treść nie była ścinana
+          overflow: "visible",
           height: `calc(297mm - ${footerHeight})`,
         }}
       >
@@ -111,7 +111,7 @@ export default function CvView({
             backgroundColor: leftColumnBgColor,
             color: "#ECF0F1",
             p: "15pt",
-            overflowY: "visible", // Zmienione z hidden
+            overflowY: "visible",
             height: "100%",
           }}
         >
@@ -274,11 +274,39 @@ export default function CvView({
                   >
                     {edu.dates}
                   </Typography>
+                  <Box sx={{ mt: 1 }}>
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: smallFontSize,
+                        textDecoration: "underline",
+                      }}
+                    >
+                      Praca inżynierska:
+                    </Typography>
+                    <Typography
+                      sx={{ fontSize: smallFontSize, fontStyle: "italic" }}
+                    >
+                      "Monitoruj proces wieloelementowych zamówień produkcyjnych
+                      dzięki aplikacji "Prodify" - część kliencka aplikacji"
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: smallerFontSize,
+                        color: "#BDC3C7",
+                        mt: 0.5,
+                      }}
+                    >
+                      Kluczowe technologie: React, Next.js, Material UI,
+                      JavaScript (ES6+), REST API
+                    </Typography>
+                  </Box>
                 </Box>
               ))}
             </Box>
           )}
-          {skillsData && Object.keys(skillsData).length > 0 && (
+
+          {references && (
             <Box
               sx={{ mt: 3, pageBreakInside: "avoid" }}
               className="cv-section-item"
@@ -288,28 +316,11 @@ export default function CvView({
                 component="h2"
                 sx={leftHeadingSx}
               >
-                Umiejętności
+                Referencje
               </Typography>
-              {Object.entries(skillsData).map(([category, skills]) => (
-                <Box
-                  key={category}
-                  sx={{ mb: 1.2 }}
-                >
-                  <Typography
-                    sx={{ fontWeight: "bold", fontSize: "9.5pt", mb: 0.3 }}
-                  >
-                    {category}
-                  </Typography>
-                  {skills.map((skill) => (
-                    <Typography
-                      key={skill.name}
-                      sx={{ fontSize: smallFontSize, mb: 0.1, lineHeight: 1.3 }}
-                    >
-                      • {skill.name} {skill.level ? `(${skill.level})` : ""}
-                    </Typography>
-                  ))}
-                </Box>
-              ))}
+              <Typography sx={{ fontSize: smallFontSize }}>
+                {references}
+              </Typography>
             </Box>
           )}
         </Box>
@@ -325,7 +336,7 @@ export default function CvView({
             display: "flex",
             flexDirection: "column",
             minHeight: 0,
-            overflowY: "visible", // Zmienione z hidden
+            overflowY: "visible",
             height: "100%",
           }}
         >
@@ -438,7 +449,7 @@ export default function CvView({
                 ))}
               </Box>
             )}
-            {references && (
+            {skillsData && Object.keys(skillsData).length > 0 && (
               <Box
                 sx={{ mb: 2, pageBreakInside: "avoid" }}
                 className="cv-section-item"
@@ -448,14 +459,35 @@ export default function CvView({
                   component="h2"
                   sx={headingSx}
                 >
-                  Referencje
+                  Umiejętności
                 </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ fontSize: baseFontSize }}
-                >
-                  {references}
-                </Typography>
+                {Object.entries(skillsData).map(([category, skills]) => (
+                  <Box
+                    key={category}
+                    sx={{ mb: 1.2, pageBreakInside: "avoid" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: "bold", fontSize: "10.5pt", mb: 0.3 }}
+                    >
+                      {category}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: smallFontSize,
+                        lineHeight: 1.4,
+                        textAlign: "justify",
+                      }}
+                    >
+                      {skills
+                        .map((skill) =>
+                          skill.level
+                            ? `${skill.name} (${skill.level})`
+                            : skill.name
+                        )
+                        .join(" • ")}
+                    </Typography>
+                  </Box>
+                ))}
               </Box>
             )}
           </Box>
