@@ -25,11 +25,11 @@ const experienceData = [
   },
   {
     type: "education",
-    title: "Inżynier (jeszcze nie :) )",
-    company: "Uczelnia: Uniwersytet Pomorski w Słupsku",
+    title: "Inżynier",
+    company: "Uniwersytet Pomorski w Słupsku",
     dates: "10.2021 - 06.2025",
     description:
-      "Aplikacja Prodify (część frontendowa) - aplikacja przeznaczona dla średnich i dużych firm produkcyjnych mająca za zadanie automatyzację, optymalizację i nadzór nad produkcją",
+      "Aplikacja Prodify (część kliencka) - aplikacja przeznaczona dla średnich i dużych firm produkcyjnych mająca za zadanie automatyzację, optymalizację i nadzór nad produkcją",
   },
 ];
 
@@ -49,10 +49,6 @@ const animatedWaveSxBase = (theme) => ({
   transition: "animation-duration 0.4s ease-out",
   "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
 });
-const animatedWaveSxSection = (theme) => ({
-  ...animatedWaveSxBase(theme),
-  fontWeight: "medium",
-});
 
 export default function ExperienceSection() {
   return (
@@ -65,7 +61,6 @@ export default function ExperienceSection() {
           <Typography
             variant="h4"
             component="h2"
-            sx={animatedWaveSxSection}
           >
             Doświadczenie i Edukacja
           </Typography>

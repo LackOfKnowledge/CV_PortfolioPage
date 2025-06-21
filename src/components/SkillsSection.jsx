@@ -6,44 +6,44 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
+import Grid from "@mui/material/Grid"; // Poprawiony import, jeśli był inny
 import Chip from "@mui/material/Chip";
 import { motion } from "framer-motion";
 
-// --- TODO: Zastąp swoimi umiejętnościami! ---
 const skillsData = {
   Frontend: [
-    { name: "HTML5 / JSX" }, // Połączenie "HTML5" i uwzględnienie JSX
-    { name: "CSS3 / SCSS" }, // Dodanie SCSS
-    { name: "JavaScript (ES6+)" }, // Użycie bardziej szczegółowej nazwy
+    { name: "HTML5 / JSX" },
+    { name: "CSS3 / SCSS" },
+    { name: "JavaScript (ES6+)" },
     { name: "React" },
     { name: "Next.js" },
     { name: "Material UI (MUI)" },
     { name: "Framer Motion" },
     { name: "Vue (Podstawy)" },
-    { name: "Axios" }, // Zachowane z drugiej listy, jeśli nadal aktualne
-    { name: "js-cookie" }, // Zachowane z drugiej listy, jeśli nadal aktualne
-    { name: "Responsive Web Design" }, // Przeniesione z "Inne" (plik CV)
-    { name: "Dostępność (WCAG/a11y)" }, // Przeniesione z "Inne" (plik CV)
+    { name: "Axios" },
+    { name: "js-cookie" },
+    { name: "Responsive Web Design" },
+    { name: "Dostępność (WCAG/a11y)" },
   ],
   Narzędzia: [
     { name: "Git / GitHub" },
-    { name: "npm" }, // Zachowanie yarn, jeśli używasz obu
+    { name: "npm" },
     { name: "VS Code" },
-    { name: "WebStorm (JetBrains)" }, // Zachowane z drugiej listy, jeśli nadal aktualne
-    { name: "Node.js" }, // Zachowane z drugiej listy, jeśli nadal aktualne
+    { name: "WebStorm (JetBrains)" },
+    { name: "Node.js" },
     { name: "DevTools" },
     { name: "Postman" },
     { name: "Figma (Podstawy)" },
-    { name: "eslint" }, // Zachowane z drugiej listy, jeśli nadal aktualne
+    { name: "eslint" },
   ],
   Inne: [
-    { name: "REST API" }, // Przeniesione z "Inne" (plik CV)
-    { name: "Podstawy SEO" }, // Przeniesione z "Inne" (plik CV)
-    { name: "Scrum / Agile" }, // Przeniesione z "Inne" (plik CV)
-    { name: "Angielski B2" }, // Utrzymanie formatu z "level" w nazwie
+    { name: "REST API" },
+    { name: "Podstawy SEO" },
+    { name: "Scrum / Agile" },
+    { name: "Angielski B2" },
   ],
 };
+
 const categoryTitleSparkleVariant = {
   hidden: { opacity: 0, y: 10 },
   visible: {
@@ -53,6 +53,7 @@ const categoryTitleSparkleVariant = {
     transition: { duration: 0.5, ease: "circOut", delay: 0.2 },
   },
 };
+
 const chipContainerVariant = {
   hidden: { opacity: 0 },
   visible: {
@@ -60,10 +61,12 @@ const chipContainerVariant = {
     transition: { staggerChildren: 0.06, delayChildren: 0.4 },
   },
 };
+
 const chipItemVariant = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
 };
+
 const chipPulseAnimation = () => ({
   opacity: [1, 0.65, 1],
   transition: {
@@ -74,35 +77,15 @@ const chipPulseAnimation = () => ({
   },
 });
 
-// Definicje stylów animacji nagłówka
-const animatedWaveSxBase = (theme) => ({
-  background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
-  backgroundSize: "350% auto",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-  textFillColor: "transparent",
-  display: "inline-block",
-  animationName: "waveGradient",
-  animationTimingFunction: "linear",
-  animationIterationCount: "infinite",
-  animationDuration: "var(--gradient-anim-duration)",
-  transition: "animation-duration 0.4s ease-out",
-  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
-});
-const animatedWaveSxSection = (theme) => ({
-  ...animatedWaveSxBase(theme),
-  fontWeight: "medium",
-});
-
 export default function SkillsSection() {
   return (
     <Box
       id="umiejetnosci"
       sx={{
         py: { xs: 6, md: 10 },
-        backgroundColor: "background.default",
-        overflow: "hidden",
+        backgroundColor: "background.paper", // Lepszy kontrast
+        borderTop: "1px solid",
+        borderColor: "divider",
       }}
     >
       <Container maxWidth="lg">
@@ -110,7 +93,6 @@ export default function SkillsSection() {
           <Typography
             variant="h4"
             component="h2"
-            sx={animatedWaveSxSection}
           >
             Umiejętności i Technologie
           </Typography>
@@ -121,7 +103,7 @@ export default function SkillsSection() {
             mb: { xs: 4, md: 6 },
             mx: "auto",
             width: "80px",
-            height: "3px",
+            height: "2px",
             backgroundColor: "primary.main",
             borderRadius: "2px",
           }}
@@ -132,11 +114,13 @@ export default function SkillsSection() {
           justifyContent="center"
         >
           {Object.entries(skillsData).map(([category, skills]) => (
+            // Zastosowanie propów xs, sm, md bezpośrednio na Grid item
             <Grid
-              key={category}
+              item
               xs={12}
               sm={6}
               md={4}
+              key={category}
             >
               <motion.div
                 variants={categoryTitleSparkleVariant}
@@ -164,7 +148,7 @@ export default function SkillsSection() {
                   justifyContent: "center",
                 }}
               >
-                {skills.map((skill, index) => (
+                {skills.map((skill) => (
                   <motion.div
                     key={skill.name}
                     variants={chipItemVariant}

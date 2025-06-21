@@ -5,12 +5,14 @@ import Box from "@mui/material/Box";
 import AuthProviders from "@/components/AuthProviders";
 import "./globals.css";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import Sidebar from "@/components/Sidebar";
+import MobileHeader from "@/components/MobileHeader";
 
 export const metadata = {
   title: "Krzysztof Skuratowicz - Portfolio",
   description: "Portfolio Frontend Developera",
   icons: {
-    icon: "/images/logo_bar.png", // to działa dla wielu formatów, ale...
+    icon: "/images/logo_bar.png",
     shortcut: "/images/logo_bar.png",
     apple: "/images/logo_bar.png",
   },
@@ -18,39 +20,27 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="pl"
-      style={{ height: "100%" }}
-    >
-      <body
-        className={chivo.className}
-        style={{
-          display: "flex", // Kluczowe dla flexbox layout
-          flexDirection: "column", // Układ kolumnowy dla body
-          minHeight: "100vh", // Minimalna wysokość body na całe okno
-          margin: 0, // Usunięcie domyślnych marginesów body
-        }}
-      >
+    <html lang="pl">
+      <body className={chivo.className}>
         <AuthProviders>
           <ThemeRegistry>
-            {/* Główny kontener aplikacji, który będzie zarządzał układem flex */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                flexGrow: 1, // Ten Box ma zająć całą dostępną przestrzeń w body
-              }}
-            >
+            <Box sx={{ display: "flex" }}>
+              <Sidebar />
               <Box
+                id="main-content-area" // <-- KROK 1: DODAJEMY ID
                 component="main"
                 sx={{
-                  flexGrow: 1, // Główna treść (main) rozciąga się, wypychając stopkę w dół
-                  // Możesz dodać tutaj padding lub inne style dla głównej treści, jeśli są potrzebne
+                  flexGrow: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100vh", // <-- KROK 2: USTAWIAWY WYSOKOŚĆ
+                  overflowY: "auto", // <-- KROK 3: WŁĄCZAMY PRZEWIJANIE
                 }}
               >
-                {children}
+                <MobileHeader />
+                <Box sx={{ flexGrow: 1 }}>{children}</Box>
+                <ConditionalFooter />
               </Box>
-              <ConditionalFooter /> {/* Stopka będzie naturalnie na dole */}
             </Box>
           </ThemeRegistry>
         </AuthProviders>

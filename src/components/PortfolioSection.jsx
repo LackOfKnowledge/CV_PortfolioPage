@@ -136,10 +136,6 @@ const animatedWaveSxBase = (theme) => ({
   transition: "animation-duration 0.4s ease-out",
   "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
 });
-const animatedWaveSxSection = (theme) => ({
-  ...animatedWaveSxBase(theme),
-  fontWeight: "medium",
-});
 
 export default function PortfolioSection() {
   const theme = useTheme();
@@ -233,7 +229,6 @@ export default function PortfolioSection() {
           <Typography
             variant="h4"
             component="h2"
-            sx={animatedWaveSxSection}
           >
             Portfolio
           </Typography>

@@ -28,10 +28,6 @@ const animatedWaveSxBase = (theme) => ({
   transition: "animation-duration 0.4s ease-out",
   "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
 });
-const animatedWaveSxSection = (theme) => ({
-  ...animatedWaveSxBase(theme),
-  fontWeight: "medium",
-});
 
 export default function ContactSection() {
   const [email, setEmail] = useState("");
@@ -87,7 +83,6 @@ export default function ContactSection() {
           <Typography
             variant="h4"
             component="h2"
-            sx={animatedWaveSxSection}
           >
             Kontakt
           </Typography>

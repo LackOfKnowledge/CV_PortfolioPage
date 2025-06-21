@@ -21,10 +21,6 @@ const animatedWaveSxBase = (theme) => ({
   transition: "animation-duration 0.4s ease-out",
   "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" }, // Przyspieszenie
 });
-const animatedWaveSxSection = (theme) => ({
-  ...animatedWaveSxBase(theme),
-  fontWeight: "medium",
-});
 
 export default function AboutSection() {
   return (
@@ -37,7 +33,6 @@ export default function AboutSection() {
           <Typography
             variant="h4"
             component="h2"
-            sx={animatedWaveSxSection}
           >
             O mnie
           </Typography>
