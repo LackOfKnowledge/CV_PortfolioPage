@@ -1,7 +1,7 @@
 // src/components/MobileHeader.jsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
@@ -11,7 +11,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
-import NavigationLinks from "./NavigationLinks";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useColorMode } from "@/components/ThemeRegistry";
+import { smoothScrollTo } from "@/utils/smoothScroll";
 
 const navItems = [
   { label: "Start", targetId: "hero" },
@@ -25,17 +30,16 @@ const navItems = [
 export default function MobileHeader() {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
+  const theme = useTheme();
+  const colorMode = useColorMode();
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const handleLinkClick = (to, isClick = false) => {
-    setActiveSection(to);
-    if (isClick) {
-      setDrawerOpen(false);
-    }
+  const handleLinkClick = (targetId) => {
+    setDrawerOpen(false);
+    smoothScrollTo(targetId, "main-content-area");
   };
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
@@ -56,7 +60,17 @@ export default function MobileHeader() {
           K. Skuratowicz
         </Typography>
         <IconButton
-          color="inherit"
+          onClick={colorMode.toggleColorMode}
+          // Usunięto prop color="inherit"
+        >
+          {theme.palette.mode === "dark" ? (
+            <Brightness7Icon />
+          ) : (
+            <Brightness4Icon />
+          )}
+        </IconButton>
+        <IconButton
+          color="inherit" // Ten jest OK, bo dotyczy ikony hamburgera
           aria-label="open drawer"
           edge="end"
           onClick={handleDrawerToggle}
@@ -86,11 +100,25 @@ export default function MobileHeader() {
           >
             <CloseIcon />
           </IconButton>
-          <NavigationLinks
-            navItems={navItems}
-            activeSection={activeSection}
-            onLinkClick={handleLinkClick}
-          />
+          <Stack
+            spacing={1}
+            sx={{ mt: 2, position: "relative" }}
+          >
+            {navItems.map((item) => (
+              <Box
+                key={item.label}
+                onClick={() => handleLinkClick(item.targetId)}
+                sx={{
+                  padding: "12px 16px",
+                  cursor: "pointer",
+                  color: "text.secondary",
+                  "&:hover": { color: "text.primary" },
+                }}
+              >
+                {item.label}
+              </Box>
+            ))}
+          </Stack>
         </Box>
       </Drawer>
     </AppBar>

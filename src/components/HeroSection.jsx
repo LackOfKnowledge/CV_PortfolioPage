@@ -5,28 +5,16 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import DownloadIcon from "@mui/icons-material/Download";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import { smoothScrollTo } from "@/utils/smoothScroll";
 
-const animatedWaveSxHero = (theme) => ({
-  background: `linear-gradient(75deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #9C27B0, ${theme.palette.primary.main})`,
-  backgroundSize: "300% auto",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-  textFillColor: "transparent",
-  animation: "waveGradient 10s linear infinite",
-  display: "inline-block",
-  fontWeight: "bold",
-});
-
-export default function HeroSection({ onNavigate }) {
-  const headerHeight = "64px";
-
+export default function HeroSection() {
   return (
     <Box
+      id="hero"
       sx={{
-        minHeight: `calc(90vh - ${headerHeight})`,
+        backgroundColor: (theme) => theme.palette.background.default,
+        minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -35,57 +23,47 @@ export default function HeroSection({ onNavigate }) {
       }}
     >
       <Container maxWidth="md">
+        <Box
+          component="img"
+          src="/images/avataaars.svg"
+          alt="Avatar"
+          sx={{
+            width: 140,
+            height: 140,
+            mb: 2,
+          }}
+        />
         <Typography
-          variant="h2"
+          variant="h4"
           component="h1"
-          gutterBottom
-          sx={animatedWaveSxHero}
-        >
-          <img src="/images/avataaars.svg" />
-        </Typography>
-        <Typography
-          variant="h5"
-          component="p"
-          color="text.secondary"
-          sx={{ mb: 3 }}
+          color="text.primary"
+          sx={{ mb: 1, fontWeight: "bold" }}
         >
           Witaj! Jestem Krzysiek i zapraszam do kontaktu!
-          {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Typography
-          variant="body1"
-          color="text.primary"
-          sx={{ mb: 5, maxWidth: "700px", mx: "auto" }}
+          variant="h6"
+          component="p"
+          color="text.secondary"
+          sx={{ mb: 4, maxWidth: "700px", mx: "auto", fontWeight: "normal" }}
         >
           Przeklikaj przez zakładki i zapoznaj się z moim życiorysem, zobacz
           gdzie pracowałem i co potrafię. Zachęcam do skontaktowania się ze mną
           poprzez formularz. Jeśli chcesz wyślę Ci swoje CV, ale w bardziej
           oryginalny sposób niż pdf mailem :).
-          {/* TODO: Wpisz swoje dane */}
         </Typography>
         <Stack
-          direction={{ xs: "column", sm: "row" }}
+          direction="row"
           spacing={2}
           justifyContent="center"
         >
-          {/* <Button
+          <Button
             variant="contained"
             color="primary"
             size="large"
-            startIcon={<DownloadIcon />}
-            href="/cv"
-            target="_blank"
-            sx={{ minWidth: "180px" }}
-          >
-            Pobierz CV
-          </Button> */}
-          <Button
-            variant="outlined"
-            color="primary"
-            size="large"
             startIcon={<MailOutlineIcon />}
-            onClick={() => (onNavigate ? onNavigate("kontakt") : null)}
             sx={{ minWidth: "180px" }}
+            onClick={() => smoothScrollTo("kontakt", "main-content-area")}
           >
             Kontakt
           </Button>

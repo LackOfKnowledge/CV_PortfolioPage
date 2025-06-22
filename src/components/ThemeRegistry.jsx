@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useMemo, createContext, useContext } from "react";
+import { useAnimation } from "framer-motion";
 import createCache from "@emotion/cache";
 import { useServerInsertedHTML } from "next/navigation";
 import { CacheProvider } from "@emotion/react";
@@ -9,16 +10,15 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { lightTheme, darkTheme } from "@/theme/theme";
 
-const createEmotionCache = () => {
-  return createCache({ key: "mui-style" });
-};
-
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 export const useColorMode = () => useContext(ColorModeContext);
 
-export default function ThemeRegistry(props) {
-  const { children } = props;
+const TransitionContext = createContext(null);
+export const useTransition = () => useContext(TransitionContext);
 
+const createEmotionCache = () => createCache({ key: "mui-style" });
+
+export default function ThemeRegistry({ children }) {
   const [{ cache, flush }] = useState(() => {
     const cache = createEmotionCache();
     cache.compat = true;
@@ -41,9 +41,7 @@ export default function ThemeRegistry(props) {
 
   useServerInsertedHTML(() => {
     const names = flush();
-    if (names.length === 0) {
-      return null;
-    }
+    if (names.length === 0) return null;
     let styles = "";
     for (const name of names) {
       styles += cache.inserted[name];
@@ -52,22 +50,48 @@ export default function ThemeRegistry(props) {
       <style
         key={cache.key}
         data-emotion={`${cache.key} ${names.join(" ")}`}
-        dangerouslySetInnerHTML={{
-          __html: styles,
-        }}
+        dangerouslySetInnerHTML={{ __html: styles }}
       />
     );
   });
 
   const [mode, setMode] = useState("dark");
+  const [overlayBg, setOverlayBg] = useState(
+    lightTheme.palette.background.default
+  );
+  const controls = useAnimation();
+
+  // Prosta i niezawodna animacja "cross-fade"
+  const triggerTransition = async (targetMode) => {
+    const targetTheme = targetMode === "light" ? lightTheme : darkTheme;
+    setOverlayBg(targetTheme.palette.background.default);
+
+    // 1. Płynnie pokaż nakładkę w kolorze docelowego tła
+    await controls.start("visible");
+
+    // 2. Zmień motyw
+    setMode(targetMode);
+
+    // 3. Płynnie schowaj nakładkę, odkrywając nową treść
+    await controls.start("hidden");
+  };
+
+  const transitionValue = useMemo(
+    () => ({
+      controls,
+      bgColor: overlayBg,
+    }),
+    [controls, overlayBg]
+  );
 
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+        const targetMode = mode === "light" ? "dark" : "light";
+        triggerTransition(targetMode);
       },
     }),
-    []
+    [mode]
   );
 
   const theme = useMemo(
@@ -77,12 +101,14 @@ export default function ThemeRegistry(props) {
 
   return (
     <CacheProvider value={cache}>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline enableColorScheme />
-          {children}
-        </ThemeProvider>
-      </ColorModeContext.Provider>
+      <TransitionContext.Provider value={transitionValue}>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline enableColorScheme />
+            {children}
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </TransitionContext.Provider>
     </CacheProvider>
   );
 }

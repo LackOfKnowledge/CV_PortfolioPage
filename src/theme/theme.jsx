@@ -4,55 +4,46 @@
 import { createTheme } from "@mui/material/styles";
 import { chivo } from "./fonts";
 
-const commonSettings = {
-  typography: {
-    fontFamily: chivo.style.fontFamily,
-    h1: { fontWeight: 700 },
-    h2: { fontWeight: 700 },
-    h3: { fontWeight: 700 },
-    h4: { fontWeight: 500 },
-    h5: { fontWeight: 500 },
+const commonComponents = {
+  MuiButton: {
+    styleOverrides: {
+      root: { textTransform: "none" },
+    },
   },
-  shape: {
-    borderRadius: 8,
+  MuiCard: {
+    defaultProps: { elevation: 0 },
   },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-        },
-      },
-    },
-    MuiCard: {
-      defaultProps: {
-        elevation: 0,
-      },
-    },
-    MuiAppBar: {
-      defaultProps: {
-        elevation: 0,
-        position: "sticky",
-      },
-    },
+  MuiAppBar: {
+    defaultProps: { elevation: 0, position: "sticky" },
   },
 };
 
 export const darkTheme = createTheme({
-  ...commonSettings,
   palette: {
     mode: "dark",
     primary: { main: "#FAFAFA" },
     background: { default: "#121212", paper: "#1E1E1E" },
-    text: { primary: "#FAFAFA", secondary: "#A0A0A0" },
+    text: { primary: "#FAFAFA", secondary: "#A0A0A0", disabled: "#757575" },
     divider: "rgba(250, 250, 250, 0.12)",
   },
+  typography: {
+    fontFamily: chivo.style.fontFamily,
+    h1: { fontWeight: 700, color: "#FFFFFF" },
+    h2: { fontWeight: 700, color: "#FAFAFA" },
+    h3: { fontWeight: 700, color: "#F5F5F5" },
+    h4: { fontWeight: 500, color: "#F5F5F5" },
+    h5: { fontWeight: 500, color: "#E0E0E0" },
+    h6: { fontWeight: 500, color: "#E0E0E0" },
+    body1: { color: "#E0E0E0" },
+    body2: { color: "#BDBDBD" },
+  },
+  shape: { borderRadius: 8 },
   components: {
-    ...commonSettings.components,
+    ...commonComponents,
     MuiButton: {
-      ...commonSettings.components.MuiButton,
+      ...commonComponents.MuiButton,
       styleOverrides: {
-        ...commonSettings.components.MuiButton.styleOverrides,
+        ...commonComponents.MuiButton.styleOverrides,
         containedPrimary: {
           backgroundColor: "#FAFAFA",
           color: "#121212",
@@ -68,7 +59,7 @@ export const darkTheme = createTheme({
       },
     },
     MuiCard: {
-      ...commonSettings.components.MuiCard,
+      ...commonComponents.MuiCard,
       styleOverrides: {
         root: {
           backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -82,42 +73,56 @@ export const darkTheme = createTheme({
 });
 
 export const lightTheme = createTheme({
-  ...commonSettings,
   palette: {
     mode: "light",
-    primary: { main: "#1E1E1E" },
-    background: { default: "#F5F5F5", paper: "#FFFFFF" },
-    text: { primary: "#1E1E1E", secondary: "#5F5F5F" },
+    primary: { main: "#1A2027" },
+    background: { default: "#F7F9FC", paper: "#FFFFFF" },
+    text: { primary: "#1A2027", secondary: "#525B62", disabled: "#9E9E9E" },
     divider: "rgba(0, 0, 0, 0.12)",
   },
+  typography: {
+    fontFamily: chivo.style.fontFamily,
+    h1: { fontWeight: 700, color: "#1A2027" },
+    h2: { fontWeight: 700, color: "#2F3A46" },
+    h3: { fontWeight: 700, color: "#3E4C59" },
+    h4: { fontWeight: 500, color: "#3E4C59" },
+    h5: { fontWeight: 500, color: "#525B62" },
+    h6: { fontWeight: 500, color: "#525B62" },
+    body1: { color: "#3E4C59" },
+    body2: { color: "#6A737D" },
+  },
+  shape: { borderRadius: 8 },
   components: {
-    ...commonSettings.components,
+    ...commonComponents,
     MuiButton: {
-      ...commonSettings.components.MuiButton,
+      ...commonComponents.MuiButton,
       styleOverrides: {
-        ...commonSettings.components.MuiButton.styleOverrides,
+        ...commonComponents.MuiButton.styleOverrides,
         containedPrimary: {
-          backgroundColor: "#1E1E1E",
+          backgroundColor: "#1A2027",
           color: "#FFFFFF",
-          "&:hover": { backgroundColor: "#333333" },
+          "&:hover": { backgroundColor: "#3E4C59" },
         },
         outlinedPrimary: {
           borderColor: "rgba(0, 0, 0, 0.23)",
           "&:hover": {
-            borderColor: "#1E1E1E",
+            borderColor: "#1A2027",
             backgroundColor: "rgba(0, 0, 0, 0.04)",
           },
         },
       },
     },
     MuiCard: {
-      ...commonSettings.components.MuiCard,
+      ...commonComponents.MuiCard,
       styleOverrides: {
         root: {
           backgroundColor: "#FFFFFF",
-          border: "1px solid rgba(0, 0, 0, 0.12)",
-          transition: "border-color 0.3s ease",
-          "&:hover": { borderColor: "rgba(0, 0, 0, 0.4)" },
+          border: "1px solid #E0E0E0",
+          transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+          "&:hover": {
+            borderColor: "#BDBDBD",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+          },
         },
       },
     },

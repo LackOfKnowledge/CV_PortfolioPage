@@ -1,4 +1,3 @@
-// src/components/PortfolioSection.jsx
 "use client";
 
 import React, { useState } from "react";
@@ -70,7 +69,7 @@ const portfolioData = [
   {
     title: "Właśnie to portfolio",
     description: "Moje portfolio, które aktualnie przeglądasz.",
-    image: null,
+    video: "/videos/portfolio-demo.mp4",
     tags: [
       "Next.js",
       "React",
@@ -80,7 +79,7 @@ const portfolioData = [
       "JavaScript",
       "Responsive Design",
     ],
-    demoUrl: "",
+    demoUrl: "https://ksportfoliodev.vercel.app",
     repoUrl: "https://github.com/LackOfKnowledge/CV_PortfolioPage",
     detailedDescription: `
       Ta strona portfolio została stworzona, aby zaprezentować moje umiejętności i projekty. 
@@ -89,25 +88,6 @@ const portfolioData = [
       Kładłem nacisk na czysty kod, responsywność oraz estetykę.
       Możesz tu znaleźć informacje o moim doświadczeniu, umiejętnościach oraz zobaczyć inne projekty.
       Dodatkowo zaimplementowałem asystenta "Clippy" dla urozmaicenia interakcji.
-    `,
-  },
-  {
-    title: "test",
-    description: "test",
-    image: null,
-    tags: [
-      "Next.js",
-      "React",
-      "Material UI",
-      "Framer Motion",
-      "CSS",
-      "JavaScript",
-      "Responsive Design",
-    ],
-    demoUrl: "",
-    repoUrl: "https://github.com/LackOfKnowledge/xxxx",
-    detailedDescription: `
-      test
     `,
   },
 ];
@@ -120,22 +100,6 @@ const portfolioItemVariant = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
-
-const animatedWaveSxBase = (theme) => ({
-  background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
-  backgroundSize: "350% auto",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-  textFillColor: "transparent",
-  display: "inline-block",
-  animationName: "waveGradient",
-  animationTimingFunction: "linear",
-  animationIterationCount: "infinite",
-  animationDuration: "var(--gradient-anim-duration)",
-  transition: "animation-duration 0.4s ease-out",
-  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
-});
 
 export default function PortfolioSection() {
   const theme = useTheme();
@@ -152,50 +116,33 @@ export default function PortfolioSection() {
     setSelectedProject(null);
   };
 
-  const cardMargin = theme.spacing(2);
+  const renderProjectMedia = (project) => {
+    if (project.video) {
+      return (
+        <CardMedia
+          component="video"
+          src={project.video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          sx={{ height: "180px", objectFit: "cover" }}
+        />
+      );
+    }
 
-  // Funkcja pomocnicza do renderowania obrazka lub ikony
-  const renderProjectImage = (projectImage) => {
-    if (typeof projectImage === "string") {
-      // Jeśli 'image' to string (ścieżka)
+    if (project.image && typeof project.image === "string") {
       return (
         <CardMedia
           component="img"
           height="180"
-          image={projectImage}
+          image={project.image}
           alt="Project image"
-          sx={{ objectFit: "cover", flexShrink: 0 }}
+          sx={{ objectFit: "cover" }}
         />
       );
-    } else if (
-      projectImage &&
-      typeof projectImage === "object" &&
-      projectImage.type &&
-      projectImage.type.muiName === "SvgIcon"
-    ) {
-      // Jeśli 'image' to komponent ikony MUI (bardziej niezawodne sprawdzenie)
-      const IconComponent = projectImage;
-      return (
-        <Box
-          sx={{
-            height: "180px", // Dopasuj wysokość do CardMedia
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor:
-              theme.palette.mode === "dark"
-                ? theme.palette.grey[800]
-                : theme.palette.grey[200], // Placeholder tło
-            color: theme.palette.text.secondary,
-            flexShrink: 0,
-          }}
-        >
-          <IconComponent sx={{ fontSize: "4rem" }} />{" "}
-          {/* Dostosuj rozmiar ikony */}
-        </Box>
-      );
     }
-    // Domyślny fallback, jeśli obrazek nie jest ani stringiem, ani poprawnym komponentem ikony
+
     return (
       <Box
         sx={{
@@ -205,10 +152,9 @@ export default function PortfolioSection() {
           justifyContent: "center",
           backgroundColor:
             theme.palette.mode === "dark"
-              ? theme.palette.grey[800]
+              ? theme.palette.grey[900]
               : theme.palette.grey[200],
           color: theme.palette.text.secondary,
-          flexShrink: 0,
         }}
       >
         <ImageNotSupportedIcon sx={{ fontSize: "4rem" }} />
@@ -225,21 +171,21 @@ export default function PortfolioSection() {
       }}
     >
       <Container maxWidth="lg">
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-          <Typography
-            variant="h4"
-            component="h2"
-          >
-            Portfolio
-          </Typography>
-        </Box>
+        <Typography
+          variant="h4"
+          component="h2"
+          align="center"
+          sx={{ mb: 1 }}
+        >
+          Portfolio
+        </Typography>
         <Divider
           variant="middle"
           sx={{
             mb: { xs: 4, md: 6 },
             mx: "auto",
             width: "80px",
-            height: "3px",
+            height: "2px",
             backgroundColor: "primary.main",
             borderRadius: "2px",
           }}
@@ -258,9 +204,7 @@ export default function PortfolioSection() {
                 sm: "repeat(2, 1fr)",
                 md: "repeat(3, 1fr)",
               },
-              gap: cardMargin,
-              mt: theme.spacing(6),
-              alignItems: "stretch",
+              gap: 3,
             }}
           >
             {portfolioData.map((project, index) => (
@@ -273,39 +217,18 @@ export default function PortfolioSection() {
                   display: "flex",
                   flexDirection: "column",
                   height: "100%",
-                  overflow: "hidden",
-                  // Przywrócone
-                  transition:
-                    "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                  "&:hover": {
-                    // Przywrócone
-                    transform: "translateY(-5px)",
-                    boxShadow: theme.shadows[6],
-                    cursor: "pointer",
-                  },
+                  cursor: "pointer",
                 }}
               >
-                {/* Użycie funkcji pomocniczej do renderowania obrazka/ikony */}
-                {renderProjectImage(project.image)}
+                {renderProjectMedia(project)}
 
                 <CardContent
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    flexGrow: 1,
-                    py: 2,
-                    px: 2,
-                    overflow: "hidden",
-                  }}
+                  sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
                 >
                   <Typography
                     variant="h6"
                     component="h2"
                     gutterBottom
-                    sx={{
-                      wordBreak: "break-word",
-                      flexShrink: 0,
-                    }}
                   >
                     {project.title}
                   </Typography>
@@ -313,10 +236,6 @@ export default function PortfolioSection() {
                     variant="body2"
                     color="text.secondary"
                     paragraph
-                    sx={{
-                      wordBreak: "break-word",
-                      flexShrink: 0,
-                    }}
                   >
                     {project.description}
                   </Typography>
@@ -325,7 +244,7 @@ export default function PortfolioSection() {
                       mt: "auto",
                       display: "flex",
                       flexWrap: "wrap",
-                      flexShrink: 0,
+                      gap: 1,
                       pt: 1,
                     }}
                   >
@@ -335,19 +254,11 @@ export default function PortfolioSection() {
                         label={tag}
                         size="small"
                         variant="outlined"
-                        sx={{
-                          m: "5px",
-                          maxWidth: "100%",
-                          "& .MuiChip-label": {
-                            display: "inline-block",
-                            whiteSpace: "normal",
-                            wordBreak: "break-all",
-                          },
-                        }}
                       />
                     ))}
                   </Box>
                 </CardContent>
+
                 {(project.demoUrl || project.repoUrl) && (
                   <CardActions
                     sx={{
@@ -355,7 +266,6 @@ export default function PortfolioSection() {
                       px: 2,
                       pb: 2,
                       pt: 1,
-                      flexShrink: 0,
                     }}
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -378,9 +288,8 @@ export default function PortfolioSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         color="inherit"
-                        sx={{ p: 0.5 }}
                       >
-                        <GitHubIcon fontSize="small" />
+                        <GitHubIcon />
                       </IconButton>
                     )}
                   </CardActions>
@@ -429,12 +338,14 @@ export default function PortfolioSection() {
             </IconButton>
           </DialogTitle>
           <DialogContentModal dividers>
-            {/* W modalu również użyjemy funkcji pomocniczej */}
-            {renderProjectImage(selectedProject.image)}
+            {renderProjectMedia(selectedProject)}
             <Typography
               gutterBottom
               id="project-dialog-description"
-              sx={{ whiteSpace: "pre-line", mt: selectedProject.image ? 2 : 0 }} // Dodaj margines, jeśli obrazek jest obecny
+              sx={{
+                whiteSpace: "pre-line",
+                mt: selectedProject.image || selectedProject.video ? 2 : 0,
+              }}
             >
               {selectedProject.detailedDescription}
             </Typography>
