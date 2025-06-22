@@ -10,7 +10,7 @@ import Link from "@mui/material/Link";
 import IconButton from "@mui/material/IconButton";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import { Link as ScrollLink, Events, scrollSpy } from "react-scroll";
+import { Link as ScrollLink, Events, scrollSpy, scroller } from "react-scroll";
 import { motion } from "framer-motion";
 import { useTheme } from "@mui/material/styles";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -19,7 +19,7 @@ import { useColorMode } from "@/components/ThemeRegistry";
 
 const navItems = [
   { label: "Start", targetId: "hero" },
-  { label: "O mnie", targetId: "omnie" },
+  { label: "O mnie", targetId: "o-mnie" },
   { label: "Doświadczenie", targetId: "doswiadczenie" },
   { label: "Umiejętności", targetId: "umiejetnosci" },
   { label: "Portfolio", targetId: "portfolio" },
@@ -33,8 +33,14 @@ export default function Sidebar() {
   const colorMode = useColorMode();
 
   useEffect(() => {
-    // Ważne: musimy przekazać opcje do scrollSpy
-    scrollSpy.update({ containerId: "main-content-area" });
+    Events.scrollEvent.register("begin", () => {});
+    Events.scrollEvent.register("end", () => {});
+    scrollSpy.update();
+
+    return () => {
+      Events.scrollEvent.remove("begin");
+      Events.scrollEvent.remove("end");
+    };
   }, []);
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
@@ -43,6 +49,24 @@ export default function Sidebar() {
 
   const handleSetActive = (to) => {
     setActiveSection(to);
+  };
+
+  // ================== NOWA FUNKCJA DO KLIKNIĘĆ ==================
+  const handleLinkClick = (target) => {
+    // Natychmiast ustawiamy podświetlenie dla lepszego UX
+    setActiveSection(target);
+
+    // Dla 'hero' używamy natywnego scrolla - to jest niezawodne
+    if (target === "hero") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // Dla pozostałych używamy scroller'a z biblioteki
+      scroller.scrollTo(target, {
+        duration: 500,
+        smooth: "easeInOutQuad",
+        offset: 0,
+      });
+    }
   };
 
   return (
@@ -99,16 +123,21 @@ export default function Sidebar() {
         spacing={1}
         sx={{ mt: 5, position: "relative" }}
       >
+        {/* Ta niewidoczna pętla jest tylko dla mechanizmu 'spy' */}
         {navItems.map((item) => (
           <ScrollLink
-            key={item.label}
+            key={`spy-${item.label}`}
             to={item.targetId}
             spy={true}
-            smooth={true}
-            duration={500}
-            offset={0}
-            containerId="main-content-area" // <-- WSKAZUJEMY KONTENER
             onSetActive={handleSetActive}
+            style={{ display: "none" }}
+          />
+        ))}
+        {/* Ta pętla renderuje widoczne, klikalne linki */}
+        {navItems.map((item) => (
+          <Box
+            key={item.label}
+            onClick={() => handleLinkClick(item.targetId)}
             style={{
               display: "block",
               padding: "8px 16px",
@@ -144,7 +173,7 @@ export default function Sidebar() {
               )}
               {item.label}
             </Box>
-          </ScrollLink>
+          </Box>
         ))}
       </Stack>
 

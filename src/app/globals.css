@@ -1,8 +1,6 @@
 /* src/app/globals.css */
-html,
-body {
-  overflow: hidden; /* <-- DODAJ TĘ REGUŁĘ */
-}
+
+/* Usuwamy całą sekcję 'html, body { overflow: hidden; }' */
 
 html {
   scroll-behavior: smooth;

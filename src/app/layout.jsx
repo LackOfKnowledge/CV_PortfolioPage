@@ -26,15 +26,14 @@ export default function RootLayout({ children }) {
           <ThemeRegistry>
             <Box sx={{ display: "flex" }}>
               <Sidebar />
+              {/* Główny kontener jest teraz znacznie prostszy */}
               <Box
-                id="main-content-area" // <-- KROK 1: DODAJEMY ID
                 component="main"
                 sx={{
                   flexGrow: 1,
                   display: "flex",
                   flexDirection: "column",
-                  height: "100vh", // <-- KROK 2: USTAWIAWY WYSOKOŚĆ
-                  overflowY: "auto", // <-- KROK 3: WŁĄCZAMY PRZEWIJANIE
+                  minHeight: "100vh",
                 }}
               >
                 <MobileHeader />
