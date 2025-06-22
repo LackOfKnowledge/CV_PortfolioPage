@@ -11,10 +11,9 @@ const commonComponents = {
     },
   },
   MuiCard: {
-    defaultProps: { elevation: 0 },
-  },
-  MuiAppBar: {
-    defaultProps: { elevation: 0, position: "sticky" },
+    defaultProps: {
+      elevation: 0,
+    },
   },
 };
 
@@ -40,6 +39,19 @@ export const darkTheme = createTheme({
   shape: { borderRadius: 8 },
   components: {
     ...commonComponents,
+    // ================== STYL DLA APPBAR W CIEMNYM MOTYWIE ==================
+    MuiAppBar: {
+      defaultProps: { position: "sticky" },
+      styleOverrides: {
+        root: {
+          backgroundColor: "#121212", // Stały kolor tła, taki jak strona
+          backgroundImage: "none",
+          boxShadow: "none",
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        },
+      },
+    },
     MuiButton: {
       ...commonComponents.MuiButton,
       styleOverrides: {
@@ -94,6 +106,20 @@ export const lightTheme = createTheme({
   shape: { borderRadius: 8 },
   components: {
     ...commonComponents,
+    // ================== STYL DLA APPBAR W JASYM MOTYWIE ==================
+    MuiAppBar: {
+      defaultProps: { position: "sticky" },
+      styleOverrides: {
+        root: {
+          backgroundColor: "#F7F9FC", // Stały kolor tła, taki jak strona
+          backgroundImage: "none",
+          boxShadow: "none",
+          borderBottom: "1px solid",
+          borderColor: "divider",
+          color: "#1A2027",
+        },
+      },
+    },
     MuiButton: {
       ...commonComponents.MuiButton,
       styleOverrides: {

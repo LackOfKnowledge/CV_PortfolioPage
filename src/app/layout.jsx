@@ -7,7 +7,7 @@ import "./globals.css";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import Sidebar from "@/components/Sidebar";
 import MobileHeader from "@/components/MobileHeader";
-import ThemeFlickerOverlay from "@/components/ThemeTransitionOverlay";
+import ThemeTransitionOverlay from "@/components/ThemeTransitionOverlay";
 
 export const metadata = {
   title: "Krzysztof Skuratowicz - Portfolio",
@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
       <body className={chivo.className}>
         <AuthProviders>
           <ThemeRegistry>
-            <ThemeFlickerOverlay />
+            <ThemeTransitionOverlay />
             <Box sx={{ display: "flex" }}>
               <Sidebar />
               <Box
@@ -37,6 +37,7 @@ export default function RootLayout({ children }) {
                   flexDirection: "column",
                   height: "100vh",
                   overflowY: "auto",
+                  backgroundColor: "background.default",
                 }}
               >
                 <MobileHeader />
