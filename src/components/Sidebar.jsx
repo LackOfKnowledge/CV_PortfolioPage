@@ -81,7 +81,6 @@ export default function Sidebar() {
         <IconButton
           onClick={colorMode.toggleColorMode}
           aria-label="toggle theme"
-          // Usunięto prop color="inherit"
         >
           {theme.palette.mode === "dark" ? (
             <Brightness7Icon />
@@ -151,6 +150,7 @@ export default function Sidebar() {
             href="https://github.com/LackOfKnowledge"
             target="_blank"
             aria-label="GitHub"
+            color="inherit" // <-- DODANA POPRAWKA
           >
             <GitHubIcon />
           </IconButton>
@@ -159,6 +159,7 @@ export default function Sidebar() {
             href="https://www.linkedin.com/in/skuratowiczkrzysztofgeo/"
             target="_blank"
             aria-label="LinkedIn"
+            color="inherit" // <-- DODANA POPRAWKA
           >
             <LinkedInIcon />
           </IconButton>
