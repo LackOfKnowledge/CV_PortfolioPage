@@ -11,7 +11,7 @@ import ThemeTransitionOverlay from "@/components/ThemeTransitionOverlay";
 
 export const metadata = {
   title: "Krzysztof Skuratowicz - Portfolio",
-  description: "Portfolio Frontend Developera",
+  description: "Portfolio",
   icons: {
     icon: "/images/logo_bar.png",
     shortcut: "/images/logo_bar.png",

@@ -19,7 +19,7 @@ import { smoothScrollTo } from "@/utils/smoothScroll";
 
 const navItems = [
   { label: "Start", targetId: "hero" },
-  { label: "O mnie", targetId: "omnie" },
+  { label: "O mnie", targetId: "o-mnie" },
   { label: "Doświadczenie", targetId: "doswiadczenie" },
   { label: "Umiejętności", targetId: "umiejetnosci" },
   { label: "Portfolio", targetId: "portfolio" },
