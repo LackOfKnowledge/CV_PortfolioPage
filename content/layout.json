@@ -1,0 +1,7 @@
+{
+  "cols": 3,
+  "layout": [
+    { "i": "wprowadzenie-do-react", "x": 0, "y": 0, "w": 2, "h": 2 },
+    { "i": "osnowy-geodezyjne", "x": 2, "y": 0, "w": 1, "h": 1 }
+  ]
+}

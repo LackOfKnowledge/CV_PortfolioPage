@@ -1,4 +1,3 @@
-// src/components/MobileHeader.jsx
 "use client";
 
 import React, { useState } from "react";
@@ -11,36 +10,17 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useColorMode } from "@/components/ThemeRegistry";
-import { smoothScrollTo } from "@/utils/smoothScroll";
+import NavLinks from "./NavLinks";
 
-const navItems = [
-  { label: "Start", targetId: "hero" },
-  { label: "O mnie", targetId: "o-mnie" },
-  { label: "Doświadczenie", targetId: "doswiadczenie" },
-  { label: "Umiejętności", targetId: "umiejetnosci" },
-  { label: "Portfolio", targetId: "portfolio" },
-  { label: "Kontakt", targetId: "kontakt" },
-];
-
-export default function MobileHeader() {
+export default function MobileHeader({ navItems }) {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const colorMode = useColorMode();
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
-  const handleLinkClick = (targetId) => {
-    setDrawerOpen(false);
-    smoothScrollTo(targetId, "main-content-area");
-  };
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
     return null;
@@ -61,7 +41,7 @@ export default function MobileHeader() {
         </Typography>
         <IconButton
           onClick={colorMode.toggleColorMode}
-          // Usunięto prop color="inherit"
+          color="inherit"
         >
           {theme.palette.mode === "dark" ? (
             <Brightness7Icon />
@@ -70,10 +50,10 @@ export default function MobileHeader() {
           )}
         </IconButton>
         <IconButton
-          color="inherit" // Ten jest OK, bo dotyczy ikony hamburgera
+          color="inherit"
           aria-label="open drawer"
           edge="end"
-          onClick={handleDrawerToggle}
+          onClick={() => setDrawerOpen(true)}
         >
           <MenuIcon />
         </IconButton>
@@ -81,7 +61,7 @@ export default function MobileHeader() {
       <Drawer
         anchor="right"
         open={drawerOpen}
-        onClose={handleDrawerToggle}
+        onClose={() => setDrawerOpen(false)}
       >
         <Box
           sx={{
@@ -95,30 +75,15 @@ export default function MobileHeader() {
           role="presentation"
         >
           <IconButton
-            onClick={handleDrawerToggle}
+            onClick={() => setDrawerOpen(false)}
             sx={{ ml: "auto" }}
           >
             <CloseIcon />
           </IconButton>
-          <Stack
-            spacing={1}
-            sx={{ mt: 2, position: "relative" }}
-          >
-            {navItems.map((item) => (
-              <Box
-                key={item.label}
-                onClick={() => handleLinkClick(item.targetId)}
-                sx={{
-                  padding: "12px 16px",
-                  cursor: "pointer",
-                  color: "text.secondary",
-                  "&:hover": { color: "text.primary" },
-                }}
-              >
-                {item.label}
-              </Box>
-            ))}
-          </Stack>
+          <NavLinks
+            navItems={navItems}
+            onLinkClick={() => setDrawerOpen(false)}
+          />
         </Box>
       </Drawer>
     </AppBar>

@@ -5,45 +5,28 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 
-// Definicje stylów animacji nagłówka sekcji
-const animatedWaveSxBase = (theme) => ({
-  background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
-  backgroundSize: "350% auto",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-  textFillColor: "transparent",
-  display: "inline-block",
-  animationName: "waveGradient",
-  animationTimingFunction: "linear",
-  animationIterationCount: "infinite",
-  animationDuration: "var(--gradient-anim-duration)", // Użycie zmiennej CSS
-  transition: "animation-duration 0.4s ease-out",
-  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" }, // Przyspieszenie
-});
-
 export default function AboutSection() {
   return (
     <Box
-      id="o-mnie"
+      id="omnie" // <-- POPRAWKA Z "o-mnie" NA "omnie"
       sx={{ py: { xs: 6, md: 10 }, backgroundColor: "background.default" }}
     >
       <Container maxWidth="md">
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-          <Typography
-            variant="h4"
-            component="h2"
-          >
-            O mnie
-          </Typography>
-        </Box>
+        <Typography
+          variant="h4"
+          component="h2"
+          align="center"
+          sx={{ mb: 1 }}
+        >
+          O mnie
+        </Typography>
         <Divider
           variant="middle"
           sx={{
             mb: { xs: 4, md: 6 },
             mx: "auto",
             width: "80px",
-            height: "3px",
+            height: "2px",
             backgroundColor: "primary.main",
             borderRadius: "2px",
           }}

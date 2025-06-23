@@ -1,7 +1,8 @@
 /* src/app/globals.css */
 
 /* Usuwamy całą sekcję 'html, body { overflow: hidden; }' */
-
+@import "react-grid-layout/css/styles.css";
+@import "react-resizable/css/styles.css";
 html {
   scroll-behavior: smooth;
 }
@@ -39,4 +40,32 @@ a {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #6a6a6a;
+}
+@media print {
+  body {
+    background: white !important;
+    overflow: visible !important; /* Pozwalamy na drukowanie całej treści */
+  }
+
+  /* Ukryj wszystko oprócz kontenera CV */
+  body > div:not(.cv-page-container) {
+    display: none !important;
+  }
+
+  /* Upewnij się, że kontener CV jest widoczny i zajmuje całą stronę */
+  .cv-page-container {
+    display: block !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    height: auto !important; /* Automatyczna wysokość dla treści */
+  }
+
+  .cv-footer-clause {
+    page-break-before: always; /* Zawsze próbuj umieścić stopkę na nowej stronie, jeśli się nie mieści */
+    position: relative !important; /* W druku, stopka jest częścią przepływu dokumentu */
+  }
+}
+
+.cv-section-item {
+  page-break-inside: avoid;
 }

@@ -239,7 +239,14 @@ export default function AdminDashboard() {
               {linkError}
             </Alert>
           )}
-
+          <Button
+            variant="contained"
+            color="secondary"
+            href="/admin/blog/new"
+            sx={{ minWidth: "220px", mt: 2 }}
+          >
+            Napisz nowy post
+          </Button>
           <Button
             variant="outlined"
             onClick={() => {

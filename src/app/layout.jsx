@@ -7,11 +7,20 @@ import "./globals.css";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import Sidebar from "@/components/Sidebar";
 import MobileHeader from "@/components/MobileHeader";
-import ThemeTransitionOverlay from "@/components/ThemeTransitionOverlay";
+import { ScrollSpyProvider } from "@/hooks/useScrollSpy";
+
+const navItems = [
+  { label: "Start", targetId: "hero" },
+  { label: "O mnie", targetId: "omnie" },
+  { label: "Doświadczenie", targetId: "doswiadczenie" },
+  { label: "Umiejętności", targetId: "umiejetnosci" },
+  { label: "Portfolio", targetId: "portfolio" },
+  { label: "Kontakt", targetId: "kontakt" },
+];
 
 export const metadata = {
   title: "Krzysztof Skuratowicz - Portfolio",
-  description: "Portfolio",
+  description: "Portfolio Frontend Developera",
   icons: {
     icon: "/images/logo_bar.png",
     shortcut: "/images/logo_bar.png",
@@ -25,26 +34,27 @@ export default function RootLayout({ children }) {
       <body className={chivo.className}>
         <AuthProviders>
           <ThemeRegistry>
-            <ThemeTransitionOverlay />
-            <Box sx={{ display: "flex" }}>
-              <Sidebar />
-              <Box
-                id="main-content-area"
-                component="main"
-                sx={{
-                  flexGrow: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100vh",
-                  overflowY: "auto",
-                  backgroundColor: "background.default",
-                }}
-              >
-                <MobileHeader />
-                <Box sx={{ flexGrow: 1 }}>{children}</Box>
-                <ConditionalFooter />
+            <ScrollSpyProvider navItems={navItems}>
+              <Box sx={{ display: "flex" }}>
+                <Sidebar navItems={navItems} />
+                <Box
+                  id="main-content-area"
+                  component="main"
+                  sx={{
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100vh",
+                    overflowY: "auto",
+                    backgroundColor: "background.default", // <-- DODANA LINIA
+                  }}
+                >
+                  <MobileHeader navItems={navItems} />
+                  <Box sx={{ flexGrow: 1 }}>{children}</Box>
+                  <ConditionalFooter />
+                </Box>
               </Box>
-            </Box>
+            </ScrollSpyProvider>
           </ThemeRegistry>
         </AuthProviders>
       </body>
