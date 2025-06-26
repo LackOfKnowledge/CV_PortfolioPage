@@ -11,7 +11,7 @@ import { CssBaseline } from "@mui/material";
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export function AdminThemeProvider({ children }) {
-  const [mode, setMode] = useState("light"); // Domyślnie startujemy z motywem jasnym
+  const [mode, setMode] = useState("dark"); // Domyślnie startujemy z motywem jasnym
 
   // Używamy useMemo, aby funkcja nie była tworzona na nowo przy każdym renderowaniu
   const colorMode = useMemo(
