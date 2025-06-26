@@ -1,13 +1,14 @@
 "use server";
 
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
 export async function createPost(formData) {
-  const session = await auth();
+  const session = await getServerSession(authOptions);
   if (!session?.user) {
     return { error: "Brak autoryzacji" };
   }
@@ -50,7 +51,7 @@ export async function createPost(formData) {
 }
 
 export async function updatePost(slug, formData) {
-  const session = await auth();
+  const session = await getServerSession(authOptions);
   if (!session?.user) {
     throw new Error("Brak autoryzacji");
   }
@@ -83,7 +84,7 @@ export async function updatePost(slug, formData) {
 }
 
 export async function deletePost(slug) {
-  const session = await auth();
+  const session = await getServerSession(authOptions);
   if (!session?.user) {
     throw new Error("Brak autoryzacji");
   }
