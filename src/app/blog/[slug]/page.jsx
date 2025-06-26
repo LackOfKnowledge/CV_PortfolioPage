@@ -93,7 +93,7 @@ export default async function PostPage({ params }) {
             }}
           />
         )}
-        <Typography
+        <Box
           component="div"
           className="prose lg:prose-xl max-w-none"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
