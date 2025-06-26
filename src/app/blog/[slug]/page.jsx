@@ -21,7 +21,9 @@ async function getPost(slug) {
   });
   if (!post) return null;
 
-  const contentHtml = await markdownToHtml(post.content || "");
+  // Zakładając, że pole w bazie nazywa się 'body' lub 'content'
+  // Użyłem 'body' jak w poprzednich przykładach. Jeśli jest inaczej, zmień `post.body`
+  const contentHtml = await markdownToHtml(post.body || "");
   return { ...post, contentHtml };
 }
 
@@ -38,11 +40,13 @@ export default async function PostPage({ params }) {
         elevation={2}
         sx={{ p: { xs: 3, md: 5 } }}
       >
-        <Chip
-          label={post.category}
-          color="primary"
-          sx={{ mb: 2 }}
-        />
+        {post.category && (
+          <Chip
+            label={post.category}
+            color="primary"
+            sx={{ mb: 2 }}
+          />
+        )}
         <Typography
           variant="h3"
           component="h1"
