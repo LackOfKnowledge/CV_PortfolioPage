@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth } from "@/auth"; // Ta ścieżka jest poprawna, jeśli plik auth.js jest w głównym katalogu
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -22,7 +22,9 @@ export async function createPost(formData) {
     return { error: "Tytuł i treść są wymagane." };
   }
 
-  const slug = `${title.toLowerCase().replace(/\s+/g, "-")}-${uuidv4().slice(0, 8)}`;
+  const slug = `${title
+    .toLowerCase()
+    .replace(/\s+/g, "-")}-${uuidv4().slice(0, 8)}`;
 
   try {
     await prisma.post.create({
