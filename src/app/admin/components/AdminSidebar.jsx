@@ -33,7 +33,11 @@ const menuItems = [
   },
 ];
 
-export default function AdminSidebar({ drawerWidth }) {
+export default function AdminSidebar({
+  drawerWidth,
+  mobileOpen,
+  handleDrawerToggle,
+}) {
   const pathname = usePathname();
 
   const drawerContent = (
@@ -96,9 +100,24 @@ export default function AdminSidebar({ drawerWidth }) {
       component="nav"
       sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
     >
+      {/* Drawer dla wersji mobilnej - tymczasowy, wysuwany */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: "block", sm: "none" },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+        }}
+      >
+        {drawerContent}
+      </Drawer>
+      {/* Drawer dla wersji desktopowej - stały */}
       <Drawer
         variant="permanent"
         sx={{
+          display: { xs: "none", sm: "block" },
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
         open

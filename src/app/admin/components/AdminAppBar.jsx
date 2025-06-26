@@ -2,13 +2,14 @@
 
 import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
 import {
+  Menu as MenuIcon,
   Brightness4 as Brightness4Icon,
   Brightness7 as Brightness7Icon,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import { useColorMode } from "../theme-provider";
 
-export default function AdminAppBar({ drawerWidth }) {
+export default function AdminAppBar({ drawerWidth, handleDrawerToggle }) {
   const theme = useTheme();
   const colorMode = useColorMode();
 
@@ -19,13 +20,21 @@ export default function AdminAppBar({ drawerWidth }) {
       sx={{
         width: { sm: `calc(100% - ${drawerWidth}px)` },
         ml: { sm: `${drawerWidth}px` },
-        // Używamy kolorów z motywu, aby pasek też się zmieniał
         backgroundColor:
           theme.palette.mode === "dark" ? "grey.900" : "primary.main",
       }}
     >
       <Toolbar>
-        {/* Pusty element, który "pcha" ikonę na prawą stronę */}
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{ mr: 2, display: { sm: "none" } }} // Widoczny tylko na mobile
+        >
+          <MenuIcon />
+        </IconButton>
+
         <Typography
           variant="h6"
           noWrap

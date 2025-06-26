@@ -1,20 +1,31 @@
 "use client";
 
-import { Box, CssBaseline } from "@mui/material";
+import { useState } from "react";
+import { Box } from "@mui/material";
 import AdminSidebar from "./AdminSidebar";
 import AdminAppBar from "./AdminAppBar";
 import { AdminThemeProvider } from "../theme-provider";
 
 export default function AdminPanelRoot({ children }) {
   const drawerWidth = 240;
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   return (
-    // Owijamy wszystko w dostawcę motywu. Ponieważ cały ten plik jest
-    // komponentem klienckim, nie ma już konfliktu.
     <AdminThemeProvider>
       <Box sx={{ display: "flex" }}>
-        <AdminAppBar drawerWidth={drawerWidth} />
-        <AdminSidebar drawerWidth={drawerWidth} />
+        <AdminAppBar
+          drawerWidth={drawerWidth}
+          handleDrawerToggle={handleDrawerToggle}
+        />
+        <AdminSidebar
+          drawerWidth={drawerWidth}
+          mobileOpen={mobileOpen}
+          handleDrawerToggle={handleDrawerToggle}
+        />
         <Box
           component="main"
           sx={{
