@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Container, Grid, Typography, Box } from "@mui/material";
-import BlogPostCard from "@/components/blog/BlogPostCard";
+import BlogPostCard from "./BlogPostCard";
 
 export const dynamic = "force-dynamic";
 
