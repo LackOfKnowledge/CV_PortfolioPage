@@ -1,15 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSecretCode } from "@/hooks/useSecretCode";
 
 const SECRET_CODE = "aezakmi";
 
 const SecretCodeHandler = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
 
   const handleSecretCode = () => {
-    console.log("Kod AEZAKMI aktywowany! Przekierowanie do /admin/login...");
+    alert("Wita księciuniu! Zapraszam do logowanka maj frend xD");
     router.push("/admin/login");
   };
 

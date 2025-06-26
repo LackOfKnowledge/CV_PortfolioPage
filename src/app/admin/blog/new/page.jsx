@@ -1,10 +1,9 @@
-// src/app/admin/blog/new/page.jsx
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import "easymde/dist/easymde.min.css"; // Import stylów dla edytora
+import "easymde/dist/easymde.min.css";
 import {
   Container,
   Box,
@@ -18,46 +17,38 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
+import { createPost } from "@/app/actions/postActions";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 });
 
 export default function NewPostPage() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [category, setCategory] = useState("programowanie");
-  const [excerpt, setExcerpt] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [contentValue, setContentValue] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
     setError("");
     setSuccess("");
 
-    try {
-      const res = await fetch("/api/admin/posts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content, category, excerpt, thumbnail }),
-      });
+    const formData = new FormData(event.currentTarget);
+    formData.set("content", contentValue);
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || `Błąd: ${res.status}`);
-      }
-      setSuccess(`Post "${data.slug}" został pomyślnie utworzony!`);
+    const result = await createPost(formData);
+
+    if (result.error) {
+      setError(result.error);
+    } else if (result.success) {
+      setSuccess(`Post "${result.slug}" został pomyślnie utworzony!`);
       setTimeout(() => router.push("/admin/dashboard"), 2000);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -74,26 +65,23 @@ export default function NewPostPage() {
       <form onSubmit={handleSubmit}>
         <TextField
           label="Tytuł posta"
+          name="title"
           fullWidth
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
           margin="normal"
           required
         />
         <TextField
           label="Zajawka (krótki opis)"
+          name="excerpt"
           fullWidth
-          value={excerpt}
-          onChange={(e) => setExcerpt(e.target.value)}
           margin="normal"
           multiline
           rows={2}
         />
         <TextField
           label="URL do miniaturki (obrazka)"
+          name="thumbnail"
           fullWidth
-          value={thumbnail}
-          onChange={(e) => setThumbnail(e.target.value)}
           margin="normal"
         />
         <FormControl
@@ -103,25 +91,23 @@ export default function NewPostPage() {
           <InputLabel id="category-select-label">Kategoria</InputLabel>
           <Select
             labelId="category-select-label"
-            value={category}
+            name="category"
+            defaultValue="programowanie"
             label="Kategoria"
-            onChange={(e) => setCategory(e.target.value)}
           >
             <MenuItem value="programowanie">Programowanie</MenuItem>
             <MenuItem value="geodezja">Geodezja</MenuItem>
           </Select>
         </FormControl>
+
         <Box sx={{ my: 2 }}>
-          <SimpleMDE
-            value={content}
-            onChange={setContent}
-          />
+          <SimpleMDE onChange={setContentValue} />
         </Box>
 
         <Button
           type="submit"
           variant="contained"
-          disabled={loading || !title || !content}
+          disabled={loading}
           sx={{ mt: 2 }}
         >
           {loading ? <CircularProgress size={24} /> : "Zapisz i Opublikuj Post"}
