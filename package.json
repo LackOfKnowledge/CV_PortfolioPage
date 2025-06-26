@@ -30,12 +30,12 @@
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "resend": "^4.2.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "eslint": "^9.29.0",
+    "eslint-config-next": "15.2.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "eslint": "^9.29.0",
-    "eslint-config-next": "15.2.4",
     "prisma": "^6.8.2"
   }
 }

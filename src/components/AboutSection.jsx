@@ -1,4 +1,6 @@
 // src/components/AboutSection.jsx
+"use client";
+
 import React from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -8,7 +10,7 @@ import Divider from "@mui/material/Divider";
 export default function AboutSection() {
   return (
     <Box
-      id="omnie" // <-- POPRAWKA Z "o-mnie" NA "omnie"
+      id="omnie"
       sx={{ py: { xs: 6, md: 10 }, backgroundColor: "background.default" }}
     >
       <Container maxWidth="md">

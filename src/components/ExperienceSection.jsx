@@ -1,4 +1,6 @@
 // src/components/ExperienceSection.jsx
+"use client";
+
 import React from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -13,7 +15,6 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import WorkIcon from "@mui/icons-material/Work";
 import SchoolIcon from "@mui/icons-material/School";
 
-// --- TODO: Podmień dane na swoje! ---
 const experienceData = [
   {
     type: "work",
@@ -32,23 +33,6 @@ const experienceData = [
       "Aplikacja Prodify (część kliencka) - aplikacja przeznaczona dla średnich i dużych firm produkcyjnych mająca za zadanie automatyzację, optymalizację i nadzór nad produkcją",
   },
 ];
-
-// Definicje stylów animacji nagłówka sekcji
-const animatedWaveSxBase = (theme) => ({
-  background: `linear-gradient(60deg, ${theme.palette.primary.main}, #FBC02D, #4CAF50, #2196F3, ${theme.palette.primary.main})`,
-  backgroundSize: "350% auto",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-  textFillColor: "transparent",
-  display: "inline-block",
-  animationName: "waveGradient",
-  animationTimingFunction: "linear",
-  animationIterationCount: "infinite",
-  animationDuration: "var(--gradient-anim-duration)",
-  transition: "animation-duration 0.4s ease-out",
-  "&:hover": { animationDuration: "var(--gradient-anim-duration-hover)" },
-});
 
 export default function ExperienceSection() {
   return (

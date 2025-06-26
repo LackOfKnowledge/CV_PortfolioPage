@@ -68,16 +68,18 @@ const portfolioData = [
   },
   {
     title: "Właśnie to portfolio",
-    description: "Moje portfolio, które aktualnie przeglądasz.",
+    description:
+      "Dynamiczna platforma CV/Portfolio oparta na Next.js i Material-UI. Posiada system generowania CV w PDF na żądanie z dostępem na token, panel admina (NextAuth.js) do zarządzania blogiem opartym o Markdown oraz integrację z bazą danych PostgreSQL przez Prisma.",
     video: "/videos/portfolio-demo.mp4",
     tags: [
       "Next.js",
       "React",
       "Material UI",
       "Framer Motion",
-      "CSS",
+      "CSS Modules",
       "JavaScript",
       "Responsive Design",
+      "Resend",
     ],
     demoUrl: "https://ksportfoliodev.vercel.app",
     repoUrl: "https://github.com/LackOfKnowledge/CV_PortfolioPage",
@@ -89,6 +91,15 @@ const portfolioData = [
       Możesz tu znaleźć informacje o moim doświadczeniu, umiejętnościach oraz zobaczyć inne projekty.
       Dodatkowo zaimplementowałem asystenta "Clippy" dla urozmaicenia interakcji.
     `,
+  },
+  {
+    title: "Strona Wizytówka (Portfolio)",
+    description:
+      "W pełni responsywna, nowoczesna strona-wizytówka zbudowana w Next.js. Posiada interaktywne animacje (Framer Motion), formularz kontaktowy zintegrowany z Resend API oraz czysty, modułowy kod z wykorzystaniem CSS Modules.",
+    video: "/videos/wizytowka-demo.mp4",
+    demoUrl: "https://wizytowka.onrender.com",
+    repoUrl: "https://github.com/LackOfKnowledge/wizytowka",
+    tags: ["Next.js", "React", "CSS Modules", "Framer Motion", "Resend"],
   },
 ];
 
