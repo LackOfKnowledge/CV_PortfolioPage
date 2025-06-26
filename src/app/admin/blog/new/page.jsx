@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import {
@@ -52,16 +53,28 @@ export default function NewPostPage() {
   };
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{ py: 5 }}
-    >
-      <Typography
-        variant="h4"
-        gutterBottom
+    <Box sx={{ bgcolor: "white", p: 4, borderRadius: 2, boxShadow: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
       >
-        Nowy Post
-      </Typography>
+        <Typography
+          variant="h4"
+          component="h1"
+        >
+          Nowy Post
+        </Typography>
+        <Link
+          href="/admin/dashboard"
+          passHref
+        >
+          <Button variant="outlined">&larr; Wróć do panelu</Button>
+        </Link>
+      </Box>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Tytuł posta"
@@ -77,6 +90,7 @@ export default function NewPostPage() {
           margin="normal"
           multiline
           rows={2}
+          required
         />
         <TextField
           label="URL do miniaturki (obrazka)"
@@ -87,6 +101,7 @@ export default function NewPostPage() {
         <FormControl
           fullWidth
           margin="normal"
+          required
         >
           <InputLabel id="category-select-label">Kategoria</InputLabel>
           <Select
@@ -99,20 +114,17 @@ export default function NewPostPage() {
             <MenuItem value="geodezja">Geodezja</MenuItem>
           </Select>
         </FormControl>
-
-        <Box sx={{ my: 2 }}>
+        <Box sx={{ my: 2, border: "1px solid #ccc", borderRadius: 1 }}>
           <SimpleMDE onChange={setContentValue} />
         </Box>
-
         <Button
           type="submit"
           variant="contained"
           disabled={loading}
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, py: 1.5, px: 4 }}
         >
           {loading ? <CircularProgress size={24} /> : "Zapisz i Opublikuj Post"}
         </Button>
-
         {error && (
           <Alert
             severity="error"
@@ -130,6 +142,6 @@ export default function NewPostPage() {
           </Alert>
         )}
       </form>
-    </Container>
+    </Box>
   );
 }

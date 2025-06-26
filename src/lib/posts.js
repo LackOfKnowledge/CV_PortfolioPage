@@ -1,6 +1,5 @@
-// src/lib/posts.js
-import path from "path";
 import fs from "fs/promises";
+import path from "path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
@@ -11,12 +10,9 @@ export async function getPostData(slug) {
   try {
     const filePath = path.join(postsDirectory, `${slug}.md`);
     const fileContents = await fs.readFile(filePath, "utf8");
-
     const { data, content } = matter(fileContents);
-
     const processedContent = await remark().use(html).process(content);
     const contentHtml = processedContent.toString();
-
     return {
       frontmatter: data,
       contentHtml,
@@ -28,11 +24,62 @@ export async function getPostData(slug) {
   }
 }
 
-export async function getAllPostSlugs() {
+export async function getAllPostsForAdmin() {
   const filenames = await fs.readdir(postsDirectory);
-  return filenames
-    .filter((filename) => filename.endsWith(".md"))
-    .map((filename) => ({
-      slug: filename.replace(/\.md$/, ""),
-    }));
+  const posts = await Promise.all(
+    filenames
+      .filter((filename) => filename.endsWith(".md"))
+      .map(async (filename) => {
+        const filePath = path.join(postsDirectory, filename);
+        const fileContents = await fs.readFile(filePath, "utf8");
+        const { data } = matter(fileContents);
+        return {
+          slug: filename.replace(/\.md$/, ""),
+          ...data,
+        };
+      })
+  );
+  return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+export async function createPostFile(formData) {
+  const title = formData.get("title");
+  const content = formData.get("content");
+  const excerpt = formData.get("excerpt");
+  const category = formData.get("category");
+  const thumbnail = formData.get("thumbnail");
+
+  if (!title || !content || !excerpt || !category) {
+    throw new Error("Tytuł, treść, zajawka i kategoria są wymagane.");
+  }
+
+  const slug = title
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
+  const date = new Date().toISOString().split("T")[0];
+
+  const frontMatter = `---
+title: "${title}"
+date: "${date}"
+category: "${category}"
+thumbnail: "${thumbnail || "https://images.unsplash.com/photo-1518770660439-4636190af475"}"
+excerpt: "${excerpt}"
+---`;
+
+  const fileContent = `${frontMatter}\n\n${content}`;
+  const filePath = path.join(postsDirectory, `${slug}.md`);
+
+  await fs.writeFile(filePath, fileContent);
+  return { slug };
+}
+
+export async function deletePostFile(slug) {
+  const filePath = path.join(postsDirectory, `${slug}.md`);
+  try {
+    await fs.unlink(filePath);
+  } catch (error) {
+    console.error(`Błąd podczas usuwania pliku ${filePath}:`, error);
+    throw new Error("Nie udało się usunąć pliku posta.");
+  }
 }
