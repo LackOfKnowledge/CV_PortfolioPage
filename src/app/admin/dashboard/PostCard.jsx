@@ -1,49 +1,73 @@
 "use client";
 
-import { deletePost } from "@/app/actions/postActions";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  Chip,
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { deletePost } from "@/app/actions/postActions";
 
-function PostCard({ post }) {
+export default function PostCard({ post }) {
   const router = useRouter();
 
   const handleDelete = async () => {
     if (window.confirm(`Czy na pewno chcesz usunąć posta "${post.title}"?`)) {
-      await deletePost(post.slug);
+      await deletePost(post.id);
       router.refresh();
     }
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
-      <div>
-        <h3 className="text-xl font-bold mb-2 text-gray-800 truncate">
+    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Typography
+          gutterBottom
+          variant="h5"
+          component="h2"
+          noWrap
+        >
           {post.title}
-        </h3>
-        <p className="text-gray-500 text-sm mb-1">
-          Kategoria: {post.category || "Brak"}
-        </p>
-        <p className="text-gray-500 text-sm mb-4">
-          Data: {new Date(post.date).toLocaleDateString()}
-        </p>
-        <p className="text-gray-600 text-sm italic">"{post.excerpt}"</p>
-      </div>
-      <div className="flex justify-end space-x-3 mt-6">
-        <Link
-          href={`/admin/blog/edit/${post.slug}`}
-          className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg"
+        </Typography>
+        <Chip
+          label={post.category || "Ogólne"}
+          size="small"
+          sx={{ mb: 1 }}
+        />
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          {post.excerpt}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          component={Link}
+          href={`/admin/blog/edit/${post.id}`}
         >
           Edytuj
-        </Link>
-        <button
+        </Button>
+        <Button
+          size="small"
+          color="error"
           onClick={handleDelete}
-          className="text-sm bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg"
         >
           Usuń
-        </button>
-      </div>
-    </div>
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
-
-export default PostCard;

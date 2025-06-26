@@ -1,43 +1,73 @@
-import Link from "next/link";
-import { getAllPostsForAdmin } from "@/lib/posts";
+import { Grid, Typography, Paper, Box } from "@mui/material";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import prisma from "@/lib/prisma";
 import PostCard from "./PostCard";
 
 export const dynamic = "force-dynamic";
 
+async function getPostsForUser() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) return [];
+
+  const whereClause =
+    session.user.role === "admin" ? {} : { authorId: session.user.id };
+
+  return await prisma.post.findMany({
+    where: whereClause,
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export default async function DashboardPage() {
-  const posts = await getAllPostsForAdmin();
+  const posts = await getPostsForUser();
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-800">Twoje Posty</h1>
-        <Link
-          href="/admin/blog/new"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-5 rounded-lg transition duration-300 text-lg"
-        >
-          Dodaj Post
-        </Link>
-      </div>
-
-      {posts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((post) => (
-            <PostCard
-              key={post.slug}
-              post={post}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16 bg-white rounded-lg shadow">
-          <p className="text-xl text-gray-600">
-            Nie masz jeszcze żadnych postów.
-          </p>
-          <p className="mt-2 text-gray-400">
-            Dodaj nowy post, aby go tu zobaczyć.
-          </p>
-        </div>
-      )}
-    </div>
+    <Box>
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        fontWeight="bold"
+      >
+        Witaj w panelu!
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        color="text.secondary"
+        sx={{ mb: 4 }}
+      >
+        Zarządzaj swoimi postami.
+      </Typography>
+      <Grid
+        container
+        spacing={3}
+      >
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              key={post.id}
+            >
+              <PostCard post={post} />
+            </Grid>
+          ))
+        ) : (
+          <Grid
+            item
+            xs={12}
+          >
+            <Paper sx={{ p: 4, textAlign: "center", color: "text.secondary" }}>
+              <Typography>
+                Nie masz jeszcze żadnych postów. Czas coś napisać!
+              </Typography>
+            </Paper>
+          </Grid>
+        )}
+      </Grid>
+    </Box>
   );
 }
