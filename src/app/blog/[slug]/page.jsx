@@ -95,7 +95,7 @@ export default async function PostPage({ params }) {
         )}
         <Box
           component="div"
-          className="prose lg:prose-xl max-w-none"
+          className="content-prose"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
       </Paper>
