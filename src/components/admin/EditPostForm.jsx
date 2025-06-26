@@ -4,11 +4,17 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Alert from "@mui/material/Alert";
+import {
+  TextField,
+  Button,
+  CircularProgress,
+  Alert,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Box,
+} from "@mui/material";
 import { updatePost } from "@/app/actions/postActions";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
@@ -16,11 +22,11 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 });
 
 export default function EditPostForm({ post }) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [content, setContent] = useState(post.content);
+  const [contentValue, setContentValue] = useState(post.content || "");
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,42 +35,75 @@ export default function EditPostForm({ post }) {
     setSuccess("");
 
     const formData = new FormData(event.currentTarget);
-    formData.set("content", content);
+    formData.set("content", contentValue);
 
-    try {
-      await updatePost(post.slug, formData);
-      setSuccess("Post został pomyślnie zaktualizowany!");
-      router.push("/admin/dashboard");
-      router.refresh();
-    } catch (err) {
-      setError(err.message || "Wystąpił nieoczekiwany błąd.");
-    } finally {
-      setLoading(false);
+    const result = await updatePost(post.slug, formData);
+
+    if (result.error) {
+      setError(result.error);
+    } else if (result.success) {
+      setSuccess(`Post "${result.slug}" został pomyślnie zaktualizowany!`);
+      router.refresh(); // odświeża dane na stronie
+      setTimeout(() => router.push("/admin/dashboard"), 2000);
     }
+
+    setLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <TextField
-        fullWidth
-        label="Tytuł Posta"
+        label="Tytuł posta"
         name="title"
-        defaultValue={post.title}
-        variant="outlined"
-        sx={{ mb: 2 }}
+        fullWidth
+        margin="normal"
         required
+        defaultValue={post.frontmatter.title}
       />
-      <Box sx={{ my: 2 }}>
+      <TextField
+        label="Zajawka (krótki opis)"
+        name="excerpt"
+        fullWidth
+        margin="normal"
+        multiline
+        rows={2}
+        required
+        defaultValue={post.frontmatter.excerpt}
+      />
+      <TextField
+        label="URL do miniaturki (obrazka)"
+        name="thumbnail"
+        fullWidth
+        margin="normal"
+        defaultValue={post.frontmatter.thumbnail}
+      />
+      <FormControl
+        fullWidth
+        margin="normal"
+        required
+      >
+        <InputLabel id="category-select-label">Kategoria</InputLabel>
+        <Select
+          labelId="category-select-label"
+          name="category"
+          label="Kategoria"
+          defaultValue={post.frontmatter.category || "programowanie"}
+        >
+          <MenuItem value="programowanie">Programowanie</MenuItem>
+          <MenuItem value="geodezja">Geodezja</MenuItem>
+        </Select>
+      </FormControl>
+      <Box sx={{ my: 2, border: "1px solid #ccc", borderRadius: 1 }}>
         <SimpleMDE
-          value={content}
-          onChange={setContent}
+          value={contentValue}
+          onChange={setContentValue}
         />
       </Box>
       <Button
         type="submit"
         variant="contained"
         disabled={loading}
-        sx={{ mt: 2 }}
+        sx={{ mt: 2, py: 1.5, px: 4 }}
       >
         {loading ? <CircularProgress size={24} /> : "Zapisz zmiany"}
       </Button>

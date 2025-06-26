@@ -6,6 +6,8 @@ import html from "remark-html";
 
 const postsDirectory = path.join(process.cwd(), "content/posts");
 
+// --- Funkcje dla strony publicznej (blog) ---
+
 export async function getPostData(slug) {
   try {
     const filePath = path.join(postsDirectory, `${slug}.md`);
@@ -15,6 +17,7 @@ export async function getPostData(slug) {
     const contentHtml = processedContent.toString();
     return {
       frontmatter: data,
+      content, // Zwracamy też surową treść dla formularza edycji
       contentHtml,
       slug,
     };
@@ -23,6 +26,17 @@ export async function getPostData(slug) {
     return null;
   }
 }
+
+export async function getAllPostSlugs() {
+  const filenames = await fs.readdir(postsDirectory);
+  return filenames
+    .filter((filename) => filename.endsWith(".md"))
+    .map((filename) => ({
+      slug: filename.replace(/\.md$/, ""),
+    }));
+}
+
+// --- Funkcje dla panelu admina ---
 
 export async function getAllPostsForAdmin() {
   const filenames = await fs.readdir(postsDirectory);
@@ -42,22 +56,17 @@ export async function getAllPostsForAdmin() {
   return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
-export async function createPostFile(formData) {
+function createMdContent(formData, originalDate) {
   const title = formData.get("title");
   const content = formData.get("content");
   const excerpt = formData.get("excerpt");
   const category = formData.get("category");
   const thumbnail = formData.get("thumbnail");
+  const date = originalDate || new Date().toISOString().split("T")[0];
 
   if (!title || !content || !excerpt || !category) {
     throw new Error("Tytuł, treść, zajawka i kategoria są wymagane.");
   }
-
-  const slug = title
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "");
-  const date = new Date().toISOString().split("T")[0];
 
   const frontMatter = `---
 title: "${title}"
@@ -67,9 +76,27 @@ thumbnail: "${thumbnail || "https://images.unsplash.com/photo-1518770660439-4636
 excerpt: "${excerpt}"
 ---`;
 
-  const fileContent = `${frontMatter}\n\n${content}`;
-  const filePath = path.join(postsDirectory, `${slug}.md`);
+  return `${frontMatter}\n\n${content}`;
+}
 
+export async function createPostFile(formData) {
+  const title = formData.get("title");
+  const slug = title
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
+  const fileContent = createMdContent(formData, null);
+  const filePath = path.join(postsDirectory, `${slug}.md`);
+  await fs.writeFile(filePath, fileContent);
+  return { slug };
+}
+
+export async function updatePostFile(slug, formData) {
+  const post = await getPostData(slug);
+  if (!post) throw new Error("Post nie został znaleziony.");
+
+  const fileContent = createMdContent(formData, post.frontmatter.date);
+  const filePath = path.join(postsDirectory, `${slug}.md`);
   await fs.writeFile(filePath, fileContent);
   return { slug };
 }
