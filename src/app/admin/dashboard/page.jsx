@@ -1,110 +1,59 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Link from "next/link";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
-import { deletePost } from "@/app/actions/postActions";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
+import PostCard from "./PostCard";
 
-// Komponent do obsługi usuwania po stronie klienta
-function DeletePostButton({ slug }) {
-  // Akcja serwerowa jest "wiązana" ze slugiem posta
-  const deletePostWithSlug = deletePost.bind(null, slug);
+export const dynamic = "force-dynamic";
 
-  return (
-    <form
-      action={deletePostWithSlug}
-      onSubmit={(e) => {
-        if (
-          !confirm(
-            "Czy na pewno chcesz usunąć ten post? Tej akcji nie można cofnąć."
-          )
-        ) {
-          e.preventDefault();
-        }
-      }}
-    >
-      <IconButton
-        edge="end"
-        aria-label="delete"
-        type="submit"
-      >
-        <DeleteIcon />
-      </IconButton>
-    </form>
-  );
-}
+async function DashboardPage() {
+  const session = await getServerSession(authOptions);
 
-export default async function DashboardPage() {
-  const posts = await prisma.post.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  let posts = [];
+
+  // Jeśli użytkownik jest adminem, pokaż wszystkie posty.
+  // W przeciwnym razie, pokaż tylko jego posty.
+  if (session?.user?.role === "admin") {
+    posts = await prisma.post.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+  } else if (session?.user?.id) {
+    posts = await prisma.post.findMany({
+      where: {
+        authorId: session.user.id,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  }
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 4,
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h1"
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Zarządzanie Postami</h1>
+        <Link
+          href="/admin/blog/new"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
         >
-          Panel Administratora
-        </Typography>
-        <Button
-          component={Link}
-          href="/admin/add-post"
-          variant="contained"
-        >
-          Dodaj nowy post
-        </Button>
-      </Box>
+          Dodaj Post
+        </Link>
+      </div>
 
-      <Typography
-        variant="h5"
-        component="h2"
-        sx={{ mb: 2 }}
-      >
-        Zarządzaj Postami
-      </Typography>
-      <List>
-        {posts.map((post) => (
-          <ListItem
-            key={post.id}
-            secondaryAction={
-              <Box sx={{ display: "flex", gap: 1 }}>
-                <IconButton
-                  edge="end"
-                  aria-label="edit"
-                  component={Link}
-                  href={`/admin/posts/edit/${post.slug}`}
-                >
-                  <EditIcon />
-                </IconButton>
-                <DeletePostButton slug={post.slug} />
-              </Box>
-            }
-          >
-            <ListItemText
-              primary={post.title}
-              secondary={`Opublikowano: ${new Date(post.createdAt).toLocaleDateString()}`}
+      {posts.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <PostCard
+              key={post.id}
+              post={post}
             />
-          </ListItem>
-        ))}
-      </List>
-    </Box>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 mt-10">
+          Nie znaleziono żadnych postów.
+        </p>
+      )}
+    </div>
   );
 }
+
+export default DashboardPage;
