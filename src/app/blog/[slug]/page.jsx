@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { markdownToHtml } from "@/lib/posts";
 import { Box, Typography, Paper, Chip, Avatar } from "@mui/material";
 
-// Generuje statyczne ścieżki dla wszystkich opublikowanych postów
 export async function generateStaticParams() {
   const posts = await prisma.post.findMany({
     where: { published: true },
@@ -19,11 +18,13 @@ async function getPost(slug) {
     where: { slug },
     include: { author: true },
   });
-  if (!post) return null;
 
-  // Zakładając, że pole w bazie nazywa się 'body' lub 'content'
-  // Użyłem 'body' jak w poprzednich przykładach. Jeśli jest inaczej, zmień `post.body`
-  const contentHtml = await markdownToHtml(post.body || "");
+  if (!post) {
+    return null;
+  }
+
+  // Używamy tutaj pola `content` - zgodnie z Twoim schematem.
+  const contentHtml = await markdownToHtml(post.content || "");
   return { ...post, contentHtml };
 }
 
@@ -74,7 +75,7 @@ export default async function PostPage({ params }) {
             {post.author.name}
           </Typography>
           <Typography variant="body1">
-            • {new Date(post.createdAt).toLocaleDateString()}
+            {new Date(post.createdAt).toLocaleDateString()}
           </Typography>
         </Box>
         {post.thumbnail && (

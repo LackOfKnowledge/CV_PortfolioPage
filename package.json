@@ -34,11 +34,13 @@
     "react-router-dom": "^7.6.2",
     "react-scroll": "^1.9.3",
     "react-simplemde-editor": "^5.2.0",
+    "rehype-pretty-code": "^0.14.1",
     "rehype-raw": "^7.0.0",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
     "resend": "^4.2.0",
+    "shiki": "^3.7.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
