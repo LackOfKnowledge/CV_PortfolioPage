@@ -69,3 +69,25 @@ a {
 .cv-section-item {
   page-break-inside: avoid;
 }
+pre[data-language] {
+  position: relative;
+  padding-top: 2.5rem !important; /* Dodatkowe miejsce na nagłówek */
+}
+
+pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.25rem 0.75rem;
+  background-color: #333; /* Ciemne tło nagłówka */
+  color: #e0e0e0; /* Jasny tekst */
+  font-size: 0.8rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-top-left-radius: 0.25rem; /* Zaokrąglenie rogów */
+  border-top-right-radius: 0.25rem;
+  border-bottom: 1px solid #444; /* Linia oddzielająca */
+}
