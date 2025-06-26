@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/app/api/auth/[...nextauth]/route"; // Ta ścieżka jest poprawna, jeśli plik auth.js jest w głównym katalogu
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -44,6 +44,7 @@ export async function createPost(formData) {
 
     return { success: true, slug: slug };
   } catch (error) {
+    console.error("Błąd przy tworzeniu posta:", error);
     return { error: "Nie udało się stworzyć postu." };
   }
 }
@@ -74,6 +75,7 @@ export async function updatePost(slug, formData) {
     revalidatePath(`/blog/${updatedPost.slug}`);
     revalidatePath("/admin/dashboard");
   } catch (error) {
+    console.error("Błąd podczas aktualizacji postu:", error);
     return { error: "Nie udało się zaktualizować postu." };
   }
 
@@ -94,6 +96,7 @@ export async function deletePost(slug) {
     revalidatePath("/blog");
     revalidatePath("/admin/dashboard");
   } catch (error) {
+    console.error("Błąd podczas usuwania postu:", error);
     return { error: "Nie udało się usunąć postu." };
   }
 
