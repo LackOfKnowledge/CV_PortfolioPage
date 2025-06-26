@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/auth"; // Ta ścieżka jest poprawna, jeśli plik auth.js jest w głównym katalogu
+import { auth } from "@/app/api/auth/[...nextauth]/route"; // Ta ścieżka jest poprawna, jeśli plik auth.js jest w głównym katalogu
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
