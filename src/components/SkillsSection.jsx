@@ -86,6 +86,10 @@ export default function SkillsSection() {
         backgroundColor: "background.paper", // Lepszy kontrast
         borderTop: "1px solid",
         borderColor: "divider",
+        minHeight: "101vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
       <Container maxWidth="lg">

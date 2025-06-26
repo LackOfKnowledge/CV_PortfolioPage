@@ -18,7 +18,10 @@ export default function Sidebar({ navItems }) {
   const pathname = usePathname();
   const theme = useTheme();
   const colorMode = useColorMode();
-
+  const filteredNavItems =
+    pathname === "/blog"
+      ? navItems.filter((item) => item.href !== "/blog")
+      : navItems;
   if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
     return null;
   }
@@ -62,8 +65,11 @@ export default function Sidebar({ navItems }) {
         </Box>
         <IconButton
           onClick={colorMode.toggleColorMode}
-          color="inherit"
           aria-label="toggle theme"
+          sx={{
+            color:
+              theme.palette.mode === "light" ? "text.secondary" : "inherit",
+          }}
         >
           {theme.palette.mode === "dark" ? (
             <Brightness7Icon />

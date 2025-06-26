@@ -2,12 +2,14 @@
 "use client";
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
 import { smoothScrollTo } from "@/utils/smoothScroll";
 
 export default function HeroSection() {
@@ -52,7 +54,9 @@ export default function HeroSection() {
           Przeklikaj przez zakładki i zapoznaj się z moim życiorysem, zobacz
           gdzie pracowałem i co potrafię. Zachęcam do skontaktowania się ze mną
           poprzez formularz. Jeśli chcesz wyślę Ci swoje CV, ale w bardziej
-          oryginalny sposób niż pdf mailem :).
+          oryginalny sposób niż pdf mailem :). Zapraszam również do zapoznania
+          się z blogiem, znajdziesz tam treści nie tylko programistyczne, ale
+          też geodezyjne/budowlane.
         </Typography>
         <Stack
           direction="row"
@@ -68,6 +72,16 @@ export default function HeroSection() {
             onClick={() => smoothScrollTo("kontakt", "main-content-area")}
           >
             Kontakt
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            startIcon={<BookOutlinedIcon />}
+            sx={{ minWidth: "180px" }}
+            onClick={() => (window.location.href = "/blog")}
+          >
+            Przejdź na bloga
           </Button>
         </Stack>
       </Container>

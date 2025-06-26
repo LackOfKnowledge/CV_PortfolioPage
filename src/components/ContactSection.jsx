@@ -76,7 +76,14 @@ export default function ContactSection() {
   return (
     <Box
       id="kontakt"
-      sx={{ py: { xs: 6, md: 10 }, backgroundColor: "background.default" }}
+      sx={{
+        py: { xs: 6, md: 10 },
+        backgroundColor: "background.default",
+        minHeight: "101vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
     >
       <Container maxWidth="sm">
         <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>

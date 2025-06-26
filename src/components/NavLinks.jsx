@@ -1,87 +1,67 @@
 "use client";
-
 import React from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { smoothScrollTo } from "@/utils/smoothScroll";
-import { useScrollSpy } from "@/hooks/useScrollSpy";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import { useScrollSpy } from "@/hooks/useScrollSpy";
+import { smoothScrollTo } from "@/utils/smoothScroll";
 
-export default function NavLinks({ navItems, onLinkClick = () => {} }) {
+export default function NavLinks({ navItems, onLinkClick }) {
+  const { activeId } = useScrollSpy();
+  const mainContentAreaId = "main-content-area";
   const pathname = usePathname();
   const router = useRouter();
-  const { activeSection } = useScrollSpy();
 
-  const handleLinkClick = (targetId) => {
-    onLinkClick();
+  const handleScrollClick = (targetId) => {
     if (pathname === "/") {
-      smoothScrollTo(targetId, "main-content-area");
+      smoothScrollTo(targetId, mainContentAreaId);
     } else {
-      router.push(`/?scrollTo=${targetId}`);
+      router.push(`/#${targetId}`);
+    }
+
+    if (onLinkClick) {
+      onLinkClick();
     }
   };
 
   return (
-    <Stack
-      spacing={1}
-      sx={{ mt: 2, position: "relative" }}
-    >
-      {navItems.map((item) => {
-        const isActive = pathname === "/" && activeSection === item.targetId;
-        return (
-          <Box
-            key={item.label}
-            onClick={() => handleLinkClick(item.targetId)}
-            sx={{
-              padding: "8px 16px",
-              cursor: "pointer",
-              position: "relative",
-              color: isActive ? "text.primary" : "text.secondary",
-              fontWeight: isActive ? "bold" : "normal",
-              transition: "color 0.2s, font-weight 0.2s",
-              "&:hover": { color: "text.primary" },
-            }}
-          >
-            {isActive && (
-              <motion.div
-                layoutId="nav-indicator"
-                style={{
-                  position: "absolute",
-                  top: "25%",
-                  bottom: "25%",
-                  left: 0,
-                  width: "2px",
-                  backgroundColor: "var(--mui-palette-primary-main)",
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              />
-            )}
-            {item.label}
-          </Box>
-        );
-      })}
-      <Link
-        href="/blog"
-        passHref
-        style={{ textDecoration: "none" }}
-      >
-        <Box
-          sx={{
-            padding: "8px 16px",
-            cursor: "pointer",
-            position: "relative",
-            color: pathname.startsWith("/blog")
-              ? "text.primary"
-              : "text.secondary",
-            fontWeight: pathname.startsWith("/blog") ? "bold" : "normal",
-            "&:hover": { color: "text.primary" },
-          }}
+    <List>
+      {navItems.map((item) => (
+        <ListItem
+          key={item.label}
+          disablePadding
         >
-          Blog
-        </Box>
-      </Link>
-    </Stack>
+          {item.href ? (
+            <ListItemButton
+              component={Link}
+              href={item.href}
+              onClick={onLinkClick}
+              sx={{ borderRadius: 1 }}
+            >
+              <ListItemText primary={item.label} />
+            </ListItemButton>
+          ) : (
+            <ListItemButton
+              selected={activeId === item.targetId}
+              onClick={() => handleScrollClick(item.targetId)}
+              sx={{
+                "&.Mui-selected": {
+                  backgroundColor: "action.selected",
+                  "&:hover": {
+                    backgroundColor: "action.hover",
+                  },
+                },
+                borderRadius: 1,
+              }}
+            >
+              <ListItemText primary={item.label} />
+            </ListItemButton>
+          )}
+        </ListItem>
+      ))}
+    </List>
   );
 }

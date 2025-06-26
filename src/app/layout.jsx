@@ -8,7 +8,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 import Sidebar from "@/components/Sidebar";
 import MobileHeader from "@/components/MobileHeader";
 import { ScrollSpyProvider } from "@/hooks/useScrollSpy";
-
+import SecretCodeHandler from "@/components/SecretCodeHandler";
 const navItems = [
   { label: "Start", targetId: "hero" },
   { label: "O mnie", targetId: "omnie" },
@@ -34,6 +34,7 @@ export default function RootLayout({ children }) {
       <body className={chivo.className}>
         <AuthProviders>
           <ThemeRegistry>
+            <SecretCodeHandler />
             <ScrollSpyProvider navItems={navItems}>
               <Box sx={{ display: "flex" }}>
                 <Sidebar navItems={navItems} />
@@ -46,7 +47,7 @@ export default function RootLayout({ children }) {
                     flexDirection: "column",
                     height: "100vh",
                     overflowY: "auto",
-                    backgroundColor: "background.default", // <-- DODANA LINIA
+                    backgroundColor: "background.default",
                   }}
                 >
                   <MobileHeader navItems={navItems} />

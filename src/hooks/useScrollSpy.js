@@ -1,11 +1,10 @@
-// src/hooks/useScrollSpy.js
 "use client";
 
 import React, {
-  useState,
-  useEffect,
   createContext,
   useContext,
+  useState,
+  useEffect,
   useRef,
 } from "react";
 
@@ -13,51 +12,56 @@ const ScrollSpyContext = createContext(null);
 
 export const useScrollSpy = () => useContext(ScrollSpyContext);
 
-export const ScrollSpyProvider = ({ navItems, children }) => {
-  const [activeSection, setActiveSection] = useState(
-    navItems[0]?.targetId || ""
-  );
-  const observerRef = useRef(null);
-  const visibleSectionsRef = useRef(new Set());
+export const ScrollSpyProvider = ({ children, navItems }) => {
+  const [activeId, setActiveId] = useState(navItems[0]?.targetId);
+
+  const activeIdRef = useRef(activeId);
+  activeIdRef.current = activeId;
 
   useEffect(() => {
-    if (observerRef.current) observerRef.current.disconnect();
+    const mainContent = document.getElementById("main-content-area");
+    if (!mainContent) return;
 
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            visibleSectionsRef.current.add(entry.target.id);
-          } else {
-            visibleSectionsRef.current.delete(entry.target.id);
+    const findClosestSection = () => {
+      let closestSection = null;
+      let smallestDistance = Infinity;
+
+      navItems.forEach((item) => {
+        if (!item.targetId) return;
+
+        const element = document.getElementById(item.targetId);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const distance = Math.abs(rect.top);
+
+          if (distance < smallestDistance) {
+            smallestDistance = distance;
+            closestSection = item.targetId;
           }
-        });
-
-        const sortedVisibleSections = navItems
-          .map((item) => item.targetId)
-          .filter((id) => visibleSectionsRef.current.has(id));
-
-        if (sortedVisibleSections.length > 0) {
-          setActiveSection(sortedVisibleSections[0]);
         }
-      },
-      {
-        rootMargin: "0px 0px -80% 0px",
-        threshold: 0,
+      });
+
+      return closestSection;
+    };
+
+    const handleScroll = () => {
+      const closestId = findClosestSection();
+      if (closestId && closestId !== activeIdRef.current) {
+        setActiveId(closestId);
       }
-    );
+    };
 
-    const { current: observer } = observerRef;
-    navItems.forEach(({ targetId }) => {
-      const element = document.getElementById(targetId);
-      if (element) observer.observe(element);
-    });
+    mainContent.addEventListener("scroll", handleScroll);
 
-    return () => observer.disconnect();
+    handleScroll();
+
+    return () => {
+      mainContent.removeEventListener("scroll", handleScroll);
+    };
   }, [navItems]);
 
   return (
-    <ScrollSpyContext.Provider value={{ activeSection }}>
+    <ScrollSpyContext.Provider value={{ activeId, setActiveId }}>
       {children}
     </ScrollSpyContext.Provider>
   );

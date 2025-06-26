@@ -38,7 +38,14 @@ export default function ExperienceSection() {
   return (
     <Box
       id="doswiadczenie"
-      sx={{ py: { xs: 6, md: 10 }, backgroundColor: "background.default" }}
+      sx={{
+        py: { xs: 6, md: 10 },
+        backgroundColor: "background.default",
+        minHeight: "101vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
     >
       <Container maxWidth="md">
         <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>

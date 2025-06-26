@@ -179,6 +179,10 @@ export default function PortfolioSection() {
       sx={{
         py: { xs: 6, md: 10 },
         backgroundColor: "background.default",
+        minHeight: "101vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
       <Container maxWidth="lg">
