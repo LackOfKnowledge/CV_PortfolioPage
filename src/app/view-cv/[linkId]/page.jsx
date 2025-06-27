@@ -4,10 +4,10 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Box, Alert } from "@mui/material";
 
-// 1. Importujemy Twój działający komponent CV
-import CvView from "@/components/CvView";
+// Importujemy nasz NOWY komponent kliencki
+import CvDisplay from "./CvDisplay";
 
-// 2. Importujemy wszystkie potrzebne dane do CV
+// Importujemy dane, które przekażemy dalej
 import {
   personalData,
   summary,
@@ -25,12 +25,6 @@ async function validateLink(id) {
 
   if (!link) return "not_found";
   if (new Date(link.expiresAt) < new Date()) return "expired";
-
-  // Opcjonalnie: Oznacz link jako użyty. Na razie zostawmy to, żeby nie komplikować.
-  // if (!link.usedAt) {
-  //   await prisma.cvLink.update({ where: { id }, data: { usedAt: new Date() } });
-  // }
-
   return "valid";
 }
 
@@ -49,35 +43,17 @@ export default async function ViewCvPage({ params }) {
     );
   }
 
-  // Jeśli link jest poprawny, renderujemy Twoje prawdziwe CV
-  return (
-    <>
-      {/* Dodajemy te same style do druku, co na starej stronie /cv */}
-      <style
-        jsx
-        global
-      >{`
-        @media print {
-          body {
-            margin: 0;
-            padding: 0;
-            background: white !important;
-          }
-          @page {
-            size: A4;
-            margin: 1cm;
-          }
-        }
-      `}</style>
-      <CvView
-        personalData={personalData}
-        summary={summary}
-        educationData={educationData}
-        skillsData={skillsData}
-        experienceData={experienceData}
-        references={references}
-        gdprClause={gdprClause}
-      />
-    </>
-  );
+  // Tworzymy obiekt z wszystkimi danymi CV
+  const cvData = {
+    personalData,
+    summary,
+    educationData,
+    skillsData,
+    experienceData,
+    references,
+    gdprClause,
+  };
+
+  // Renderujemy komponent kliencki, przekazując mu dane jako props
+  return <CvDisplay cvData={cvData} />;
 }
