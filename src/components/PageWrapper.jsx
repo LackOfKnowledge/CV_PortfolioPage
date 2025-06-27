@@ -41,6 +41,7 @@ export default function PageWrapper({ children, navItems }) {
         flexDirection: "column",
         height: "100vh",
         overflowY: "auto",
+        backgroundColor: "background.default", // --- TO JEST TA BRAKUJĄCA LINIA ---
       }}
     >
       <MobileHeader navItems={navItems} />
@@ -51,28 +52,14 @@ export default function PageWrapper({ children, navItems }) {
 
   const entirePageLayout = (
     <Box sx={{ display: "flex" }}>
-      {/* NOWA, NIEWIDZIALNA STREFA SPUSTOWA 
-        Renderowana tylko na stronie pojedynczego posta.
-      */}
-      {isSinglePostPage && (
-        <Box
-          onMouseEnter={() => setSidebarHovered(true)}
-          sx={{
-            display: { xs: "none", md: "block" },
-            position: "fixed",
-            left: 0,
-            top: 0,
-            width: "25px", // Szerokość strefy
-            height: "100vh",
-            zIndex: 1199, // Tuż pod sidebarem
-          }}
-        />
-      )}
-
       <Box
         component="aside"
-        // Zdarzenie onMouseLeave zostaje tutaj, aby chować sidebar po zjechaniu z niego
-        onMouseLeave={() => setSidebarHovered(false)}
+        onMouseEnter={
+          isSinglePostPage ? () => setSidebarHovered(true) : undefined
+        }
+        onMouseLeave={
+          isSinglePostPage ? () => setSidebarHovered(false) : undefined
+        }
         sx={{
           display: { xs: "none", md: "block" },
           position: "fixed",
@@ -84,7 +71,6 @@ export default function PageWrapper({ children, navItems }) {
           borderRight: "1px solid",
           borderColor: "divider",
           transition: "transform 0.3s ease-in-out",
-          // Logika transformacji - na stronie posta zależy od najechania, na innych stronach jest stały
           transform:
             isSinglePostPage && !isSidebarHovered
               ? `translateX(-${sidebarWidth}px)`
@@ -93,12 +79,10 @@ export default function PageWrapper({ children, navItems }) {
       >
         {sidebarComponent}
       </Box>
-
       <Box
         sx={{
           flexGrow: 1,
           transition: "padding-left 0.3s ease-in-out",
-          // Logika dopasowania contentu - również zależy od typu strony i najechania
           pl: {
             xs: 0,
             md:
