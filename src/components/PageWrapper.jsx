@@ -32,6 +32,7 @@ export default function PageWrapper({ children, navItems }) {
     />
   );
 
+  // DEFINICJA GŁÓWNEJ TREŚCI Z POPRAWNYM TŁEM
   const mainContentArea = (
     <Box
       component="main"
@@ -41,7 +42,7 @@ export default function PageWrapper({ children, navItems }) {
         flexDirection: "column",
         height: "100vh",
         overflowY: "auto",
-        backgroundColor: "background.default", // --- TO JEST TA BRAKUJĄCA LINIA ---
+        backgroundColor: "background.default", // <-- POPRAWKA TŁA JEST TUTAJ
       }}
     >
       <MobileHeader navItems={navItems} />
@@ -52,14 +53,26 @@ export default function PageWrapper({ children, navItems }) {
 
   const entirePageLayout = (
     <Box sx={{ display: "flex" }}>
+      {/* 1. OSOBNA, NIEWIDZIALNA STREFA DO AKTYWACJI SIDEBARA */}
+      {isSinglePostPage && (
+        <Box
+          onMouseEnter={() => setSidebarHovered(true)}
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "fixed",
+            left: 0,
+            top: 0,
+            width: "25px", // Szerokość strefy
+            height: "100vh",
+            zIndex: 1199, // Pod sidebarem
+          }}
+        />
+      )}
+
+      {/* 2. SIDEBAR, KTÓRY REAGUJE NA onMouseLeave */}
       <Box
         component="aside"
-        onMouseEnter={
-          isSinglePostPage ? () => setSidebarHovered(true) : undefined
-        }
-        onMouseLeave={
-          isSinglePostPage ? () => setSidebarHovered(false) : undefined
-        }
+        onMouseLeave={() => setSidebarHovered(false)}
         sx={{
           display: { xs: "none", md: "block" },
           position: "fixed",
@@ -79,6 +92,8 @@ export default function PageWrapper({ children, navItems }) {
       >
         {sidebarComponent}
       </Box>
+
+      {/* 3. KONTENER Z TREŚCIĄ, KTÓRY SIĘ DOPASOWUJE */}
       <Box
         sx={{
           flexGrow: 1,
