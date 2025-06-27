@@ -1,5 +1,3 @@
-// Plik: src/app/admin/categories/page.jsx
-
 import prisma from "@/lib/prisma";
 import { Typography } from "@mui/material";
 import CategoryManager from "./CategoryManager";
@@ -12,8 +10,6 @@ async function getCategories() {
       orderBy: { name: "asc" },
     });
   } catch (e) {
-    // Jeśli tabela nie istnieje, prisma rzuci błędem.
-    // Zwracamy pustą tablicę, aby strona się nie wysypała.
     return [];
   }
 }

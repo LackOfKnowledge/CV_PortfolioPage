@@ -1,11 +1,9 @@
-// src/app/api/admin/posts/route.js
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route.js";
 import path from "path";
 import fs from "fs/promises";
 
-// Funkcja pomocnicza do tworzenia "slugów" z tytułów
 const slugify = (text) =>
   text
     .toString()
@@ -37,16 +35,13 @@ export async function POST(req) {
     const postsDirectory = path.join(process.cwd(), "content/posts");
     const filePath = path.join(postsDirectory, filename);
 
-    // Sprawdzenie, czy plik o takim slugu już istnieje
     try {
       await fs.access(filePath);
       return NextResponse.json(
         { error: "Post z takim tytułem (slug) już istnieje." },
         { status: 409 }
       );
-    } catch (e) {
-      // Plik nie istnieje, możemy kontynuować
-    }
+    } catch (e) {}
 
     const fileContent = `---
 title: '${title.replace(/'/g, "''")}'

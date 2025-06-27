@@ -5,16 +5,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import EditPostForm from "@/components/admin/EditPostForm";
 
-// Ta strona jest teraz Komponentem Serwerowym
 export default async function EditPostPage({ params }) {
   const { slug } = params;
 
-  // Pobieramy dane posta bezpośrednio na serwerze
   const post = await prisma.post.findUnique({
     where: { slug: slug },
   });
 
-  // Jeśli nie ma posta, wyświetlamy stronę 404
   if (!post) {
     notFound();
   }
@@ -28,7 +25,6 @@ export default async function EditPostPage({ params }) {
       >
         Edytuj Post
       </Typography>
-      {/* Renderujemy formularz i przekazujemy mu dane posta */}
       <EditPostForm post={post} />
     </Box>
   );

@@ -6,14 +6,11 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-
-// Tworzymy kontekst, który będzie przechowywał funkcję do zmiany motywu
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export function AdminThemeProvider({ children }) {
-  const [mode, setMode] = useState("dark"); // Domyślnie startujemy z motywem jasnym
+  const [mode, setMode] = useState("dark");
 
-  // Używamy useMemo, aby funkcja nie była tworzona na nowo przy każdym renderowaniu
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
@@ -23,7 +20,6 @@ export function AdminThemeProvider({ children }) {
     []
   );
 
-  // Tworzymy motyw MUI na podstawie aktualnego trybu (jasny/ciemny)
   const theme = useMemo(
     () =>
       createTheme({
@@ -37,7 +33,6 @@ export function AdminThemeProvider({ children }) {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <MuiThemeProvider theme={theme}>
-        {/* CssBaseline resetuje style i aplikuje kolor tła z motywu */}
         <CssBaseline />
         {children}
       </MuiThemeProvider>
@@ -45,5 +40,4 @@ export function AdminThemeProvider({ children }) {
   );
 }
 
-// Customowy hook, aby łatwo dostać się do funkcji przełączającej motyw
 export const useColorMode = () => useContext(ColorModeContext);

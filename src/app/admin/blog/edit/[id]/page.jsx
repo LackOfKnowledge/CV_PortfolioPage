@@ -1,4 +1,3 @@
-// Plik: src/app/admin/blog/edit/[id]/page.jsx
 import PostForm from "@/components/admin/PostForm";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";

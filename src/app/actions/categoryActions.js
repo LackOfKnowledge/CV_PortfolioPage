@@ -1,5 +1,3 @@
-// Plik: src/app/actions/categoryActions.js
-
 "use server";
 
 import prisma from "@/lib/prisma";
@@ -48,12 +46,8 @@ export async function deleteCategory(prevState, formData) {
     });
     revalidatePath("/admin/categories");
     revalidatePath("/blog");
-    // Zwracamy sukces, chociaż nie będziemy go wyświetlać.
-    // RevalidatePath odświeży listę.
     return { message: "Kategoria usunięta.", type: "success" };
   } catch (error) {
-    // P2003 to kod błędu Prisma oznaczający naruszenie klucza obcego
-    // (tj. jakiś post wciąż używa tej kategorii)
     if (error.code === "P2003") {
       return {
         message:

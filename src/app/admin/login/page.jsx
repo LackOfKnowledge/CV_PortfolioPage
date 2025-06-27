@@ -1,4 +1,3 @@
-// src/app/admin/login/page.jsx
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -16,10 +15,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Stan dla spinnera przycisku
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
-  const isRedirecting = useRef(false); // Flaga do śledzenia, czy przekierowanie zostało zainicjowane
+  const isRedirecting = useRef(false);
 
   console.log(
     "[LoginPage] Render. Status:",
@@ -39,21 +38,20 @@ export default function LoginPage() {
       "isRedirecting:",
       isRedirecting.current
     );
-    // Przekieruj tylko jeśli jesteśmy uwierzytelnieni, mamy sesję I NIE jesteśmy już w trakcie przekierowania
     if (status === "authenticated" && session && !isRedirecting.current) {
       console.log(
         "[LoginPage] Authenticated & not redirecting yet. Initiating redirect to /admin/dashboard"
       );
-      isRedirecting.current = true; // Ustaw flagę PRZED wywołaniem router.push
+      isRedirecting.current = true;
       router.push("/admin/dashboard");
     }
-  }, [session, status, router]); // isRedirecting.current nie jest w zależnościach, bo to ref
+  }, [session, status, router]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true); // Ustaw ładowanie dla przycisku
+    setLoading(true);
     setError("");
-    isRedirecting.current = false; // Zresetuj flagę przekierowania na wypadek poprzedniego błędu
+    isRedirecting.current = false;
     console.log(
       "[LoginPage] handleSubmit: Attempting signIn with email:",
       email
@@ -61,7 +59,7 @@ export default function LoginPage() {
 
     try {
       const result = await signIn("credentials", {
-        redirect: false, // Kluczowe: next-auth nie przekierowuje, robimy to sami
+        redirect: false,
         email: email,
         password: password,
       });
@@ -80,32 +78,26 @@ export default function LoginPage() {
           result.error
         );
         setError(errorMessage);
-        setLoading(false); // Wyłącz ładowanie przycisku
+        setLoading(false);
       } else if (result?.ok) {
         console.log(
           "[LoginPage] handleSubmit: signIn successful. Session status will update, useEffect will handle redirect."
         );
-        // Nie ustawiamy setLoading(false) tutaj, ponieważ oczekujemy na przekierowanie.
-        // Jeśli przekierowanie nie nastąpi z jakiegoś powodu, użytkownik może utknąć ze spinnerem na przycisku.
-        // Można rozważyć timeout dla setLoading(false) lub obsłużyć to inaczej,
-        // ale idealnie useEffect powinien szybko przekierować.
       } else {
-        // Rzadki przypadek, ale warto obsłużyć
         console.error(
           "[LoginPage] handleSubmit: signIn result not ok and no error:",
           result
         );
         setError("Wystąpił nieoczekiwany błąd logowania.");
-        setLoading(false); // Wyłącz ładowanie przycisku
+        setLoading(false);
       }
     } catch (e) {
       console.error("[LoginPage] handleSubmit: Exception during signIn:", e);
       setError("Wystąpił błąd podczas próby logowania.");
-      setLoading(false); // Wyłącz ładowanie przycisku
+      setLoading(false);
     }
   };
 
-  // 1. Stan ładowania sesji (najwyższy priorytet) lub gdy już zainicjowano przekierowanie
   if (status === "loading" || isRedirecting.current) {
     console.log(
       "[LoginPage] Rendering: Status is 'loading' or isRedirecting.current is true. Showing global spinner."
@@ -127,15 +119,11 @@ export default function LoginPage() {
     );
   }
 
-  // 2. Jeśli użytkownik jest już uwierzytelniony (ale useEffect jeszcze nie zadziałał/nie przekierował)
-  // Ten blok może być zbędny, jeśli logika z isRedirecting.current działa poprawnie,
-  // ale zostawiam go jako dodatkowe zabezpieczenie przed migotaniem formularza.
   if (status === "authenticated") {
     console.log(
       "[LoginPage] Rendering: Status is 'authenticated' (and not yet redirecting). Should be handled by useEffect shortly."
     );
     return (
-      // Powinien to być stan przejściowy, zanim useEffect przekieruje
       <Box
         sx={{
           display: "flex",
@@ -152,7 +140,6 @@ export default function LoginPage() {
     );
   }
 
-  // 3. Domyślnie (status === "unauthenticated" i nie jesteśmy w trakcie przekierowania) pokaż formularz
   console.log(
     "[LoginPage] Rendering: Status is 'unauthenticated' and not redirecting. Showing login form."
   );
@@ -192,7 +179,7 @@ export default function LoginPage() {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled={loading} // Spinner na przycisku, nie na polach
+            disabled={loading}
           />
           <TextField
             margin="normal"
@@ -205,7 +192,7 @@ export default function LoginPage() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            disabled={loading} // Spinner na przycisku, nie na polach
+            disabled={loading}
           />
           {error && (
             <Alert
@@ -220,7 +207,7 @@ export default function LoginPage() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={loading} // Spinner na przycisku
+            disabled={loading}
           >
             {loading ? (
               <CircularProgress

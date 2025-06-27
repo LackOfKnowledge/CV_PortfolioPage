@@ -1,8 +1,7 @@
-// src/app/api/admin/generate-cv-link/route.js
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Upewnij się, że ścieżka jest poprawna
-import prisma from "@/lib/prisma"; // Twój skonfigurowany klient Prisma
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req) {
@@ -17,7 +16,7 @@ export async function POST(req) {
   try {
     const tokenString = uuidv4();
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // Link ważny przez 7 dni
+    expiresAt.setDate(expiresAt.getDate() + 7);
 
     console.log(
       `[API generate-cv-link] Generating token for admin: ${session.user.id}`
@@ -28,7 +27,7 @@ export async function POST(req) {
         token: tokenString,
         expiresAt: expiresAt,
         isUsed: false,
-        userId: session.user.id, // Powiązanie z adminem, który wygenerował
+        userId: session.user.id,
       },
     });
 
@@ -36,7 +35,6 @@ export async function POST(req) {
       "[API generate-cv-link] Token created successfully:",
       newCvToken
     );
-    // Zwracamy tylko ścieżkę, pełny URL zostanie złożony po stronie klienta
     return NextResponse.json({
       success: true,
       link: `/view-cv/${newCvToken.token}`,

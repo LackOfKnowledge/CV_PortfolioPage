@@ -1,5 +1,3 @@
-// Plik: src/app/admin/categories/CategoryManager.jsx
-
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
@@ -55,19 +53,15 @@ export default function CategoryManager({ initialCategories }) {
   );
   const formRef = useRef(null);
 
-  // Ta funkcja opakowuje akcję serwerową, aby obsłużyć jej wynik po stronie klienta
   const handleDeleteAction = async (formData) => {
-    // Wywołujemy akcję serwerową i czekamy na odpowiedź
     const result = await deleteCategory(null, formData);
 
-    // Jeśli akcja zwróciła błąd, wyświetlamy go w alercie
     if (result?.type === "error") {
       alert(result.message);
     }
   };
 
   useEffect(() => {
-    // Resetuj formularz tylko jeśli dodawanie się powiodło
     if (createState?.type === "success") {
       formRef.current?.reset();
     }
@@ -75,7 +69,6 @@ export default function CategoryManager({ initialCategories }) {
 
   return (
     <Box>
-      {/* Formularz dodawania kategorii */}
       <Paper sx={{ p: 3, mb: 4 }}>
         <Typography
           variant="h6"
@@ -100,7 +93,6 @@ export default function CategoryManager({ initialCategories }) {
             <SubmitCreateButton />
           </Box>
         </form>
-        {/* Wyświetlaj błędy walidacji lub inne błędy z serwera */}
         {createState?.message && (
           <Alert
             severity={createState.type || "info"}
@@ -111,7 +103,6 @@ export default function CategoryManager({ initialCategories }) {
         )}
       </Paper>
 
-      {/* Lista istniejących kategorii */}
       <Paper sx={{ p: 3 }}>
         <Typography
           variant="h6"

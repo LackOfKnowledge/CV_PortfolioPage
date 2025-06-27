@@ -18,7 +18,7 @@ import {
   Description as DescriptionIcon,
   Logout as LogoutIcon,
   Home as HomeIcon,
-  Category as CategoryIcon, // 1. Import ikony dla kategorii
+  Category as CategoryIcon,
 } from "@mui/icons-material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -26,7 +26,6 @@ import { signOut } from "next-auth/react";
 
 const menuItems = [
   { text: "Panel", icon: <DashboardIcon />, path: "/admin/dashboard" },
-  // 2. Dodany nowy obiekt dla menedżera kategorii
   { text: "Kategorie", icon: <CategoryIcon />, path: "/admin/categories" },
   { text: "Dodaj Post", icon: <PostAddIcon />, path: "/admin/blog/new" },
   {

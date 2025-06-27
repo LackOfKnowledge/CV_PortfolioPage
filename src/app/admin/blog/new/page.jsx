@@ -1,4 +1,3 @@
-// Plik: src/app/admin/blog/new/page.jsx
 import PostForm from "@/components/admin/PostForm";
 import { Typography } from "@mui/material";
 import prisma from "@/lib/prisma";

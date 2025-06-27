@@ -1,15 +1,11 @@
-// Plik: src/app/api/contact/route.js
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-// Odczyt zmiennych środowiskowych
 const resendApiKey = process.env.RESEND_API_KEY;
 const recipientEmail = process.env.CONTACT_EMAIL_TO;
 
-// Regex do walidacji email
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Sprawdzenie konfiguracji przy starcie
 if (!resendApiKey)
   console.error(
     "FATAL: Zmienna środowiskowa RESEND_API_KEY nie jest ustawiona!"
@@ -21,7 +17,6 @@ if (!recipientEmail)
 
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
-// --- Obsługa metody POST (wysyłanie formularza) ---
 export async function POST(request) {
   if (!resend || !recipientEmail) {
     console.error(
@@ -37,7 +32,6 @@ export async function POST(request) {
     const body = await request.json();
     const { email, message } = body;
 
-    // Walidacja podstawowa + format email
     if (!email || !message) {
       return NextResponse.json(
         { error: "Brakuje wymaganych pól (email, message)." },
@@ -59,10 +53,10 @@ export async function POST(request) {
       .replace(/>/g, "&gt;");
 
     const { data, error } = await resend.emails.send({
-      from: "onboarding@resend.dev", // TODO: Zmień w produkcji na zweryfikowaną domenę
+      from: "onboarding@resend.dev",
       to: [recipientEmail],
       subject: `Nowa wiadomość z Twojego Portfolio od: ${email}`,
-      reply_to: email, // TODO: Rozważ usunięcie do testów, jeśli błąd 403 nadal występuje
+      reply_to: email,
       html: `<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;"><h2 style="color: #0B57D0;">Nowa wiadomość z Portfolio</h2><p>Otrzymałeś/aś wiadomość od użytkownika:</p><ul><li><strong>Email:</strong> ${email}</li></ul><h3>Treść wiadomości:</h3><div style="background-color: #f4f4f4; border: 1px solid #ddd; padding: 15px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word;">${sanitizedMessage.replace(/\n/g, "<br>")}</div><hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;"><p style="font-size: 0.9em; color: #777;">Wiadomość wysłana z formularza kontaktowego na Twojej stronie.</p></div>`,
     });
 
@@ -99,7 +93,6 @@ export async function POST(request) {
   }
 }
 
-// --- Obsługa pozostałych metod HTTP (zwracanie błędu 405) ---
 const message = "Method Not Allowed";
 const status = 405;
 

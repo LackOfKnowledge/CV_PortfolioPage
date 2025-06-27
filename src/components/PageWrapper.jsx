@@ -1,48 +1,105 @@
-// Plik: src/components/PageWrapper.jsx
-
 "use client";
 
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Box } from "@mui/material";
-
 import { ScrollSpyProvider } from "@/hooks/useScrollSpy";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import Sidebar from "@/components/Sidebar";
 import MobileHeader from "@/components/MobileHeader";
 
+const sidebarWidth = 280;
+
 export default function PageWrapper({ children, navItems }) {
   const pathname = usePathname();
-  const isBlogPage = pathname.startsWith("/blog");
-  const isAdminPage = pathname.startsWith("/admin");
+  const [isSidebarHovered, setSidebarHovered] = useState(false);
 
-  // Dla strony bloga i admina, layout jest obsługiwany przez ich własne pliki layout.jsx
-  // PageWrapper po prostu renderuje dzieci bez dodatkowego opakowania.
-  if (isBlogPage || isAdminPage) {
+  const isHomePage = pathname === "/";
+  const isSinglePostPage =
+    pathname.startsWith("/blog/") && pathname.length > "/blog/".length;
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
     return <>{children}</>;
   }
 
-  // Standardowy layout dla reszty stron (Portfolio)
-  return (
-    <ScrollSpyProvider navItems={navItems}>
-      <Box sx={{ display: "flex" }}>
-        <Sidebar navItems={navItems} />
-        <Box
-          id="main-content-area"
-          component="main"
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            height: "100vh",
-            overflowY: "auto",
-            backgroundColor: "background.default",
-          }}
-        >
-          <MobileHeader navItems={navItems} />
-          <Box sx={{ flexGrow: 1 }}>{children}</Box>
-          <ConditionalFooter />
-        </Box>
-      </Box>
-    </ScrollSpyProvider>
+  const sidebarComponent = (
+    <Sidebar
+      navItems={navItems}
+      scrollSpyEnabled={isHomePage}
+    />
   );
+
+  const mainContentArea = (
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        overflowY: "auto",
+      }}
+    >
+      <MobileHeader navItems={navItems} />
+      <Box sx={{ flexGrow: 1 }}>{children}</Box>
+      <ConditionalFooter />
+    </Box>
+  );
+
+  const entirePageLayout = (
+    <Box sx={{ display: "flex" }}>
+      <Box
+        component="aside"
+        onMouseEnter={
+          isSinglePostPage ? () => setSidebarHovered(true) : undefined
+        }
+        onMouseLeave={
+          isSinglePostPage ? () => setSidebarHovered(false) : undefined
+        }
+        sx={{
+          display: { xs: "none", md: "block" },
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: sidebarWidth,
+          height: "100vh",
+          zIndex: 1200,
+          borderRight: "1px solid",
+          borderColor: "divider",
+          transition: "transform 0.3s ease-in-out",
+          transform:
+            isSinglePostPage && !isSidebarHovered
+              ? `translateX(-${sidebarWidth}px)`
+              : "translateX(0)",
+        }}
+      >
+        {sidebarComponent}
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
+          transition: "padding-left 0.3s ease-in-out",
+          pl: {
+            xs: 0,
+            md:
+              isSinglePostPage && !isSidebarHovered
+                ? "0px"
+                : `${sidebarWidth}px`,
+          },
+        }}
+      >
+        {mainContentArea}
+      </Box>
+    </Box>
+  );
+
+  if (isHomePage) {
+    return (
+      <ScrollSpyProvider navItems={navItems}>
+        {entirePageLayout}
+      </ScrollSpyProvider>
+    );
+  }
+
+  return entirePageLayout;
 }

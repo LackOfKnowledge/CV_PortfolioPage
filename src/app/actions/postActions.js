@@ -1,5 +1,3 @@
-// Plik: src/app/actions/postActions.js
-
 "use server";
 
 import prisma from "@/lib/prisma";

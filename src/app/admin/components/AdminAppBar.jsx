@@ -30,7 +30,7 @@ export default function AdminAppBar({ drawerWidth, handleDrawerToggle }) {
           aria-label="open drawer"
           edge="start"
           onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: "none" } }} // Widoczny tylko na mobile
+          sx={{ mr: 2, display: { sm: "none" } }}
         >
           <MenuIcon />
         </IconButton>

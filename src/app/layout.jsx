@@ -1,11 +1,8 @@
-// Plik: src/app/layout.jsx
-
-// --- ABSOLUTNIE BEZ "use client" ---
 import { chivo } from "@/theme/fonts";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import AuthProviders from "@/components/AuthProviders";
 import SecretCodeHandler from "@/components/SecretCodeHandler";
-import PageWrapper from "@/components/PageWrapper"; // Importujemy nasz nowy komponent
+import PageWrapper from "@/components/PageWrapper";
 import "./globals.css";
 
 const navItems = [

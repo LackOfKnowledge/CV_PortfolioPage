@@ -14,14 +14,11 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useColorMode } from "@/components/ThemeRegistry";
 import NavLinks from "./NavLinks";
 
-export default function Sidebar({ navItems }) {
+export default function Sidebar({ navItems, scrollSpyEnabled }) {
   const pathname = usePathname();
   const theme = useTheme();
   const colorMode = useColorMode();
-  const filteredNavItems =
-    pathname === "/blog"
-      ? navItems.filter((item) => item.href !== "/blog")
-      : navItems;
+
   if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
     return null;
   }
@@ -30,13 +27,8 @@ export default function Sidebar({ navItems }) {
     <Box
       sx={{
         width: "280px",
-        flexShrink: 0,
-        height: "100vh",
-        position: "sticky",
-        top: 0,
-        borderRight: "1px solid",
-        borderColor: "divider",
-        display: { xs: "none", md: "flex" },
+        height: "100%",
+        display: "flex",
         flexDirection: "column",
         p: 4,
         backgroundColor: "background.default",
@@ -79,7 +71,10 @@ export default function Sidebar({ navItems }) {
         </IconButton>
       </Box>
 
-      <NavLinks navItems={navItems} />
+      <NavLinks
+        navItems={navItems}
+        scrollSpyEnabled={scrollSpyEnabled}
+      />
 
       <Box sx={{ mt: "auto" }}>
         <Typography
