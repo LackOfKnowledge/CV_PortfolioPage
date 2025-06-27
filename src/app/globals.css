@@ -1,6 +1,3 @@
-/* src/app/globals.css */
-
-/* Usuwamy całą sekcję 'html, body { overflow: hidden; }' */
 @import "react-grid-layout/css/styles.css";
 @import "react-resizable/css/styles.css";
 html {
@@ -24,7 +21,6 @@ a {
   text-decoration: none;
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -44,25 +40,23 @@ a {
 @media print {
   body {
     background: white !important;
-    overflow: visible !important; /* Pozwalamy na drukowanie całej treści */
+    overflow: visible !important;
   }
 
-  /* Ukryj wszystko oprócz kontenera CV */
   body > div:not(.cv-page-container) {
     display: none !important;
   }
 
-  /* Upewnij się, że kontener CV jest widoczny i zajmuje całą stronę */
   .cv-page-container {
     display: block !important;
     margin: 0 !important;
     box-shadow: none !important;
-    height: auto !important; /* Automatyczna wysokość dla treści */
+    height: auto !important;
   }
 
   .cv-footer-clause {
-    page-break-before: always; /* Zawsze próbuj umieścić stopkę na nowej stronie, jeśli się nie mieści */
-    position: relative !important; /* W druku, stopka jest częścią przepływu dokumentu */
+    page-break-before: always;
+    position: relative !important;
   }
 }
 
@@ -71,7 +65,7 @@ a {
 }
 pre[data-language] {
   position: relative;
-  padding-top: 2.5rem !important; /* Dodatkowe miejsce na nagłówek */
+  padding-top: 2.5rem !important;
 }
 
 pre[data-language]::before {
@@ -81,15 +75,15 @@ pre[data-language]::before {
   left: 0;
   right: 0;
   padding: 0.25rem 0.75rem;
-  background-color: #333; /* Ciemne tło nagłówka */
-  color: #e0e0e0; /* Jasny tekst */
+  background-color: #333;
+  color: #e0e0e0;
   font-size: 0.8rem;
   font-family: sans-serif;
   font-weight: bold;
   text-transform: uppercase;
-  border-top-left-radius: 0.25rem; /* Zaokrąglenie rogów */
+  border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
-  border-bottom: 1px solid #444; /* Linia oddzielająca */
+  border-bottom: 1px solid #444;
 }
 .content-prose p {
   margin-top: 1.25em;
@@ -126,7 +120,7 @@ pre[data-language]::before {
 }
 
 .content-prose a {
-  color: #1976d2; /* Kolor linków z domyślnego motywu MUI */
+  color: #1976d2;
   text-decoration: underline;
 }
 
@@ -136,4 +130,10 @@ pre[data-language]::before {
   padding-left: 1em;
   border-left: 0.25em solid #e0e0e0;
   color: #555;
+}
+.content-prose pre {
+  overflow-x: auto;
+}
+.CodeMirror-scroll {
+  max-height: 400px;
 }

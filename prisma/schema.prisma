@@ -11,17 +11,24 @@ datasource db {
 }
 
 model User {
-  id              String    @id @default(cuid())
+  id              String       @id @default(cuid())
   name            String?
-  email           String?   @unique
+  email           String?      @unique
   emailVerified   DateTime?
   hashedPassword  String?
   image           String?
-  role            String    @default("user")
+  role            String       @default("user")
   accounts        Account[]
   sessions        Session[]
   posts           Post[]
   cvDownloads     CvDownload[]
+}
+
+// Nowy model dla kategorii
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[]
 }
 
 model Post {
@@ -30,7 +37,6 @@ model Post {
   title       String
   content     String
   excerpt     String?
-  category    String?
   thumbnail   String?
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -38,6 +44,9 @@ model Post {
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
   cvDownloads CvDownload[]
+
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
 }
 
 model Account {
@@ -54,6 +63,7 @@ model Account {
   id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, providerAccountId])
 }
 
@@ -69,6 +79,7 @@ model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+
   @@unique([identifier, token])
 }
 

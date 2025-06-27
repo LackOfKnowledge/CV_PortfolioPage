@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { markdownToHtml } from "@/lib/posts";
 import { Box, Typography, Paper, Chip, Avatar } from "@mui/material";
+import BackButton from "./BackButton";
 
 export async function generateStaticParams() {
   const posts = await prisma.post.findMany({
@@ -37,6 +38,7 @@ export default async function PostPage({ params }) {
 
   return (
     <Box sx={{ maxWidth: "800px", mx: "auto", my: 5, px: 2 }}>
+      <BackButton />
       <Paper
         elevation={2}
         sx={{ p: { xs: 3, md: 5 } }}

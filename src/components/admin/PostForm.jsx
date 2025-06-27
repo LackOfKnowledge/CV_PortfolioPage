@@ -22,7 +22,7 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 });
 
-export default function PostForm({ post }) {
+export default function PostForm({ post, categories }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -38,8 +38,11 @@ export default function PostForm({ post }) {
     const formData = new FormData(event.currentTarget);
     formData.set("content", contentValue);
 
-    const action = post ? updatePost(post.id, formData) : createPost(formData);
-    const result = await action;
+    const action = post
+      ? updatePost.bind(null, post.id, formData)
+      : createPost.bind(null, formData);
+
+    const result = await action();
 
     if (result.error) {
       setError(result.error);
@@ -86,17 +89,25 @@ export default function PostForm({ post }) {
       <FormControl
         fullWidth
         margin="normal"
-        required
       >
         <InputLabel id="category-select-label">Kategoria</InputLabel>
         <Select
-          name="category"
+          name="categoryId"
           labelId="category-select-label"
           label="Kategoria"
-          defaultValue={post?.category || "programowanie"}
+          defaultValue={post?.categoryId || ""}
         >
-          <MenuItem value="programowanie">Programowanie</MenuItem>
-          <MenuItem value="geodezja">Geodezja</MenuItem>
+          <MenuItem value="">
+            <em>Brak kategorii</em>
+          </MenuItem>
+          {categories?.map((category) => (
+            <MenuItem
+              key={category.id}
+              value={category.id}
+            >
+              {category.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
       <Box sx={{ my: 2, border: "1px solid #ccc", borderRadius: 1 }}>
