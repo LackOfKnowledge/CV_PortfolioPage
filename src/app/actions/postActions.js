@@ -1,3 +1,5 @@
+// Plik: src/app/actions/postActions.js
+
 "use server";
 
 import prisma from "@/lib/prisma";
@@ -24,15 +26,16 @@ export async function createPost(formData) {
   try {
     const authorId = await getAuthorId();
     const title = formData.get("title");
+    const categoryId = formData.get("categoryId") || null;
 
     const postData = {
       title,
       slug: createSlug(title),
       content: formData.get("content"),
       excerpt: formData.get("excerpt"),
-      category: formData.get("category"),
       thumbnail: formData.get("thumbnail"),
       authorId,
+      categoryId: categoryId,
     };
 
     const newPost = await prisma.post.create({ data: postData });
@@ -49,14 +52,15 @@ export async function updatePost(postId, formData) {
   try {
     await getAuthorId();
     const title = formData.get("title");
+    const categoryId = formData.get("categoryId") || null;
 
     const postData = {
       title,
       slug: createSlug(title),
       content: formData.get("content"),
       excerpt: formData.get("excerpt"),
-      category: formData.get("category"),
       thumbnail: formData.get("thumbnail"),
+      categoryId: categoryId,
     };
 
     const updatedPost = await prisma.post.update({

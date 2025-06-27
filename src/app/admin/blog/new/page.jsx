@@ -1,7 +1,14 @@
+// Plik: src/app/admin/blog/new/page.jsx
 import PostForm from "@/components/admin/PostForm";
 import { Typography } from "@mui/material";
+import prisma from "@/lib/prisma";
 
-export default function NewPostPage() {
+async function getCategories() {
+  return await prisma.category.findMany({ orderBy: { name: "asc" } });
+}
+
+export default async function NewPostPage() {
+  const categories = await getCategories();
   return (
     <div>
       <Typography
@@ -12,7 +19,7 @@ export default function NewPostPage() {
       >
         Nowy Post
       </Typography>
-      <PostForm />
+      <PostForm categories={categories} />
     </div>
   );
 }

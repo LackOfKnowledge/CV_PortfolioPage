@@ -1,3 +1,5 @@
+// Plik: src/components/admin/PostForm.jsx
+
 "use client";
 
 import React, { useState } from "react";
@@ -48,7 +50,7 @@ export default function PostForm({ post, categories }) {
       setError(result.error);
     } else if (result.success) {
       setSuccess(`Post "${result.post.title}" został pomyślnie zapisany!`);
-      router.refresh(); // Ważne dla odświeżenia danych
+      router.refresh();
       setTimeout(() => router.push("/admin/dashboard"), 1500);
     }
 

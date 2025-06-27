@@ -14,9 +14,24 @@ export async function createCategory(formData) {
     await prisma.category.create({
       data: { name },
     });
-    revalidatePath("/admin/blog/new"); // Odśwież formularze
-    revalidatePath("/admin/blog/edit/.*"); // Odśwież formularze edycji
+    revalidatePath("/admin/categories");
+    revalidatePath("/admin/blog/new");
+    revalidatePath("/admin/blog/edit/.*");
   } catch (error) {
     return { error: "Kategoria o tej nazwie już istnieje." };
+  }
+}
+
+export async function deleteCategory(id) {
+  try {
+    await prisma.category.delete({
+      where: { id },
+    });
+    revalidatePath("/admin/categories");
+  } catch (error) {
+    return {
+      error:
+        "Nie można usunąć kategorii, ponieważ jest ona przypisana do postów.",
+    };
   }
 }

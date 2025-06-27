@@ -1,7 +1,12 @@
+// Plik: src/app/admin/blog/edit/[id]/page.jsx
 import PostForm from "@/components/admin/PostForm";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Typography } from "@mui/material";
+
+async function getCategories() {
+  return await prisma.category.findMany({ orderBy: { name: "asc" } });
+}
 
 export default async function EditPostPage({ params }) {
   const post = await prisma.post.findUnique({
@@ -11,6 +16,8 @@ export default async function EditPostPage({ params }) {
   if (!post) {
     notFound();
   }
+
+  const categories = await getCategories();
 
   return (
     <div>
@@ -22,7 +29,10 @@ export default async function EditPostPage({ params }) {
       >
         Edytujesz: {post.title}
       </Typography>
-      <PostForm post={post} />
+      <PostForm
+        post={post}
+        categories={categories}
+      />
     </div>
   );
 }
