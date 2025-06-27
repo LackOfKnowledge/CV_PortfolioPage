@@ -3,69 +3,62 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Box } from "@mui/material";
-import Sidebar from "./Sidebar"; // Używamy Twojego istniejącego sidebara
+import MobileHeader from "./MobileHeader"; // Używamy Twojego istniejącego nagłówka mobilnego
 
-const sidebarWidth = 280; // Szerokość Twojego sidebara
+const sidebarWidth = 240;
 
-export default function BlogLayout({ children }) {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+export default function BlogLayout({ children, blogSidebar }) {
+  const [isSidebarHovered, setSidebarHovered] = useState(false);
+  const pathname = usePathname();
 
-  // Strefa przy krawędzi, która aktywuje sidebar
-  const triggerZoneWidth = 25;
+  const isBlogRoot = pathname === "/blog";
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {/* Ta sekcja dotyczy tylko widoku desktopowego */}
-      <Box sx={{ display: { xs: "none", md: "flex" } }}>
-        {/* Niewidzialna strefa do aktywacji sidebara */}
-        <Box
-          onMouseEnter={() => setSidebarOpen(true)}
-          sx={{
-            position: "fixed",
-            left: 0,
-            top: 0,
-            width: triggerZoneWidth,
-            height: "100%",
-            zIndex: 1201, // Tuż nad sidebarem
-          }}
-        />
-
-        {/* Sidebar, który będzie się wysuwał */}
-        <Box
-          onMouseLeave={() => setSidebarOpen(false)}
-          sx={{
-            position: "fixed",
-            left: 0,
-            top: 0,
-            height: "100%",
-            width: sidebarWidth,
-            transform: isSidebarOpen
+    <Box sx={{ display: "flex", width: "100vw" }}>
+      <Box
+        component="aside"
+        onMouseEnter={() => setSidebarHovered(true)}
+        onMouseLeave={() => setSidebarHovered(false)}
+        sx={{
+          display: { xs: "none", md: "block" },
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: sidebarWidth,
+          height: "100vh",
+          zIndex: 1200,
+          transform:
+            isSidebarHovered || isBlogRoot
               ? "translateX(0)"
-              : `translateX(-${sidebarWidth - triggerZoneWidth}px)`, // Lekko wystaje, żeby było widać, że tam jest
-            transition: "transform 0.3s ease-in-out",
-            zIndex: 1200,
-          }}
-        >
-          <Sidebar />
-        </Box>
+              : `translateX(-${sidebarWidth}px)`,
+          transition: "transform 0.3s ease-in-out",
+          overflowY: "auto",
+          backgroundColor: "background.paper",
+          borderRight: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        {blogSidebar} {/* Tu wstawimy nasz BlogSidebar */}
       </Box>
-
-      {/* Główna treść strony */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          // Płynne dopasowanie marginesu na desktopie
-          transition: "margin-left 0.3s ease-in-out",
-          marginLeft: {
-            xs: 0, // Na mobilce bez zmian
-            md: isSidebarOpen ? `${sidebarWidth}px` : `${triggerZoneWidth}px`,
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          overflowY: "auto",
+          transition: "padding-left 0.3s ease-in-out",
+          pl: {
+            xs: 0,
+            md: isSidebarHovered || isBlogRoot ? `${sidebarWidth}px` : "0px",
           },
-          p: 3,
         }}
       >
-        {children}
+        {/* Na mobilce nie potrzebujemy MobileHeader, bo jest on już w głównym layoucie */}
+        <Box sx={{ flexGrow: 1, width: "100%" }}>{children}</Box>
       </Box>
     </Box>
   );

@@ -1,14 +1,13 @@
-// src/app/layout.jsx
+// Plik: src/app/layout.jsx
+
+// --- ABSOLUTNIE BEZ "use client" ---
 import { chivo } from "@/theme/fonts";
 import ThemeRegistry from "@/components/ThemeRegistry";
-import Box from "@mui/material/Box";
 import AuthProviders from "@/components/AuthProviders";
-import "./globals.css";
-import ConditionalFooter from "@/components/ConditionalFooter";
-import Sidebar from "@/components/Sidebar";
-import MobileHeader from "@/components/MobileHeader";
-import { ScrollSpyProvider } from "@/hooks/useScrollSpy";
 import SecretCodeHandler from "@/components/SecretCodeHandler";
+import PageWrapper from "@/components/PageWrapper"; // Importujemy nasz nowy komponent
+import "./globals.css";
+
 const navItems = [
   { label: "Start", targetId: "hero" },
   { label: "O mnie", targetId: "omnie" },
@@ -35,27 +34,7 @@ export default function RootLayout({ children }) {
         <AuthProviders>
           <ThemeRegistry>
             <SecretCodeHandler />
-            <ScrollSpyProvider navItems={navItems}>
-              <Box sx={{ display: "flex" }}>
-                <Sidebar navItems={navItems} />
-                <Box
-                  id="main-content-area"
-                  component="main"
-                  sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100vh",
-                    overflowY: "auto",
-                    backgroundColor: "background.default",
-                  }}
-                >
-                  <MobileHeader navItems={navItems} />
-                  <Box sx={{ flexGrow: 1 }}>{children}</Box>
-                  <ConditionalFooter />
-                </Box>
-              </Box>
-            </ScrollSpyProvider>
+            <PageWrapper navItems={navItems}>{children}</PageWrapper>
           </ThemeRegistry>
         </AuthProviders>
       </body>
