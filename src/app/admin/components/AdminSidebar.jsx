@@ -18,6 +18,7 @@ import {
   Description as DescriptionIcon,
   Logout as LogoutIcon,
   Home as HomeIcon,
+  Category as CategoryIcon, // 1. Import ikony dla kategorii
 } from "@mui/icons-material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,6 +26,8 @@ import { signOut } from "next-auth/react";
 
 const menuItems = [
   { text: "Panel", icon: <DashboardIcon />, path: "/admin/dashboard" },
+  // 2. Dodany nowy obiekt dla menedżera kategorii
+  { text: "Kategorie", icon: <CategoryIcon />, path: "/admin/categories" },
   { text: "Dodaj Post", icon: <PostAddIcon />, path: "/admin/blog/new" },
   {
     text: "Generuj Link CV",
@@ -100,7 +103,6 @@ export default function AdminSidebar({
       component="nav"
       sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
     >
-      {/* Drawer dla wersji mobilnej - tymczasowy, wysuwany */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -113,7 +115,6 @@ export default function AdminSidebar({
       >
         {drawerContent}
       </Drawer>
-      {/* Drawer dla wersji desktopowej - stały */}
       <Drawer
         variant="permanent"
         sx={{
