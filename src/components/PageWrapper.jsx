@@ -12,18 +12,13 @@ import MobileHeader from "@/components/MobileHeader";
 
 const sidebarWidth = 280;
 
-export default function PageWrapper({ children, navItems }) {
+// --- Komponent dla widoku desktopowego ---
+const DesktopLayout = ({ children, navItems }) => {
   const pathname = usePathname();
   const [isSidebarHovered, setSidebarHovered] = useState(false);
-
   const isHomePage = pathname === "/";
   const isSinglePostPage =
     pathname.startsWith("/blog/") && pathname.length > "/blog/".length;
-  const isBlogPage = pathname.startsWith("/blog");
-
-  if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
-    return <>{children}</>;
-  }
 
   const sidebarComponent = (
     <Sidebar
@@ -32,7 +27,6 @@ export default function PageWrapper({ children, navItems }) {
     />
   );
 
-  // DEFINICJA GŁÓWNEJ TREŚCI Z POPRAWNYM TŁEM
   const mainContentArea = (
     <Box
       component="main"
@@ -42,10 +36,10 @@ export default function PageWrapper({ children, navItems }) {
         flexDirection: "column",
         height: "100vh",
         overflowY: "auto",
-        backgroundColor: "background.default", // <-- POPRAWKA TŁA JEST TUTAJ
+        backgroundColor: "background.default",
       }}
     >
-      <MobileHeader navItems={navItems} />
+      {/* MobileHeader nie jest potrzebny na desktopie */}
       <Box sx={{ flexGrow: 1 }}>{children}</Box>
       <ConditionalFooter />
     </Box>
@@ -53,28 +47,15 @@ export default function PageWrapper({ children, navItems }) {
 
   const entirePageLayout = (
     <Box sx={{ display: "flex" }}>
-      {/* 1. OSOBNA, NIEWIDZIALNA STREFA DO AKTYWACJI SIDEBARA */}
-      {isSinglePostPage && (
-        <Box
-          onMouseEnter={() => setSidebarHovered(true)}
-          sx={{
-            display: { xs: "none", md: "block" },
-            position: "fixed",
-            left: 0,
-            top: 0,
-            width: "25px", // Szerokość strefy
-            height: "100vh",
-            zIndex: 1199, // Pod sidebarem
-          }}
-        />
-      )}
-
-      {/* 2. SIDEBAR, KTÓRY REAGUJE NA onMouseLeave */}
       <Box
         component="aside"
-        onMouseLeave={() => setSidebarHovered(false)}
+        onMouseEnter={
+          isSinglePostPage ? () => setSidebarHovered(true) : undefined
+        }
+        onMouseLeave={
+          isSinglePostPage ? () => setSidebarHovered(false) : undefined
+        }
         sx={{
-          display: { xs: "none", md: "block" },
           position: "fixed",
           left: 0,
           top: 0,
@@ -93,18 +74,26 @@ export default function PageWrapper({ children, navItems }) {
         {sidebarComponent}
       </Box>
 
-      {/* 3. KONTENER Z TREŚCIĄ, KTÓRY SIĘ DOPASOWUJE */}
+      {isSinglePostPage && (
+        <Box
+          onMouseEnter={() => setSidebarHovered(true)}
+          sx={{
+            position: "fixed",
+            left: 0,
+            top: 0,
+            width: "25px",
+            height: "100vh",
+            zIndex: 1199,
+          }}
+        />
+      )}
+
       <Box
         sx={{
           flexGrow: 1,
           transition: "padding-left 0.3s ease-in-out",
-          pl: {
-            xs: 0,
-            md:
-              isSinglePostPage && !isSidebarHovered
-                ? "0px"
-                : `${sidebarWidth}px`,
-          },
+          pl:
+            isSinglePostPage && !isSidebarHovered ? "0px" : `${sidebarWidth}px`,
         }}
       >
         {mainContentArea}
@@ -119,6 +108,41 @@ export default function PageWrapper({ children, navItems }) {
       </ScrollSpyProvider>
     );
   }
-
   return entirePageLayout;
+};
+
+// --- Komponent dla widoku mobilnego ---
+const MobileLayout = ({ children, navItems }) => {
+  return (
+    <Box>
+      <MobileHeader navItems={navItems} />
+      <Box
+        component="main"
+        sx={{ pt: "64px" /* Wysokość headera */ }}
+      >
+        {children}
+      </Box>
+      <ConditionalFooter />
+    </Box>
+  );
+};
+
+// --- Główny komponent-przełącznik ---
+export default function PageWrapper({ children, navItems }) {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/view-cv")) {
+    return <>{children}</>;
+  }
+
+  return (
+    <>
+      <Box sx={{ display: { xs: "none", md: "block" } }}>
+        <DesktopLayout navItems={navItems}>{children}</DesktopLayout>
+      </Box>
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
+        <MobileLayout navItems={navItems}>{children}</MobileLayout>
+      </Box>
+    </>
+  );
 }
