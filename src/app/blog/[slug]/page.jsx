@@ -1,3 +1,5 @@
+// Plik: src/app/blog/[slug]/page.jsx
+
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { markdownToHtml } from "@/lib/posts";
@@ -9,22 +11,24 @@ export async function generateStaticParams() {
     where: { published: true },
     select: { slug: true },
   });
-  return posts.map((post) => ({
+  return posts?.map((post) => ({
     slug: post.slug,
   }));
 }
 
 async function getPost(slug) {
   const post = await prisma.post.findUnique({
-    where: { slug },
-    include: { author: true },
+    where: { slug: slug },
+    include: {
+      author: true,
+      category: true, // WAŻNE: Dołączamy dane powiązanej kategorii
+    },
   });
 
   if (!post) {
     return null;
   }
 
-  // Używamy tutaj pola `content` - zgodnie z Twoim schematem.
   const contentHtml = await markdownToHtml(post.content || "");
   return { ...post, contentHtml };
 }
@@ -43,9 +47,10 @@ export default async function PostPage({ params }) {
         elevation={2}
         sx={{ p: { xs: 3, md: 5 } }}
       >
+        {/* POPRAWKA: Wyświetlamy nazwę kategorii z obiektu */}
         {post.category && (
           <Chip
-            label={post.category}
+            label={post.category.name}
             color="primary"
             sx={{ mb: 2 }}
           />
