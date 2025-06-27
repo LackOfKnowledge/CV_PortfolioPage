@@ -12,7 +12,7 @@ import MobileHeader from "@/components/MobileHeader";
 
 const sidebarWidth = 280;
 
-// --- Komponent dla widoku desktopowego ---
+// --- Komponent dla widoku desktopowego (bez zmian) ---
 const DesktopLayout = ({ children, navItems }) => {
   const pathname = usePathname();
   const [isSidebarHovered, setSidebarHovered] = useState(false);
@@ -39,7 +39,6 @@ const DesktopLayout = ({ children, navItems }) => {
         backgroundColor: "background.default",
       }}
     >
-      {/* MobileHeader nie jest potrzebny na desktopie */}
       <Box sx={{ flexGrow: 1 }}>{children}</Box>
       <ConditionalFooter />
     </Box>
@@ -111,14 +110,15 @@ const DesktopLayout = ({ children, navItems }) => {
   return entirePageLayout;
 };
 
-// --- Komponent dla widoku mobilnego ---
+// --- Komponent dla widoku mobilnego (TUTAJ JEST POPRAWKA) ---
 const MobileLayout = ({ children, navItems }) => {
   return (
-    <Box>
+    // Dodajemy backgroundColor i minHeight do głównego kontenera
+    <Box sx={{ backgroundColor: "background.default", minHeight: "100vh" }}>
       <MobileHeader navItems={navItems} />
       <Box
         component="main"
-        sx={{ pt: "64px" /* Wysokość headera */ }}
+        sx={{ pt: "64px" }}
       >
         {children}
       </Box>
@@ -127,7 +127,7 @@ const MobileLayout = ({ children, navItems }) => {
   );
 };
 
-// --- Główny komponent-przełącznik ---
+// --- Główny komponent-przełącznik (bez zmian) ---
 export default function PageWrapper({ children, navItems }) {
   const pathname = usePathname();
 
