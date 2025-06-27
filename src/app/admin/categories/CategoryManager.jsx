@@ -1,4 +1,4 @@
-// Stwórz nowy plik: src/app/admin/categories/CategoryManager.jsx
+// Plik: src/app/admin/categories/CategoryManager.jsx
 
 "use client";
 
@@ -19,12 +19,9 @@ import {
 import { Delete } from "@mui/icons-material";
 import { createCategory, deleteCategory } from "@/app/actions/categoryActions";
 
-const initialState = {
-  message: null,
-  type: null,
-};
+const initialState = { message: null, type: null };
 
-function SubmitButton() {
+function SubmitCreateButton() {
   const { pending } = useFormStatus();
   return (
     <Button
@@ -37,18 +34,48 @@ function SubmitButton() {
   );
 }
 
+function SubmitDeleteButton() {
+  const { pending } = useFormStatus();
+  return (
+    <IconButton
+      edge="end"
+      aria-label="delete"
+      type="submit"
+      disabled={pending}
+    >
+      <Delete />
+    </IconButton>
+  );
+}
+
 export default function CategoryManager({ initialCategories }) {
-  const [state, formAction] = useFormState(createCategory, initialState);
+  const [createState, createFormAction] = useFormState(
+    createCategory,
+    initialState
+  );
   const formRef = useRef(null);
 
+  // Ta funkcja opakowuje akcję serwerową, aby obsłużyć jej wynik po stronie klienta
+  const handleDeleteAction = async (formData) => {
+    // Wywołujemy akcję serwerową i czekamy na odpowiedź
+    const result = await deleteCategory(null, formData);
+
+    // Jeśli akcja zwróciła błąd, wyświetlamy go w alercie
+    if (result?.type === "error") {
+      alert(result.message);
+    }
+  };
+
   useEffect(() => {
-    if (state?.type === "success") {
+    // Resetuj formularz tylko jeśli dodawanie się powiodło
+    if (createState?.type === "success") {
       formRef.current?.reset();
     }
-  }, [state]);
+  }, [createState]);
 
   return (
     <Box>
+      {/* Formularz dodawania kategorii */}
       <Paper sx={{ p: 3, mb: 4 }}>
         <Typography
           variant="h6"
@@ -58,7 +85,7 @@ export default function CategoryManager({ initialCategories }) {
           Dodaj nową kategorię
         </Typography>
         <form
-          action={formAction}
+          action={createFormAction}
           ref={formRef}
         >
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
@@ -70,19 +97,21 @@ export default function CategoryManager({ initialCategories }) {
               required
               fullWidth
             />
-            <SubmitButton />
+            <SubmitCreateButton />
           </Box>
         </form>
-        {state?.message && (
+        {/* Wyświetlaj błędy walidacji lub inne błędy z serwera */}
+        {createState?.message && (
           <Alert
-            severity={state.type || "info"}
+            severity={createState.type || "info"}
             sx={{ mt: 2 }}
           >
-            {state.message}
+            {createState.message}
           </Alert>
         )}
       </Paper>
 
+      {/* Lista istniejących kategorii */}
       <Paper sx={{ p: 3 }}>
         <Typography
           variant="h6"
@@ -97,14 +126,13 @@ export default function CategoryManager({ initialCategories }) {
               <ListItem
                 key={category.id}
                 secondaryAction={
-                  <form action={() => deleteCategory(category.id)}>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      type="submit"
-                    >
-                      <Delete />
-                    </IconButton>
+                  <form action={handleDeleteAction}>
+                    <input
+                      type="hidden"
+                      name="id"
+                      value={category.id}
+                    />
+                    <SubmitDeleteButton />
                   </form>
                 }
               >
