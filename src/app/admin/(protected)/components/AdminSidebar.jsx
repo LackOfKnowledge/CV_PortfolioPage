@@ -1,7 +1,10 @@
+// Plik: src/app/admin/components/AdminSidebar.jsx
+
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-  AppBar,
   Box,
   Drawer,
   List,
@@ -11,29 +14,24 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  LinkIcon,
+  Divider,
 } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
   PostAdd as PostAddIcon,
-  Description as DescriptionIcon,
-  Logout as LogoutIcon,
-  Home as HomeIcon,
   Category as CategoryIcon,
+  Link as LinkIcon, // Poprawna ikona dla linków
+  Home as HomeIcon,
+  Logout as LogoutIcon,
 } from "@mui/icons-material";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
+// Definicja menu w jednym miejscu
 const menuItems = [
-  { text: "Panel", icon: <DashboardIcon />, path: "/admin/dashboard" },
-  { text: "Kategorie", icon: <CategoryIcon />, path: "/admin/categories" },
-  { text: "Dodaj Post", icon: <PostAddIcon />, path: "/admin/blog/new" },
-  {
-    text: "Linki CV",
-    icon: <LinkIcon />,
-    path: "/admin/cv",
-  },
+  { text: "Panel", path: "/admin/dashboard", icon: <DashboardIcon /> },
+  { text: "Kategorie", path: "/admin/categories", icon: <CategoryIcon /> },
+  { text: "Nowy Post", path: "/admin/blog/new", icon: <PostAddIcon /> },
+  { text: "Linki CV", path: "/admin/cv", icon: <LinkIcon /> },
 ];
 
 export default function AdminSidebar({
@@ -54,6 +52,7 @@ export default function AdminSidebar({
           Panel Admina
         </Typography>
       </Toolbar>
+      <Divider />
       <List>
         {menuItems.map((item) => (
           <ListItem
@@ -61,10 +60,9 @@ export default function AdminSidebar({
             disablePadding
           >
             <ListItemButton
-              component={item.path ? Link : "button"}
+              component={Link}
               href={item.path}
-              onClick={item.action}
-              selected={item.path === pathname}
+              selected={pathname === item.path}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
@@ -73,6 +71,7 @@ export default function AdminSidebar({
         ))}
       </List>
       <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+        <Divider />
         <List>
           <ListItem disablePadding>
             <ListItemButton

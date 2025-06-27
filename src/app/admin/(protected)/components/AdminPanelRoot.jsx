@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Box } from "@mui/material";
 import AdminSidebar from "./AdminSidebar";
 import AdminAppBar from "./AdminAppBar";
-import { AdminThemeProvider } from "../theme-provider";
+import { AdminThemeProvider } from "../../theme-provider";
 
 export default function AdminPanelRoot({ children }) {
   const drawerWidth = 240;

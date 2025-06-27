@@ -7,7 +7,7 @@ import {
   Brightness7 as Brightness7Icon,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
-import { useColorMode } from "../theme-provider";
+import { useColorMode } from "../../theme-provider";
 
 export default function AdminAppBar({ drawerWidth, handleDrawerToggle }) {
   const theme = useTheme();
