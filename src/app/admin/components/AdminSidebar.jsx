@@ -29,9 +29,9 @@ const menuItems = [
   { text: "Kategorie", icon: <CategoryIcon />, path: "/admin/categories" },
   { text: "Dodaj Post", icon: <PostAddIcon />, path: "/admin/blog/new" },
   {
-    text: "Generuj Link CV",
-    icon: <DescriptionIcon />,
-    action: () => alert("Funkcjonalność wkrótce!"),
+    text: "Linki CV",
+    icon: <LinkIcon />,
+    path: "/admin/cv",
   },
 ];
 

@@ -95,3 +95,10 @@ model CvDownload {
   postId        String?
   post          Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
 }
+model CvLink {
+  id        String    @id @default(cuid())
+  name      String    
+  createdAt DateTime  @default(now())
+  expiresAt DateTime  
+  usedAt    DateTime? 
+}
